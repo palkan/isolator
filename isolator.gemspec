@@ -20,9 +20,19 @@ Gem::Specification.new do |spec|
   end
   spec.require_paths = ["lib"]
 
+  spec.add_dependency "anyway_config", "~> 1.0"
+  spec.add_dependency 'uniform_notifier', "~> 1.11"
+
   spec.add_development_dependency "bundler", "~> 1.14"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "rubocop", "~> 0.51"
   spec.add_development_dependency "rubocop-md", "~> 0.2"
+
+  spec.add_development_dependency "redis", '~> 3.0'
+  spec.add_development_dependency "httpclient", "~> 2.8.3"
+  spec.add_development_dependency "http", "~> 3.0.0"
+  spec.add_development_dependency "patron", "~> 0.10.0"
+  spec.add_development_dependency "ethon", "~> 0.11.0"
+  spec.add_development_dependency "typhoeus", "~> 1.3.0"
 end
