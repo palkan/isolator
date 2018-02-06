@@ -17,8 +17,6 @@ require "isolator/adapters/httpclient_adapter"
 require "isolator/adapters/http_adapter"
 require "isolator/adapters/net_http_adapter"
 
-require "isolator/adapters/redis_adapter"
-
 module Isolator
   class << self
     def notify(klass:, backtrace: [])

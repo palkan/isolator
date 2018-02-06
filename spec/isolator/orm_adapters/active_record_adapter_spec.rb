@@ -13,15 +13,5 @@ RSpec.describe ActiveRecord::Base do
 
       it { expect { make_request }.to raise_error(Isolator::NetworkRequestError) }
     end
-
-    context "when making request to redis" do
-      subject(:access_redis) do
-        described_class.transaction do
-          Redis.new.get("key")
-        end
-      end
-
-      it { expect { access_redis }.to raise_error(Isolator::RedisAccessError) }
-    end
   end
 end

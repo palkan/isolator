@@ -29,7 +29,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rubocop", "~> 0.51"
   spec.add_development_dependency "rubocop-md", "~> 0.2"
 
-  spec.add_development_dependency "redis", '~> 3.0'
   spec.add_development_dependency "httpclient", "~> 2.8.3"
   spec.add_development_dependency "http", "~> 3.0.0"
   spec.add_development_dependency "patron", "~> 0.10.0"

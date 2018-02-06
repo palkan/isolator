@@ -9,7 +9,6 @@ require "net/http"
 require "uri"
 require "typhoeus"
 require "ethon"
-require "redis"
 
 require "isolator"
 
