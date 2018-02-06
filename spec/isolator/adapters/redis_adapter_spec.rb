@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 RSpec.describe Redis do
   before { Isolator.enable! }
@@ -8,6 +8,6 @@ RSpec.describe Redis do
   subject(:client) { Redis.new }
 
   specify do
-    expect { client.get('key') }.to raise_error(Isolator::RedisAccessError)
+    expect { client.get("key") }.to raise_error(Isolator::RedisAccessError)
   end
 end

@@ -33,7 +33,7 @@ Add this line to your application's Gemfile:
 
 ```ruby
 group :development, :test do
-  gem 'isolator'
+  gem "isolator"
 end
 ```
 

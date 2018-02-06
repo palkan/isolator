@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 RSpec.describe Isolator::Notifier do
-  describe '#call' do
+  describe "#call" do
     let(:object) { double }
 
     subject(:notifier) { described_class.new(object) }
 
-    context 'when sending notifications without raising exception ' do
+    context "when sending notifications without raising exception " do
       before do
         allow(notifier).to receive(:send_notifications?).and_return(true)
         allow(notifier).to receive(:raise_exceptions?).and_return(false)
@@ -21,14 +21,14 @@ RSpec.describe Isolator::Notifier do
       end
     end
 
-    context 'when raising exceptions' do
+    context "when raising exceptions" do
       let(:object) { double(isolator_exception: Isolator::NetworkRequestError) }
 
       specify do
         expect { notifier.call }.to raise_error(Isolator::NetworkRequestError)
       end
 
-      context 'when object has no isolator_exception' do
+      context "when object has no isolator_exception" do
         specify do
           expect { notifier.call }.to raise_error(Isolator::UnsafeOperationError)
         end

@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
-require 'anyway'
-require 'uniform_notifier'
+require "anyway"
+require "uniform_notifier"
 
-require 'isolator/version'
-require 'isolator/notifier'
-require 'isolator/errors'
-require 'isolator/config'
+require "isolator/version"
+require "isolator/notifier"
+require "isolator/errors"
+require "isolator/config"
 
-require 'isolator/orm_adapters/active_record_adapter'
+require "isolator/orm_adapters/active_record_adapter"
 
-require 'isolator/adapters/ethon_adapter'
-require 'isolator/adapters/patron_adapter'
-require 'isolator/adapters/httpclient_adapter'
-require 'isolator/adapters/http_adapter'
-require 'isolator/adapters/net_http_adapter'
+require "isolator/adapters/ethon_adapter"
+require "isolator/adapters/patron_adapter"
+require "isolator/adapters/httpclient_adapter"
+require "isolator/adapters/http_adapter"
+require "isolator/adapters/net_http_adapter"
 
-require 'isolator/adapters/redis_adapter'
+require "isolator/adapters/redis_adapter"
 
 module Isolator
   class << self

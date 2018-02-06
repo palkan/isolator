@@ -1,27 +1,27 @@
 # frozen_string_literal: true
 
-require 'active_record'
+require "active_record"
 
-require 'httpclient'
-require 'http'
-require 'patron'
-require 'net/http'
-require 'uri'
-require 'typhoeus'
-require 'ethon'
-require 'redis'
+require "httpclient"
+require "http"
+require "patron"
+require "net/http"
+require "uri"
+require "typhoeus"
+require "ethon"
+require "redis"
 
-require 'isolator'
+require "isolator"
 
 begin
-  require 'pry-byebug'
+  require "pry-byebug"
 rescue LoadError # rubocop:disable Lint/HandleExceptions
 end
 
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
 RSpec.configure do |config|
-  config.example_status_persistence_file_path = '.rspec_status'
+  config.example_status_persistence_file_path = ".rspec_status"
   config.filter_run focus: true
   config.run_all_when_everything_filtered = true
 
