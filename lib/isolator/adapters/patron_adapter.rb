@@ -21,4 +21,4 @@ module Isolator
   end
 end
 
-::Patron::Session.send(:include, Isolator::PatronAdapter) if defined?(::Patron::Session)
+::Patron::Session.include(Isolator::PatronAdapter) if defined?(::Patron::Session)

@@ -23,4 +23,4 @@ module Isolator
   end
 end
 
-Ethon::Easy.send(:include, Isolator::EthonAdapter::Http) if defined?(::Ethon::Easy)
+Ethon::Easy.include(Isolator::EthonAdapter::Http) if defined?(::Ethon::Easy)

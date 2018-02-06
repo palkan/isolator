@@ -21,5 +21,5 @@ module Isolator
 end
 
 if defined?(ActiveRecord::Base)
-  ActiveRecord::Base.send :extend, Isolator::ActiveRecordAdapter::IsolatedTransactions
+  ActiveRecord::Base.extend(Isolator::ActiveRecordAdapter::IsolatedTransactions)
 end

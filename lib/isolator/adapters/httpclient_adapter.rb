@@ -23,4 +23,4 @@ module Isolator
   end
 end
 
-HTTPClient.send(:include, Isolator::Adapters::HTTPClientAdapter) if defined?(::HTTPClient)
+HTTPClient.include(Isolator::Adapters::HTTPClientAdapter) if defined?(::HTTPClient)

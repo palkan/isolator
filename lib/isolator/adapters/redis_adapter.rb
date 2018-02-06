@@ -23,4 +23,4 @@ module Isolator
   end
 end
 
-Redis::Client.send(:include, Isolator::RedisAdapter::Client) if defined?(Redis::Client)
+Redis::Client.include(Isolator::RedisAdapter::Client) if defined?(Redis::Client)

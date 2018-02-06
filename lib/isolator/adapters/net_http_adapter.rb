@@ -25,4 +25,4 @@ module Isolator
   end
 end
 
-Net::HTTP.send(:include, Isolator::Adapters::NetHttpAdapter)
+Net::HTTP.include(Isolator::Adapters::NetHttpAdapter)
