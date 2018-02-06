@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe Isolator::Adapters::NetHttpAdapter do
+RSpec.describe Net::HTTP do
   before { Isolator.enable! }
 
   shared_examples "outgoing request" do |http_method|

@@ -4,6 +4,7 @@ require "anyway"
 require "uniform_notifier"
 
 require "isolator/version"
+require "isolator/adapter_builder"
 require "isolator/notifier"
 require "isolator/errors"
 require "isolator/config"
