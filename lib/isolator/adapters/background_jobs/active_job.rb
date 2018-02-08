@@ -1,1 +1,4 @@
-ActiveJob::Base.prepend Isolator::AdapterBuilder.new(%i(perform_now enqueue), Isolator::BackgroundJobError)
+# frozen_string_literal: true
+
+mod = Isolator::AdapterBuilder.new(:perform_now, :enqueue, exception: Isolator::BackgroundJobError)
+ActiveJob::Base.prepend mod

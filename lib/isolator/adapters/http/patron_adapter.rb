@@ -1,2 +1,4 @@
 # frozen_string_literal: true
-Patron::Session.prepend Isolator::AdapterBuilder.new(:request, ::Isolator::NetworkRequestError)
+
+mod = Isolator::AdapterBuilder.new(:request, exception: ::Isolator::NetworkRequestError)
+Patron::Session.prepend mod

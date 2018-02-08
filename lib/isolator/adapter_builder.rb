@@ -1,7 +1,7 @@
 module Isolator
   class AdapterBuilder < Module
-    def initialize(methods_to_isolate, exception = Isolator::UnsafeOperationError)
-      Array(methods_to_isolate).each { |name| patch_method name }
+    def initialize(*methods_to_isolate, exception: Isolator::UnsafeOperationError)
+      methods_to_isolate.each { |name| patch_method name }
       define_exception_method(exception)
     end
 

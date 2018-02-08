@@ -1,2 +1,4 @@
 # frozen_string_literal: true
-HTTPClient.prepend Isolator::AdapterBuilder.new(:do_get_block, ::Isolator::NetworkRequestError)
+
+mod = Isolator::AdapterBuilder.new(:do_get_block,exception: ::Isolator::NetworkRequestError)
+HTTPClient.prepend mod
