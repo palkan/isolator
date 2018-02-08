@@ -20,6 +20,4 @@ module Isolator
   end
 end
 
-if defined?(ActiveRecord::Base)
-  ActiveRecord::Base.extend(Isolator::ActiveRecordAdapter::IsolatedTransactions)
-end
+ActiveRecord::Base.extend(Isolator::ActiveRecordAdapter::IsolatedTransactions)

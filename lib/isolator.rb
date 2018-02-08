@@ -9,12 +9,12 @@ require "isolator/notifier"
 require "isolator/errors"
 require "isolator/config"
 
-require "isolator/orm_adapters/active_record_adapter"
+require "isolator/orm_adapters/active_record_adapter" if defined?(ActiveRecord::Base)
 
-require "isolator/adapters/ethon_adapter"
-require "isolator/adapters/patron_adapter"
-require "isolator/adapters/httpclient_adapter"
-require "isolator/adapters/http_adapter"
+require "isolator/adapters/ethon_adapter" if defined?(::Ethon::Easy)
+require "isolator/adapters/patron_adapter" if defined?(::Patron::Session)
+require "isolator/adapters/httpclient_adapter" if defined?(::HTTPClient)
+require "isolator/adapters/http_adapter" if defined?(::HTTP::Client)
 require "isolator/adapters/net_http_adapter"
 
 module Isolator
