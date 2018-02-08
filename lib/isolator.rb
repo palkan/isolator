@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+require 'pry'
 require "anyway"
 require "uniform_notifier"
 
@@ -16,6 +16,7 @@ require "isolator/adapters/http/patron_adapter" if defined?(::Patron::Session)
 require "isolator/adapters/http/httpclient_adapter" if defined?(::HTTPClient)
 require "isolator/adapters/http/http_adapter" if defined?(::HTTP::Client)
 require "isolator/adapters/http/net_http_adapter"
+require "isolator/adapters/background_jobs/active_job" if defined?(ActiveJob::Base)
 
 module Isolator
   class << self

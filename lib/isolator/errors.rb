@@ -13,8 +13,8 @@ module Isolator
     MESSAGE = "You are trying to make an outgoing network request inside db transaction. "
   end
 
-  class RedisAccessError < UnsafeOperationError
-    MESSAGE = "You are trying to hit Redis inside db transaction. " \
-      "In case of transaction failure, this will lead to data inconsistency and unexpected bugs"
+  class BackgroundJobError < UnsafeOperationError
+    MESSAGE = "You are trying to enqueue background job inside db transaction." \
+      "In case of transaction failure, this may lead to data inconsistency and unexpected bugs"
   end
 end

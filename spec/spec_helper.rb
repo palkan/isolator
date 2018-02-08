@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "active_record"
+require "active_job"
 
 require "httpclient"
 require "http"

@@ -1,2 +1,2 @@
 # frozen_string_literal: true
-Net::HTTP.include Isolator::AdapterBuilder.new(:request, ::Isolator::NetworkRequestError)
+Net::HTTP.prepend Isolator::AdapterBuilder.new(:request, ::Isolator::NetworkRequestError)
