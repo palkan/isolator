@@ -8,8 +8,6 @@ Dir["#{File.dirname(__FILE__)}/isolator/**/*.rb"].each { |f| require f }
 module Isolator # :nodoc:
   class << self
     def start_analyze
-      return unless block_given?
-
       analyzers.each(&:start)
       yield
       analyzers.each(&:infer!)

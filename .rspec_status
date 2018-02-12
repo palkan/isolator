@@ -1,0 +1,7 @@
+example_id                                                          | status | run_time        |
+------------------------------------------------------------------- | ------ | --------------- |
+./spec/integration/active_record/external_requests_spec.rb[1:1:1:1] | passed | 0.25003 seconds |
+./spec/integration/active_record/external_requests_spec.rb[1:1:2:1] | passed | 0.00308 seconds |
+./spec/integration/active_record/external_requests_spec.rb[1:2:1:1] | passed | 0.27718 seconds |
+./spec/isolator_spec.rb[1:1:1]                                      | passed | 0.00011 seconds |
+./spec/isolator_spec.rb[1:1:2]                                      | passed | 0.0009 seconds  |
