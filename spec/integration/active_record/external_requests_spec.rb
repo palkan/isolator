@@ -1,10 +1,5 @@
-# temp
-require 'pry'
-#...
-
-require 'net/http'
-
 require 'spec_helper'
+require 'net/http'
 
 class User < ActiveRecord::Base
   def transaction_with_http_call
