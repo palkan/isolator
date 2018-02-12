@@ -3,16 +3,9 @@
 module Isolator
   module ActiveRecordAdapter
     module IsolatedTransactions
-      def self.extended(base)
-        class << base
-          alias_method :transaction_without_isolator, :transaction
-          alias_method :transaction, :transaction_with_isolator
-        end
-      end
-
-      def transaction_with_isolator(options = {}, &block)
+      def transaction(options = {}, &block)
         Isolator.enable!
-        result = transaction_without_isolator(options, &block)
+        result = super(options, &block)
         Isolator.disable!
         result
       end
@@ -20,4 +13,4 @@ module Isolator
   end
 end
 
-ActiveRecord::Base.extend(Isolator::ActiveRecordAdapter::IsolatedTransactions)
+ActiveRecord::Base.singleton_class.prepend Isolator::ActiveRecordAdapter::IsolatedTransactions

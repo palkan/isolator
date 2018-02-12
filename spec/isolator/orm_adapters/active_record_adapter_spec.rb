@@ -15,6 +15,8 @@ RSpec.describe ActiveRecord::Base do
     end
 
     context "when enquing job" do
+      before { ActiveJob::Base.queue_adapter = :test }
+
       subject(:enqueue) do
         described_class.transaction do
           ActiveJobWorker.perform_later
