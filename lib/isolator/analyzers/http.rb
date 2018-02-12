@@ -5,12 +5,12 @@ module Isolator
         Sniffer.enable!
       end
 
-      def find_something?
+      def requests_were_made?
         !Sniffer.data[0].nil?
       end
 
       def infer!
-        if find_something?
+        if requests_were_made?
           Sniffer.clear! && Sniffer.disable!
           handle_errors!
         end
