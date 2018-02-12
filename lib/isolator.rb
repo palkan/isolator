@@ -11,7 +11,10 @@ require "isolator/notifier"
 require "isolator/errors"
 require "isolator/config"
 
-require "isolator/orm_adapters/active_record_adapter" if defined?(ActiveRecord::Base)
+if defined?(ActiveRecord::Base)
+  require "isolator/orm_adapters/active_record_adapter"
+  require "isolator/active_record/connection_decorator"
+end
 
 require "isolator/adapters/http/ethon_adapter" if defined?(::Ethon::Easy)
 require "isolator/adapters/http/patron_adapter" if defined?(::Patron::Session)
