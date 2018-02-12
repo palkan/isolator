@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require "active_record"
+require "sidekiq"
+require "delayed_job_active_record"
 require "active_job"
 
 require "httpclient"

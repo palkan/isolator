@@ -1,4 +1,16 @@
 # frozen_string_literal: true
 
-mod = Isolator::AdapterBuilder.new(:perform_now, :enqueue, exception: Isolator::BackgroundJobError)
+adapter_name = -> { ActiveJob::Base.queue_adapter.class.name.demodulize.remove("Adapter") }
+
+db_backend = -> { %w(Que QueClassic).include?(adapter_name.call) }
+
+ar_delayed_job = lambda {
+  "DelayedJob" == adapter_name.call &&
+    "ActiveRecord" == Delayed::Worker.backend.name.match(/Delayed::Backend::(.*)::Job/)[1]
+}
+
+mod = Isolator::AdapterBuilder.new :perform_now, :enqueue,
+  exception: Isolator::BackgroundJobError,
+  unless: [db_backend, ar_delayed_job]
+
 ActiveJob::Base.prepend mod

@@ -34,4 +34,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "patron", "~> 0.10.0"
   spec.add_development_dependency "ethon", "~> 0.11.0"
   spec.add_development_dependency "typhoeus", "~> 1.3.0"
+
+  spec.add_development_dependency "sidekiq", "~> 5.0"
+  spec.add_development_dependency "delayed_job_active_record"
 end

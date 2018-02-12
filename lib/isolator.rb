@@ -5,6 +5,7 @@ require "uniform_notifier"
 
 require "isolator/version"
 require "isolator/adapter_builder"
+require "isolator/guard"
 require "isolator/notifier"
 require "isolator/errors"
 require "isolator/config"
@@ -17,6 +18,7 @@ require "isolator/adapters/http/httpclient_adapter" if defined?(::HTTPClient)
 require "isolator/adapters/http/http_adapter" if defined?(::HTTP::Client)
 require "isolator/adapters/http/net_http_adapter"
 require "isolator/adapters/background_jobs/active_job" if defined?(ActiveJob::Base)
+require "isolator/adapters/background_jobs/sidekiq" if defined?(Sidekiq::Client)
 
 module Isolator
   class << self
