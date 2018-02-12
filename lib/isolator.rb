@@ -10,12 +10,7 @@ module Isolator # :nodoc:
 
     analyzers.each(&:start)
     yield
-    analyzers.each do |analyzer|
-      if analyzer.find_something?
-        analyzer.end
-        analyzer.raise_error!
-      end
-    end
+    analyzers.each(&:infer!)
   end
 
   def self.analyzers

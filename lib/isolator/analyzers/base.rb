@@ -1,10 +1,9 @@
 module Isolator
   module Analyzers
-    # Basic analyzer inferface
+    # Basic analyzer interface
     class Base
       def start; end
-      def end; end
-      def find_something?; end
+      def infer!; end
     end
   end
 end

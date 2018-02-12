@@ -9,12 +9,11 @@ module Isolator
         !Sniffer.data[0].nil?
       end
 
-      def end
-        Sniffer.clear! and Sniffer.disable!
-      end
-
-      def raise_error!
-        raise Errors::HTTPError
+      def infer!
+        if find_something?
+          Sniffer.clear! && Sniffer.disable!
+          raise Errors::HTTPError
+        end
       end
     end
   end
