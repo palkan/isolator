@@ -41,4 +41,12 @@ module Isolator
       Thread.current[:isolator] == true
     end
   end
+
+  def self.configuration
+    @configuration ||= Configuration.new
+  end
+
+  def self.configure
+    yield(self.configuration)
+  end
 end
