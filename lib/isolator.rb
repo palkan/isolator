@@ -20,7 +20,7 @@ require "isolator/adapters/http/ethon_adapter" if defined?(::Ethon::Easy)
 require "isolator/adapters/http/patron_adapter" if defined?(::Patron::Session)
 require "isolator/adapters/http/httpclient_adapter" if defined?(::HTTPClient)
 require "isolator/adapters/http/http_adapter" if defined?(::HTTP::Client)
-require "isolator/adapters/http/net_http_adapter"
+require "isolator/adapters/http/net_http_adapter" if defined?(::Net::HTTP)
 require "isolator/adapters/background_jobs/active_job" if defined?(ActiveJob::Base)
 require "isolator/adapters/background_jobs/sidekiq" if defined?(Sidekiq::Client)
 
