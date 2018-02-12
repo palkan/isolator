@@ -17,7 +17,7 @@ RSpec.describe ActiveRecord::Base do
     context "when enquing job" do
       subject(:enqueue) do
         described_class.transaction do
-          ActiveJobWorker.perform_now
+          ActiveJobWorker.perform_later
         end
       end
 

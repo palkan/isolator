@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe ActiveJob::Base do
+RSpec.describe ActiveJobWorker do
   before do
     Isolator.enable!
     ActiveJob::Base.queue_adapter = :async
@@ -10,7 +10,7 @@ RSpec.describe ActiveJob::Base do
 
   describe "#perform_now" do
     specify do
-      expect { described_class.perform_now }.to raise_error(Isolator::BackgroundJobError)
+      expect { described_class.perform_now }.to_not raise_error
     end
   end
 

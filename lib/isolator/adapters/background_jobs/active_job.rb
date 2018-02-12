@@ -9,7 +9,7 @@ ar_delayed_job = lambda {
     Delayed::Worker.backend.name.match(/Delayed::Backend::(.*)::Job/)[1] == "ActiveRecord"
 }
 
-mod = Isolator::AdapterBuilder.new :perform_now, :enqueue,
+mod = Isolator::AdapterBuilder.new :enqueue,
   exception: Isolator::BackgroundJobError,
   unless: [db_backend, ar_delayed_job]
 
