@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Isolator
   class AdapterBuilder < Module
     def initialize(*methods_to_isolate, **options)

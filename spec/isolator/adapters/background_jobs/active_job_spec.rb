@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 RSpec.describe ActiveJob::Base do
@@ -6,13 +8,13 @@ RSpec.describe ActiveJob::Base do
     ActiveJob::Base.queue_adapter = :async
   end
 
-  describe '#perform_now' do
+  describe "#perform_now" do
     specify do
       expect { described_class.perform_now }.to raise_error(Isolator::BackgroundJobError)
     end
   end
 
-  describe '#perform_later' do
+  describe "#perform_later" do
     specify do
       expect { described_class.perform_later }.to raise_error(Isolator::BackgroundJobError)
     end

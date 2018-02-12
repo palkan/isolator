@@ -14,7 +14,7 @@ RSpec.describe ActiveRecord::Base do
       it { expect { make_request }.to raise_error(Isolator::NetworkRequestError) }
     end
 
-    context 'when enquing job' do
+    context "when enquing job" do
       subject(:enqueue) do
         described_class.transaction do
           ActiveJobWorker.perform_now

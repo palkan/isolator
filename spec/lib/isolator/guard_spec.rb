@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 RSpec.describe Isolator::Guard do
@@ -25,7 +27,7 @@ RSpec.describe Isolator::Guard do
     end
   end
 
-  context 'with method names' do
+  context "with method names" do
     let(:record) { double(test?: true) }
 
     let(:conditions) { { if: :test? } }

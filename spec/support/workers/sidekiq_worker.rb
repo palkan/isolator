@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 class SidekiqWorker
   include Sidekiq::Worker
 
-  def perform
-  end
+  def perform; end
 end

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require 'pry'
+
+require "pry"
 require "anyway"
 require "uniform_notifier"
 
