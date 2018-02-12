@@ -12,7 +12,7 @@ module Isolator
       def execute(sql, name = nil)
         ::Isolator.enable! if /^begin/i === sql
         result = connection.execute(sql, name)
-        ::Isolator.disable! if /(commit|rollback)$/i === sql
+        ::Isolator.disable! if /(commit|rollback)($|;)/i === sql
         result
       end
 
