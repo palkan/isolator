@@ -1,29 +1,36 @@
 # frozen_string_literal: true
 
 require "sniffer"
+require "logger"
 
 Dir["#{File.dirname(__FILE__)}/isolator/**/*.rb"].each { |f| require f }
 
 module Isolator # :nodoc:
-  def self.start_analyze
-    return unless block_given?
+  class << self
+    def start_analyze
+      return unless block_given?
 
-    analyzers.each(&:start)
-    yield
-    analyzers.each(&:infer!)
-  end
+      analyzers.each(&:start)
+      yield
+      analyzers.each(&:infer!)
+    end
 
-  def self.analyzers
-    [
-      Isolator::Analyzers::HTTP.new
-    ]
-  end
+    def analyzers
+      [
+        Isolator::Analyzers::HTTP.new
+      ]
+    end
 
-  def self.configuration
-    @configuration ||= Configuration.new
-  end
+    def configuration
+      @configuration ||= Configuration.new
+    end
 
-  def self.configure
-    yield(self.configuration)
+    def configure
+      yield(configuration)
+    end
+
+    def logger
+      Logger.new(STDOUT)
+    end
   end
 end

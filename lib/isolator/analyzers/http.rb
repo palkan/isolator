@@ -12,6 +12,16 @@ module Isolator
       def infer!
         if find_something?
           Sniffer.clear! && Sniffer.disable!
+          handle_errors!
+        end
+      end
+
+      def handle_errors!
+        if Isolator.configuration.logger
+          Isolator.logger.debug("Forbidden HTTP call within transaction was made!")
+        end
+
+        if Isolator.configuration.raise_errors
           raise Errors::HTTPError
         end
       end
