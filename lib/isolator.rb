@@ -9,8 +9,9 @@ module Isolator # :nodoc:
   class << self
     def start_analyze
       analyzers.each(&:start)
-      yield
+      result = yield
       analyzers.each(&:infer!)
+      result
     end
 
     def analyzers
