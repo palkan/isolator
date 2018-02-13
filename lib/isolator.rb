@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "pry"
-require "anyway"
 require "uniform_notifier"
 
 require "isolator/version"
@@ -44,6 +43,10 @@ module Isolator
 
     def config
       @config ||= Config.new
+    end
+
+    def configure
+      yield(config)
     end
   end
 end
