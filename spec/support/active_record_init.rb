@@ -6,7 +6,9 @@ require "activerecord-jdbcsqlite3-adapter" if defined? JRUBY_VERSION
 ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
 
 ActiveRecord::Schema.define do
-  # Create schema here
+  create_table :users do |t|
+    t.column :name, :string
+  end
 end
 
 ActiveRecord::Base.logger = Logger.new(STDOUT) if ENV["LOG"]

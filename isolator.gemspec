@@ -25,4 +25,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "rubocop", "~> 0.51"
   spec.add_development_dependency "rubocop-md", "~> 0.2"
+
+  spec.add_runtime_dependency "sniffer", "~> 0.3.0"
 end
