@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "active_record"
+require "action_mailer"
 require "isolator"
 
 begin

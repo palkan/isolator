@@ -8,15 +8,17 @@ Dir["#{File.dirname(__FILE__)}/isolator/**/*.rb"].each { |f| require f }
 module Isolator # :nodoc:
   class << self
     def start_analyze
-      analyzers.each(&:start)
-      yield
-      analyzers.each(&:infer!)
+      analyzers.values.each(&:start)
+      result = yield
+      analyzers.values.each(&:infer!)
+      result
     end
-
+    
     def analyzers
-      [
-        Isolator::Analyzers::HTTP.new
-      ]
+      {
+        http: Isolator::Analyzers::HTTP.new,
+        action_mailer: Isolator::Analyzers::ActionMailer.new
+      }
     end
 
     def configuration
