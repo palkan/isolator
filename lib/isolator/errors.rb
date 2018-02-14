@@ -18,4 +18,8 @@ module Isolator # :nodoc: all
     MESSAGE = "You are trying to enqueue background job inside db transaction. " \
       "In case of transaction failure, this may lead to data inconsistency and unexpected bugs"
   end
+
+  class ActionMailerError < UnsafeOperationError
+    MESSAGE = "You are trying to send email inside db transaction. "
+  end
 end
