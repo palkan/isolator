@@ -6,6 +6,10 @@ require "active_support"
 require "uniform_notifier"
 
 require "sidekiq"
+require "sidekiq/testing"
+
+Sidekiq::Testing.fake!
+
 require "net/http"
 require "uri"
 
