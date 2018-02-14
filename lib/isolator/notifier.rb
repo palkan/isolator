@@ -26,9 +26,9 @@ module Isolator
 
     def exception_klass
       @exception ||= if object.respond_to?(:isolator_exception)
-        object.isolator_exception
-      else
-        Isolator::UnsafeOperationError
+                       object.isolator_exception
+                     else
+                       Isolator::UnsafeOperationError
       end
     end
 

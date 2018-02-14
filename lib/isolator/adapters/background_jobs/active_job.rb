@@ -10,7 +10,7 @@ ar_delayed_job = lambda {
 }
 
 mod = Isolator::AdapterBuilder.new :enqueue,
-  exception: Isolator::BackgroundJobError,
-  unless: [db_backend, ar_delayed_job]
+                                   exception: Isolator::BackgroundJobError,
+                                   unless: [db_backend, ar_delayed_job]
 
 ActiveJob::Base.prepend mod

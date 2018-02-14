@@ -9,7 +9,6 @@ require "isolator/adapter_builder"
 require "isolator/guard"
 require "isolator/notifier"
 require "isolator/errors"
-require "isolator/config"
 
 if defined?(ActiveRecord::Base)
   require "isolator/orm_adapters/active_record_adapter"
@@ -40,10 +39,6 @@ module Isolator
 
     def enabled?
       Thread.current[:isolator] == true
-    end
-
-    def config
-      @config ||= Config.new
     end
   end
 end
