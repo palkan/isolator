@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+ENV["RAILS_ENV"] ||= "test"
+
 require "active_record"
 require "sidekiq"
 require "delayed_job_active_record"
@@ -14,6 +16,8 @@ require "typhoeus"
 require "ethon"
 
 require "isolator"
+
+ActiveJob::Base.logger = Logger.new(IO::NULL)
 
 begin
   require "pry-byebug"
@@ -35,5 +39,10 @@ RSpec.configure do |config|
 
   config.mock_with :rspec do |mocks|
     mocks.verify_partial_doubles = true
+  end
+
+  config.after(:each) do
+    Isolator.remove_instance_variable(:@config) if
+     Isolator.instance_variable_defined?(:@config)
   end
 end

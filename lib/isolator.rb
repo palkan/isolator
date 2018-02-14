@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-require "pry"
-require "anyway"
 require "uniform_notifier"
 
 require "isolator/version"
+require "isolator/configuration"
 require "isolator/adapter_builder"
 require "isolator/guard"
 require "isolator/notifier"
@@ -23,8 +22,17 @@ require "isolator/adapters/http/net_http_adapter" if defined?(::Net::HTTP)
 require "isolator/adapters/background_jobs/active_job" if defined?(ActiveJob::Base)
 require "isolator/adapters/background_jobs/sidekiq" if defined?(Sidekiq::Client)
 
+# Isolator detects unsafe operations performed within DB transactions.
 module Isolator
   class << self
+    def config
+      @config ||= Configuration.new
+    end
+
+    def configure
+      yield config
+    end
+
     def notify(klass:, backtrace: [])
       Notifier.new(klass, backtrace).call
     end
@@ -40,13 +48,5 @@ module Isolator
     def enabled?
       Thread.current[:isolator] == true
     end
-  end
-
-  def self.configuration
-    @configuration ||= Configuration.new
-  end
-
-  def self.configure
-    yield(self.configuration)
   end
 end

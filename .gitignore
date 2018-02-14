@@ -10,3 +10,4 @@
 *.gem
 gemfiles/*.lock
 Gemfile.local
+.rspec_status
