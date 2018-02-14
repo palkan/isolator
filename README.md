@@ -115,6 +115,18 @@ Possible `options` are:
 - `exception_class` – an exception class to raise in case of offense
 - `exception_message` – custom exception message (could be specified without a class)
 
+You can also add some callbacks to be run before and after transaction:
+
+```ruby
+Isolator.before_isolate do
+ # right after we enter the transaction
+end
+
+Isolator.after_isolate do
+ # right after the transaction has been commited/rollbacked
+end
+```
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/palkan/isolator.
