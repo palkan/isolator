@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "action_mailer"
+
 ActionMailer::Base.delivery_method = :test
 
 class SampleEmail < ActionMailer::Base
