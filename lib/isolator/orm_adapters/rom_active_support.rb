@@ -2,4 +2,4 @@
 
 require_relative "./active_support_subscriber"
 
-Isolator::ActiveSupportSubscriber.subscribe!("sql.active_record")
+Isolator::ActiveSupportSubscriber.subscribe!("sql.rom")
