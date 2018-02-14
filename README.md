@@ -108,6 +108,7 @@ Isolator has a bunch of built-in adapters:
 - `:http` – built on top of [Sniffer][]
 - `:active_job`
 - `:sidekiq`
+- `:action_mailer`
 
 You can dynamically enable/disable adapters, e.g.:
 
