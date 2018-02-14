@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 ActionMailer::Base.delivery_method = :test
 
 class SampleEmail < ActionMailer::Base
-  default from: 'isolator@example.com'
+  default from: "isolator@example.com"
 
   def hello
-    mail(to: 'example.com', subject: 'isolator test', body: 'isolator test')
+    mail(to: "example.com", subject: "isolator test", body: "isolator test")
   end
 end
