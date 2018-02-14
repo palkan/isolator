@@ -4,11 +4,7 @@ require "spec_helper"
 
 describe Isolator::Notifier do
   describe "#call" do
-    let(:exception_class) { Isolator::NetworkRequestError }
-
-    let(:object) do
-      double(isolator_exception: exception_class)
-    end
+    let(:exception) { Isolator::NetworkRequestError.new("test exception") }
 
     let(:uniform_notifier) do
       double(out_of_channel_notify: nil)
@@ -18,7 +14,7 @@ describe Isolator::Notifier do
       allow(UniformNotifier).to receive(:active_notifiers) { [uniform_notifier] }
     end
 
-    subject { described_class.new(object).call }
+    subject { described_class.new(exception).call }
 
     context "when sending notifications without raising exception " do
       before do
@@ -34,7 +30,7 @@ describe Isolator::Notifier do
         expect(uniform_notifier).to have_received(
           :out_of_channel_notify
         ).with(
-          exception_class.exception.message
+          exception.message
         )
       end
     end

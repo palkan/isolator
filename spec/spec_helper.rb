@@ -2,27 +2,19 @@
 
 ENV["RAILS_ENV"] ||= "test"
 
-require "active_record"
-require "sidekiq"
-require "delayed_job_active_record"
-require "active_job"
+require "active_support"
+require "uniform_notifier"
 
-require "httpclient"
-require "http"
-require "patron"
+require "sidekiq"
 require "net/http"
 require "uri"
-require "typhoeus"
-require "ethon"
-
-require "isolator"
-
-ActiveJob::Base.logger = Logger.new(IO::NULL)
 
 begin
   require "pry-byebug"
 rescue LoadError # rubocop:disable Lint/HandleExceptions
 end
+
+require "isolator"
 
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
@@ -44,5 +36,7 @@ RSpec.configure do |config|
   config.after(:each) do
     Isolator.remove_instance_variable(:@config) if
      Isolator.instance_variable_defined?(:@config)
+
+    Isolator.clear_transactions!
   end
 end

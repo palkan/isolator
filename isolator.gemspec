@@ -20,7 +20,6 @@ Gem::Specification.new do |spec|
   end
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "uniform_notifier", "~> 1.11"
   spec.add_runtime_dependency "sniffer", "~> 0.3.0"
 
   spec.add_development_dependency "bundler", "~> 1.14"
@@ -29,6 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rubocop", "~> 0.51"
   spec.add_development_dependency "rubocop-md", "~> 0.2"
 
+  spec.add_development_dependency "uniform_notifier", "~> 1.11"
   spec.add_development_dependency "sidekiq", "~> 5.0"
   spec.add_development_dependency "delayed_job_active_record"
 end

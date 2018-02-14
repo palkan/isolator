@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
-module Isolator
+module Isolator # :nodoc:all
   class UnsafeOperationError < StandardError
     MESSAGE = "You are trying to do unsafe operation inside db transaction"
 
-    def initialize(msg = self.class::MESSAGE)
+    def initialize(msg = nil)
+      msg ||= self.class::MESSAGE
       super
     end
   end
