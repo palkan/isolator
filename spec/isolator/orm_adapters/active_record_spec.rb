@@ -14,8 +14,8 @@ describe "ActiveRecord integration" do
           Net::HTTP.get("example.com", "/index.html")
         end
       end
-  
-      it { expect { subject }.to raise_error(Isolator::NetworkRequestError) }
+
+      it { expect { subject }.to raise_error(Isolator::HTTPError) }
 
       context "when adapter is disabled" do
         around do |ex|
@@ -58,11 +58,11 @@ describe "ActiveRecord integration" do
             ex.run
             Isolator.adapters.active_job.enable!
           end
-  
+
           it "doesn't raise" do
             expect { subject }.to_not raise_error
           end
-        end  
+        end
       end
 
       context "Sidekiq" do
@@ -80,11 +80,11 @@ describe "ActiveRecord integration" do
             ex.run
             Isolator.adapters.sidekiq.enable!
           end
-  
+
           it "doesn't raise" do
             expect { subject }.to_not raise_error
           end
-        end  
+        end
       end
     end
   end
@@ -96,7 +96,7 @@ describe "ActiveRecord integration" do
     describe "#execute" do
       specify do
         connection.execute("begin")
-        expect { make_request }.to raise_error(Isolator::NetworkRequestError)
+        expect { make_request }.to raise_error(Isolator::HTTPError)
 
         expect(Isolator).to be_within_transaction
 
@@ -108,7 +108,7 @@ describe "ActiveRecord integration" do
     describe "#begin_db_transaction" do
       specify do
         connection.begin_db_transaction
-        expect { make_request }.to raise_error(Isolator::NetworkRequestError)
+        expect { make_request }.to raise_error(Isolator::HTTPError)
 
         expect(Isolator).to be_within_transaction
 

@@ -7,7 +7,7 @@ module Isolator
       key_str = key.to_s
 
       if key_str.end_with?("=")
-        self[key_str.tr('=')] = args.first 
+        self[key_str.tr("=")] = args.first
       else
         fetch(key_str) { super }
       end
@@ -16,7 +16,7 @@ module Isolator
     def respond_to_missing?(key)
       key_str = key.to_s
       if key_str.end_with?("=")
-        key?(key_str.tr('=')) || super
+        key?(key_str.tr("=")) || super
       else
         key?(key_str) || super
       end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Isolator # :nodoc:all
+module Isolator # :nodoc: all
   class UnsafeOperationError < StandardError
     MESSAGE = "You are trying to do unsafe operation inside db transaction"
 
@@ -10,7 +10,7 @@ module Isolator # :nodoc:all
     end
   end
 
-  class NetworkRequestError < UnsafeOperationError
+  class HTTPError < UnsafeOperationError
     MESSAGE = "You are trying to make an outgoing network request inside db transaction. "
   end
 

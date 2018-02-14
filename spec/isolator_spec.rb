@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe Isolator do
@@ -7,7 +9,7 @@ describe Isolator do
 
       described_class.incr_transactions!
       expect(described_class).to be_within_transaction
-      
+
       described_class.decr_transactions!
       expect(described_class).not_to be_within_transaction
     end

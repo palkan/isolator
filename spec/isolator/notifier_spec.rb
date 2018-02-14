@@ -4,7 +4,7 @@ require "spec_helper"
 
 describe Isolator::Notifier do
   describe "#call" do
-    let(:exception) { Isolator::NetworkRequestError.new("test exception") }
+    let(:exception) { Isolator::HTTPError.new("test exception") }
 
     let(:uniform_notifier) do
       double(out_of_channel_notify: nil)
@@ -44,16 +44,8 @@ describe Isolator::Notifier do
       end
 
       specify(aggregate_failures: true) do
-        expect { subject }.to raise_error(Isolator::NetworkRequestError)
+        expect { subject }.to raise_error(Isolator::HTTPError)
         expect(uniform_notifier).to_not have_received(:out_of_channel_notify)
-      end
-
-      context "when object has no isolator_exception" do
-        let(:object) { double }
-
-        it "raises UnsafeOperationError" do
-          expect { subject }.to raise_error(Isolator::UnsafeOperationError)
-        end
       end
     end
   end

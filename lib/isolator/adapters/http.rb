@@ -8,7 +8,7 @@ Sniffer.config do |c|
 end
 
 Isolator.isolate :http, Sniffer.singleton_class,
-                 :store, exception_class: Isolator::NetworkRequestError
+                 :store, exception_class: Isolator::HTTPError
 
 Isolator.before_isolate do
   Sniffer.enable!

@@ -6,7 +6,7 @@ describe "Sidekiq adapter" do
   before do
     allow(Isolator).to receive(:within_transaction?) { true }
   end
-  
+
   let(:worker) { SidekiqWorker }
 
   describe "#perform_now" do

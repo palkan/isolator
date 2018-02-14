@@ -39,6 +39,9 @@ Style/BlockDelimiters:
   Exclude:
     - 'spec/**/*.rb'
 
+Style/NumericPredicate:
+  Enabled: false
+
 Layout/SpaceInsideStringInterpolation:
   EnforcedStyle: no_space
 

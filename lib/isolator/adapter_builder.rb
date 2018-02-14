@@ -15,7 +15,7 @@ module Isolator
 
       add_patch_method adapter, target, method_name
       adapter
-   end
+    end
 
     def self.add_patch_method(adapter, base, method_name)
       mod = Module.new do
