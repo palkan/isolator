@@ -110,9 +110,9 @@ describe "ActiveRecord integration" do
 
         context "when adapter is enabled" do
           around do |ex|
-            Isolator.adapters.action_mailer.disable!
-            ex.run
             Isolator.adapters.action_mailer.enable!
+            ex.run
+            Isolator.adapters.action_mailer.disable!
           end
 
           it "raises Isolator::ActionMailerError" do
