@@ -87,6 +87,40 @@ describe "ActiveRecord integration" do
         end
       end
     end
+
+    context "Email sending" do
+      context "ActionMailer" do
+        subject do
+          ar_class.transaction do
+            SampleEmail.hello.deliver
+          end
+        end
+
+        context "when adapter is disabled" do
+          around do |ex|
+            Isolator.adapters.action_mailer.disable!
+            ex.run
+            Isolator.adapters.action_mailer.enable!
+          end
+
+          it "doesn't raise" do
+            expect { subject }.to_not raise_error
+          end
+        end
+
+        context "when adapter is enabled" do
+          around do |ex|
+            Isolator.adapters.action_mailer.disable!
+            ex.run
+            Isolator.adapters.action_mailer.enable!
+          end
+
+          it "raises Isolator::ActionMailerError" do
+            expect { subject }.to raise_error(Isolator::ActionMailerError)
+          end
+        end
+      end
+    end
   end
 
   context "other transaction methods" do
