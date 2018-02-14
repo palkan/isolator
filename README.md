@@ -47,7 +47,7 @@ However, there are some potential caveats:
 
 1) Isolator tries to automatically detect the environment and include only necessary adapters. Thus the order of loading gems matters: make sure that `isolator` is required in the end.
 
-2) Isolator does not distinguish framework-level adapters. For example, `:active_job` spy doesn't take into account which AJ adapter you use; if you are using a safe one (e.g. `Que`) just disable the `:active_job` adapter to avoid false negatives (i.e. `Isolator.adatpers.active_job.disable!`).
+2) Isolator does not distinguish framework-level adapters. For example, `:active_job` spy doesn't take into account which AJ adapter you use; if you are using a safe one (e.g. `Que`) just disable the `:active_job` adapter to avoid false negatives (i.e. `Isolator.adapters.active_job.disable!`).
 
 3) Isolator tries to detect the `test` environment and slightly change it behaviour: first, it respect _transactional tests_; secondly, error raising is turned on by default (see [below](#configuration)).
 
@@ -70,6 +70,11 @@ Isolator relys on [uniform_notifier][] to send custom notifications.
 
 **NOTE:** `uniform_notifier` should be installed separately (i.e. added to Gemfile).
 
+### Supported ORMs
+
+- `ActiveRecord` >= 4.1
+- `ROM::SQL` (only if Active Support instrumentation extenstion is loaded)
+
 ### Adapters
 
 Isolator has a bunch of built-in adapters:
@@ -77,7 +82,38 @@ Isolator has a bunch of built-in adapters:
 - `:active_job`
 - `:sidekiq`
 
+You can dynamically enable/disable adapters, e.g.:
+
+```ruby
+# Disable HTTP adapter == do not spy on HTTP requests
+Isolator.adapters.http.disable!
+
+# Enable back
+
+Isolator.adapters.http.enable!
+```
+
 ## Custom Adapters
+
+An adapter is just a combination of a _method wrapper_ and lifecycle hooks.
+
+Suppose that you have a class `Danger` with a method `#explode`, which is not safe to be run within a DB transaction. Then you can _isolate_ it (i.e. register with Isolator):
+
+```ruby
+# The first argument is a uniq adapter id,
+# you can use it later to enable/disable the adapter
+#
+# The second argument is the method owner and
+# the third one is a method name.
+Isolotar.isolate :danger, Danger, :explode, **options
+
+# NOTE: if you want to isolate a class method, use signleton_class instead
+Isolator.isolate :danger, Danger.singleton_class, :explode, **options
+```
+
+Possible `options` are:
+- `exception_class` – an exception class to raise in case of offense
+- `exception_message` – custom exception message (could be specified without a class)
 
 ## Contributing
 
