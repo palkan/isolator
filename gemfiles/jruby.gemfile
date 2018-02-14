@@ -1,7 +1,8 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
-gem 'activerecord-jdbcsqlite3-adapter', '~> 50.0'
-gem 'jdbc-sqlite3'
-gem 'activerecord', '~> 5.0.0'
+gem "activerecord-jdbcsqlite3-adapter", "~> 50.0"
+gem "jdbc-sqlite3"
+gem "activerecord", "~> 5.0.0"
+gem "activejob", "~> 5.0"
 
-gemspec path: '..'
+gemspec path: ".."
