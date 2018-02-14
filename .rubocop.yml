@@ -51,3 +51,6 @@ Metrics/LineLength:
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*.rb'
+
+Layout/ElseAlignment:
+  Enabled: false
