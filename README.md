@@ -42,7 +42,7 @@ class Comment < ApplicationRecord
   end
 end
 
-Comment.create(text: 'Mars is watching you!')
+Comment.create(text: "Mars is watching you!")
 #=> raises Isolator::BackgroundJobError
 ```
 
