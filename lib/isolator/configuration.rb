@@ -23,8 +23,6 @@ module Isolator
     alias raise_exceptions? raise_exceptions
     alias send_notifications? send_notifications
 
-    private
-
     def test_env?
       ENV["RACK_ENV"] == "test" || ENV["RAILS_ENV"] == "test"
     end

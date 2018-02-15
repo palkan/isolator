@@ -29,6 +29,12 @@ RSpec.configure do |config|
 
   config.order = :random
 
+  config.define_derived_metadata(file_path: %r{/spec/integrations/}) do |metadata|
+    metadata[:type] = :integration
+  end
+
+  config.include IntegrationHelpers, type: :integration
+
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end

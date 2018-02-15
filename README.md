@@ -27,6 +27,22 @@ end
 #=> raises Isolator::BackgroundJobError
 ```
 
+One pretty common bad practice–enqueing background job from `after_create` callback:
+
+```ruby
+class Comment < ApplicationRecord
+  # the good way is to use after_create_commit
+  # (or not use callbacks at all)
+  after_create :notify_author
+
+  private
+
+  def notify_author
+    CommentMailer.comment_created(self).deliver_later
+  end
+end
+```
+
 Isolator is supposed to be used in tests and on staging.
 
 ## Installation
@@ -34,9 +50,17 @@ Isolator is supposed to be used in tests and on staging.
 Add this line to your application's Gemfile:
 
 ```ruby
+# We suppose that Isolator is used in development and test
+# environments.
 group :development, :test do
   gem "isolator"
 end
+
+# Or you can add it to Gemfile with `require: false`
+# and require it manually in your code.
+#
+# This aproach is useful when you want to use it on staging too.
+gem "isolator", require: false
 ```
 
 ## Usage

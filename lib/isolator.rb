@@ -37,18 +37,26 @@ module Isolator
       Thread.current[:isolator_disabled] = true
     end
 
+    def transactions_threshold
+      Thread.current.fetch(:isolator_threshold)
+    end
+
+    def transactions_threshold=(val)
+      Thread.current[:isolator_threshold] = val
+    end
+
     def incr_transactions!
       return unless enabled?
       Thread.current[:isolator_transactions] =
         Thread.current.fetch(:isolator_transactions, 0) + 1
-      start! if Thread.current.fetch(:isolator_transactions) == 1
+      start! if Thread.current.fetch(:isolator_transactions) == transactions_threshold
     end
 
     def decr_transactions!
       return unless enabled?
       Thread.current[:isolator_transactions] =
         Thread.current.fetch(:isolator_transactions) - 1
-      finish! if Thread.current.fetch(:isolator_transactions) == 0
+      finish! if Thread.current.fetch(:isolator_transactions) == (transactions_threshold - 1)
     end
 
     def clear_transactions!
@@ -56,7 +64,7 @@ module Isolator
     end
 
     def within_transaction?
-      Thread.current.fetch(:isolator_transactions, 0) > 0
+      Thread.current.fetch(:isolator_transactions, 0) >= transactions_threshold
     end
 
     def enabled?
@@ -70,6 +78,8 @@ module Isolator
     include Isolator::Isolate
     include Isolator::Callbacks
   end
+
+  self.transactions_threshold = 1
 end
 
 require "isolator/orm_adapters"
