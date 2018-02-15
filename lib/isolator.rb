@@ -73,4 +73,11 @@ module Isolator
 end
 
 require "isolator/orm_adapters"
-require "isolator/adapters"
+
+# Load adapters after application initialization
+# (when all deps are likely loaded).
+if defined?(Rails)
+  require "isolator/railtie"
+else
+  require "isolator/adapters"
+end
