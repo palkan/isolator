@@ -6,7 +6,7 @@ module Isolator
       # Load adapters
       require "isolator/adapters"
 
-      next unless Isolator.config.test_env?
+      next unless Rails.env.test?
 
       if defined?(::ActiveRecord::TestFixtures)
         ::ActiveRecord::TestFixtures.prepend(
