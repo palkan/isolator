@@ -9,11 +9,10 @@ gem "pry-byebug"
 
 gem "sqlite3"
 
-gem "activerecord", "~> 5.0"
-gem "activejob", "~> 5.0"
-
-local_gemfile = "Gemfile.local"
+local_gemfile = File.join(__dir__, "Gemfile.local")
 
 if File.exist?(local_gemfile)
   eval(File.read(local_gemfile)) # rubocop:disable Security/Eval
+else
+  gem "rails", "~> 5.0"
 end
