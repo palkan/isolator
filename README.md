@@ -27,7 +27,7 @@ end
 #=> raises Isolator::BackgroundJobError
 ```
 
-One pretty common bad practice–enqueing background job from `after_create` callback:
+Of course, Isolator can detect _implicit_ transactions too. Consider this pretty common bad practice–enqueueing background job from `after_create` callback:
 
 ```ruby
 class Comment < ApplicationRecord
@@ -41,6 +41,9 @@ class Comment < ApplicationRecord
     CommentMailer.comment_created(self).deliver_later
   end
 end
+
+Comment.create(text: 'Mars is watching you!')
+#=> raises Isolator::BackgroundJobError
 ```
 
 Isolator is supposed to be used in tests and on staging.
@@ -59,7 +62,7 @@ end
 # Or you can add it to Gemfile with `require: false`
 # and require it manually in your code.
 #
-# This aproach is useful when you want to use it on staging too.
+# This approach is useful when you want to use it in staging env too.
 gem "isolator", require: false
 ```
 
@@ -69,11 +72,11 @@ Isolator is a plug-n-play tool, so, it begins to work right after required.
 
 However, there are some potential caveats:
 
-1) Isolator tries to automatically detect the environment and include only necessary adapters. Thus the order of loading gems matters: make sure that `isolator` is required in the end.
+1) Isolator tries to detect the environment automatically and includes only necessary adapters. Thus the order of loading gems matters: make sure that `isolator` is required in the end (NOTE: in Rails, all adapters loaded after application initialization).
 
 2) Isolator does not distinguish framework-level adapters. For example, `:active_job` spy doesn't take into account which AJ adapter you use; if you are using a safe one (e.g. `Que`) just disable the `:active_job` adapter to avoid false negatives (i.e. `Isolator.adapters.active_job.disable!`).
 
-3) Isolator tries to detect the `test` environment and slightly change it behaviour: first, it respect _transactional tests_; secondly, error raising is turned on by default (see [below](#configuration)).
+3) Isolator tries to detect the `test` environment and slightly change its behavior: first, it respect _transactional tests_; secondly, error raising is turned on by default (see [below](#configuration)).
 
 ### Configuration
 
@@ -92,7 +95,7 @@ end
 
 Isolator relys on [uniform_notifier][] to send custom notifications.
 
-**NOTE:** `uniform_notifier` should be installed separately (i.e. added to Gemfile).
+**NOTE:** `uniform_notifier` should be installed separately (i.e., added to Gemfile).
 
 ### Supported ORMs
 
@@ -121,10 +124,10 @@ Isolator.adapters.http.enable!
 
 An adapter is just a combination of a _method wrapper_ and lifecycle hooks.
 
-Suppose that you have a class `Danger` with a method `#explode`, which is not safe to be run within a DB transaction. Then you can _isolate_ it (i.e. register with Isolator):
+Suppose that you have a class `Danger` with a method `#explode`, which is not safe to be run within a DB transaction. Then you can _isolate_ it (i.e., register with Isolator):
 
 ```ruby
-# The first argument is a uniq adapter id,
+# The first argument is a unique adapter id,
 # you can use it later to enable/disable the adapter
 #
 # The second argument is the method owner and
@@ -139,7 +142,7 @@ Possible `options` are:
 - `exception_class` – an exception class to raise in case of offense
 - `exception_message` – custom exception message (could be specified without a class)
 
-You can also add some callbacks to be run before and after transaction:
+You can also add some callbacks to be run before and after the transaction:
 
 ```ruby
 Isolator.before_isolate do
@@ -147,7 +150,7 @@ Isolator.before_isolate do
 end
 
 Isolator.after_isolate do
- # right after the transaction has been commited/rollbacked
+ # right after the transaction has been committed/rollbacked
 end
 ```
 
