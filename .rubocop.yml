@@ -22,7 +22,7 @@ AllCops:
 Rails:
   Enabled: false
 
-Bundler/OrederedGems:
+Bundler/OrderedGems:
   Enabled: false
 
 Style/SymbolArray:
