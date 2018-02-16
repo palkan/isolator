@@ -6,6 +6,7 @@ require "action_controller/railtie"
 require "isolator"
 
 require_relative "./active_record_init"
+require_relative "./action_mailer_init"
 require_relative "./active_job_init"
 
 class TestApp < Rails::Application
