@@ -128,7 +128,11 @@ describe "ActiveRecord integration" do
           end
 
           context "and active_job adapter is disabled" do
-            before { Isolator.adapters.active_job.disable! }
+            around do |ex|
+              Isolator.adapters.active_job.disable!
+              ex.run
+              Isolator.adapters.active_job.enable!
+            end
 
             it "does not raise error on #deliver_later" do
               expect { deliver_later }.to_not raise_error
