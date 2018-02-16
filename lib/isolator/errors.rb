@@ -20,6 +20,6 @@ module Isolator # :nodoc: all
   end
 
   class ActionMailerError < UnsafeOperationError
-    MESSAGE = "You are trying to send email inside db transaction. "
+    MESSAGE = "You are trying to send email inside db transaction."
   end
 end
