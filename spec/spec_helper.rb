@@ -13,8 +13,6 @@ Sidekiq::Testing.fake!
 require "net/http"
 require "uri"
 
-require "action_mailer"
-
 begin
   require "pry-byebug"
 rescue LoadError # rubocop:disable Lint/HandleExceptions
