@@ -90,13 +90,25 @@ describe "ActiveRecord integration" do
 
     context "Email sending" do
       context "ActionMailer" do
-        subject do
+        let(:deliver) do
           ar_class.transaction do
             SampleEmail.hello.deliver
           end
         end
 
-        context "when adapter is disabled" do
+        let(:deliver_later) do
+          ar_class.transaction do
+            SampleEmail.hello.deliver_later
+          end
+        end
+
+        let(:email_body) do
+          ar_class.transaction do
+            SampleEmail.hello.body
+          end
+        end
+
+        context "when action_mailer adapter is disabled" do
           around do |ex|
             Isolator.adapters.action_mailer.disable!
             ex.run
@@ -104,19 +116,31 @@ describe "ActiveRecord integration" do
           end
 
           it "doesn't raise" do
-            expect { subject }.to_not raise_error
+            expect { deliver }.to_not raise_error
           end
         end
 
-        context "when adapter is enabled" do
+        context "when action_mailer adapter is enabled" do
           around do |ex|
             Isolator.adapters.action_mailer.enable!
             ex.run
             Isolator.adapters.action_mailer.disable!
           end
 
-          it "raises Isolator::ActionMailerError" do
-            expect { subject }.to raise_error(Isolator::ActionMailerError)
+          context "and active_job adapter is disabled" do
+            before { Isolator.adapters.active_job.disable! }
+
+            it "does not raise error on #deliver_later" do
+              expect { deliver_later }.to_not raise_error
+            end
+          end
+
+          it "raises Isolator::ActionMailerError on email delivering" do
+            expect { deliver }.to raise_error(Isolator::ActionMailerError)
+          end
+
+          it "does not raise error on email rendering" do
+            expect { email_body }.to_not raise_error
           end
         end
       end
