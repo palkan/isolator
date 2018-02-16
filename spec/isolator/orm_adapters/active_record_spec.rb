@@ -108,11 +108,11 @@ describe "ActiveRecord integration" do
           end
         end
 
-        context "when action_mailer adapter is disabled" do
+        context "when mailer adapter is disabled" do
           around do |ex|
-            Isolator.adapters.action_mailer.disable!
+            Isolator.adapters.mailer.disable!
             ex.run
-            Isolator.adapters.action_mailer.enable!
+            Isolator.adapters.mailer.enable!
           end
 
           it "doesn't raise" do
@@ -120,11 +120,11 @@ describe "ActiveRecord integration" do
           end
         end
 
-        context "when action_mailer adapter is enabled" do
+        context "when mailer adapter is enabled" do
           around do |ex|
-            Isolator.adapters.action_mailer.enable!
+            Isolator.adapters.mailer.enable!
             ex.run
-            Isolator.adapters.action_mailer.disable!
+            Isolator.adapters.mailer.disable!
           end
 
           context "and active_job adapter is disabled" do
@@ -140,12 +140,35 @@ describe "ActiveRecord integration" do
           end
 
           it "raises Isolator::ActionMailerError on email delivering" do
-            expect { deliver }.to raise_error(Isolator::ActionMailerError)
+            expect { deliver }.to raise_error(Isolator::MailerError)
           end
 
           it "does not raise error on email rendering" do
             expect { email_body }.to_not raise_error
           end
+        end
+      end
+
+      context "Simple email" do
+        around do |ex|
+          Isolator.adapters.mailer.enable!
+          ex.run
+          Isolator.adapters.mailer.disable!
+        end
+
+        let(:send_email) do
+          ar_class.transaction do
+            Mail.deliver do
+              to "me@me.com"
+              from "you@you.com"
+              subject "testing"
+              body "hello"
+            end
+          end
+        end
+
+        it "raises Isolator::MailerError" do
+          expect { send_email }.to raise_error(Isolator::MailerError)
         end
       end
     end

@@ -19,7 +19,7 @@ module Isolator # :nodoc: all
       "In case of transaction failure, this may lead to data inconsistency and unexpected bugs"
   end
 
-  class ActionMailerError < UnsafeOperationError
+  class MailerError < UnsafeOperationError
     MESSAGE = "You are trying to send email inside db transaction."
   end
 end
