@@ -2,6 +2,8 @@
 
 ## master
 
+- Add `ignore_if` modifier to adapter. ([@palkan][])
+
 - [PR [#5](https://github.com/palkan/isolator/pull/5)] Add `mail` adapter. ([@alexshgov][])
 
 - Initial version. ([@palkan][], [@TheSmartnik][], [@alexshgov][])

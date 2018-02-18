@@ -121,6 +121,20 @@ Isolator.adapters.http.disable!
 Isolator.adapters.http.enable!
 ```
 
+### Ignore Offenses
+
+Since Isolator adapter is just a wrapper over original code, it may lead to false positives when there is another library patching the same behaviour. In that case you might want to ignore some offenses.
+
+Consider an example: we use Sidekiq along with [`sidekiq-postpone`](https://github.com/marshall-lee/sidekiq-postpone)–gem that patches `Sidekiq::Client#raw_push` and allows you to postpone jobs enqueueing (e.g. to enqueue everything when a transaction is commited–we don't want to raise exceptions in such situation).
+
+To ignore offenses when `sidekiq-postpone` is active, you can add an ignore `proc`:
+
+```ruby
+Isolator.adapters.sidekiq.ignore_if { Thread.current[:sidekiq_postpone] }
+```
+
+You can add as many _ignores_ as you want, the offense is registered iff all of them return false.
+
 ## Custom Adapters
 
 An adapter is just a combination of a _method wrapper_ and lifecycle hooks.
