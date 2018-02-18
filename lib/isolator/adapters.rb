@@ -2,4 +2,4 @@
 
 require "isolator/adapters/http"
 require "isolator/adapters/background_jobs"
-require "isolator/adapters/mailer"
+require "isolator/adapters/mailers"

@@ -2,6 +2,8 @@
 
 ## master
 
+- [PR [#5](https://github.com/palkan/isolator/pull/5)] Add `mail` adapter. ([@alexshgov][])
+
 - Initial version. ([@palkan][], [@TheSmartnik][], [@alexshgov][])
 
 [@palkan]: https://github.com/palkan
