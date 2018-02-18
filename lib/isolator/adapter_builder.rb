@@ -20,7 +20,7 @@ module Isolator
     def self.add_patch_method(adapter, base, method_name)
       mod = Module.new do
         define_method method_name do |*args, &block|
-          adapter.notify(caller) if adapter.notify_isolator?
+          adapter.notify(caller) if adapter.notify_isolator?(*args)
           super(*args, &block)
         end
       end

@@ -22,9 +22,23 @@ module Isolator
         Isolator.notify(exception: build_exception, backtrace: backtrace)
       end
 
-      def notify_isolator?
-        enabled? && Isolator.within_transaction?
+      def notify_isolator?(*args)
+        enabled? && Isolator.within_transaction? && !ignored?(*args)
       end
+
+      def ignore_if
+        ignores << Proc.new
+      end
+
+      def ignores
+        @ignores ||= []
+      end
+
+      def ignored?(*args)
+        ignores.any? { |block| block.call(*args) }
+      end
+
+      private
 
       def build_exception
         klass = exception_class || Isolator::UnsafeOperationError
