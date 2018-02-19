@@ -28,11 +28,15 @@ module Isolator
 
     def log_exception
       return unless Isolator.config.logger
-      Isolator.config.logger.warn(
-        "[ISOLATOR EXCEPTION]\n" \
-        "#{exception.message}\n" \
-        "  ↳ #{filtered_backtrace.first}"
-      )
+
+      offense_line = filtered_backtrace.first
+
+      msg = "[ISOLATOR EXCEPTION]\n" \
+            "#{exception.message}"
+
+      msg += "\n  ↳ #{offense_line}" if offense_line
+
+      Isolator.config.logger.warn(msg)
     end
 
     def send_notifications
@@ -44,7 +48,7 @@ module Isolator
     end
 
     def filtered_backtrace
-      backtrace.reject { |line| line =~ /gems/ }.take_while { |line| line !~ /ruby/ }
+      backtrace.reject { |line| line =~ /\/(gems|ruby)/ }.take_while { |line| line !~ /ruby/ }
     end
 
     def uniform_notifier_loaded?
