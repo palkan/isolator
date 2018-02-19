@@ -10,10 +10,12 @@ Isolator.isolate :http, target: Sniffer.singleton_class,
                         exception_class: Isolator::HTTPError
 
 Isolator.before_isolate do
+  next if Isolator.adapters.http.disabled?
   Sniffer.enable!
 end
 
 Isolator.after_isolate do
+  next if Isolator.adapters.http.disabled?
   Sniffer.clear!
   Sniffer.disable!
 end

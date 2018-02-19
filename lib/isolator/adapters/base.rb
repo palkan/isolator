@@ -15,7 +15,11 @@ module Isolator
       end
 
       def enabled?
-        @disabled != true
+        !disabled?
+      end
+
+      def disabled?
+        @disabled == true
       end
 
       def notify(backtrace, *args)
