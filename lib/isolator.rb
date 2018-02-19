@@ -39,6 +39,7 @@ module Isolator
 
     # Accepts block and disable Isolator within
     def disable
+      return yield if disabled?
       res = nil
       begin
         disable!
@@ -51,6 +52,7 @@ module Isolator
 
     # Accepts block and enable Isolator within
     def enable
+      return yield if enabled?
       res = nil
       begin
         enable!
@@ -90,7 +92,11 @@ module Isolator
     end
 
     def enabled?
-      Thread.current[:isolator_disabled] != true
+      !disabled?
+    end
+
+    def disabled?
+      Thread.current[:isolator_disabled] == true
     end
 
     def adapters
