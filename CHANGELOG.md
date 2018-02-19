@@ -2,6 +2,8 @@
 
 ## master
 
+## 0.1.0 (2018-02-19)
+
 - Add `test_after_commit` patch. ([@palkan][])
 
 - [PR [#7](https://github.com/palkan/isolator/pull/7)] Add WebMock adapter. ([@palkan][])
