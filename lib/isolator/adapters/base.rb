@@ -18,11 +18,12 @@ module Isolator
         @disabled != true
       end
 
-      def notify(backtrace)
+      def notify(backtrace, *args)
+        return unless notify?(*args)
         Isolator.notify(exception: build_exception, backtrace: backtrace)
       end
 
-      def notify_isolator?(*args)
+      def notify?(*args)
         enabled? && Isolator.within_transaction? && !ignored?(*args)
       end
 

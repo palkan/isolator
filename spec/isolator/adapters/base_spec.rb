@@ -10,7 +10,8 @@ describe "Base adapter" do
       end
     end
 
-    Isolator.isolate :test, ::Isolator::Danger.singleton_class, :call
+    Isolator.isolate :test, target: ::Isolator::Danger.singleton_class,
+                            method_name: :call
   end
 
   after(:all) do
