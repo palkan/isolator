@@ -12,10 +12,12 @@ module Isolator
     end
 
     def start!
+      return if Isolator.disabled?
       before_isolate_callbacks.each(&:call)
     end
 
     def finish!
+      return if Isolator.disabled?
       after_isolate_callbacks.each(&:call)
     end
 
