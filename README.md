@@ -109,6 +109,7 @@ Isolator has a bunch of built-in adapters:
 - `:active_job`
 - `:sidekiq`
 - `:mailer`
+- `:webmock` – track mocked HTTP requests (unseen by Sniffer) in tests
 
 You can dynamically enable/disable adapters, e.g.:
 
