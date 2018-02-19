@@ -24,7 +24,7 @@ module Isolator
       end
 
       def notify?(*args)
-        enabled? && Isolator.within_transaction? && !ignored?(*args)
+        enabled? && Isolator.enabled? && Isolator.within_transaction? && !ignored?(*args)
       end
 
       def ignore_if

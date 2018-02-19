@@ -37,6 +37,18 @@ module Isolator
       Thread.current[:isolator_disabled] = true
     end
 
+    # Accepts block and disable Isolator within
+    def disable
+      res = nil
+      begin
+        disable!
+        res = yield
+      ensure
+        enable!
+      end
+      res
+    end
+
     def transactions_threshold
       Thread.current.fetch(:isolator_threshold)
     end
@@ -46,14 +58,12 @@ module Isolator
     end
 
     def incr_transactions!
-      return unless enabled?
       Thread.current[:isolator_transactions] =
         Thread.current.fetch(:isolator_transactions, 0) + 1
       start! if Thread.current.fetch(:isolator_transactions) == transactions_threshold
     end
 
     def decr_transactions!
-      return unless enabled?
       Thread.current[:isolator_transactions] =
         Thread.current.fetch(:isolator_transactions) - 1
       finish! if Thread.current.fetch(:isolator_transactions) == (transactions_threshold - 1)

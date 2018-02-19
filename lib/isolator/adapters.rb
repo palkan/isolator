@@ -3,3 +3,4 @@
 require "isolator/adapters/http"
 require "isolator/adapters/background_jobs"
 require "isolator/adapters/mailers"
+require "isolator/adapters/after_commit" if defined?(::TestAfterCommit)

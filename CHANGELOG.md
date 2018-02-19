@@ -2,6 +2,8 @@
 
 ## master
 
+- Add `test_after_commit` patch. ([@palkan][])
+
 - [PR [#7](https://github.com/palkan/isolator/pull/7)] Add WebMock adapter. ([@palkan][])
 
 - Add `ignore_if` modifier to adapter. ([@palkan][])

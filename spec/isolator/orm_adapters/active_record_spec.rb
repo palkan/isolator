@@ -92,7 +92,7 @@ describe "ActiveRecord integration" do
       context "ActionMailer" do
         let(:deliver) do
           ar_class.transaction do
-            SampleEmail.hello.deliver
+            SampleEmail.hello.deliver_now
           end
         end
 
