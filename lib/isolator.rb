@@ -94,10 +94,5 @@ end
 
 require "isolator/orm_adapters"
 
-# Load adapters after application initialization
-# (when all deps are likely loaded).
-if defined?(Rails)
-  require "isolator/railtie"
-else
-  require "isolator/adapters"
-end
+require "isolator/adapters"
+require "isolator/railtie" if defined?(Rails)

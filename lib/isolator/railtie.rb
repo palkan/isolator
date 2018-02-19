@@ -3,8 +3,9 @@
 module Isolator
   class Railtie < ::Rails::Railtie # :nodoc:
     config.after_initialize do
-      # Load adapters
-      require "isolator/adapters"
+      # Forec load adapters after application initialization
+      # (when all deps are likely to be loaded).
+      load File.join(__dir__, "adapters.rb")
 
       next unless Rails.env.test?
 
