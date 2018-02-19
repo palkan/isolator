@@ -49,6 +49,18 @@ module Isolator
       res
     end
 
+    # Accepts block and enable Isolator within
+    def enable
+      res = nil
+      begin
+        enable!
+        res = yield
+      ensure
+        disable!
+      end
+      res
+    end
+
     def transactions_threshold
       Thread.current.fetch(:isolator_threshold)
     end
