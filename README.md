@@ -1,3 +1,4 @@
+[![Cult Of Martians](http://cultofmartians.com/assets/cult-of-martians-badge.svg)](http://cultofmartians.com/tasks/isolator.html)
 [![Gem Version](https://badge.fury.io/rb/isolator.svg)](https://badge.fury.io/rb/isolator)
 [![Build Status](https://travis-ci.org/palkan/isolator.svg?branch=master)](https://travis-ci.org/palkan/isolator)
 
