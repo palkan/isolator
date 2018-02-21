@@ -3,7 +3,7 @@
 require "sniffer"
 
 # Disable Sniffer logger
-Sniffer::Config.defaults["logger"] = Logger.new(IO::NULL)
+Sniffer::Config.defaults["logger"] = nil
 
 Isolator.isolate :http, target: Sniffer.singleton_class,
                         method_name: :store,

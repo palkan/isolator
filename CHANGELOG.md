@@ -2,6 +2,10 @@
 
 ## master
 
+## 0.1.1 (2018-02-21)
+
+- Update `sniffer` required mininum version. ([@palkan][])
+
 ## 0.1.0 (2018-02-19)
 
 - Add `test_after_commit` patch. ([@palkan][])
