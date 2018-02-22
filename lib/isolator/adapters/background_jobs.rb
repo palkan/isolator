@@ -7,3 +7,4 @@ if defined?(ActiveSupport)
 end
 
 require "isolator/adapters/background_jobs/sidekiq" if defined?(Sidekiq::Client)
+require "isolator/adapters/background_jobs/resque" if defined?(Resque)

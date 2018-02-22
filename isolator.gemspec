@@ -34,4 +34,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "sidekiq", "~> 5.0"
   spec.add_development_dependency "webmock", "~> 3.1"
   spec.add_development_dependency "test_after_commit", "~> 1.1"
+  spec.add_development_dependency "resque"
+  spec.add_development_dependency "fakeredis"
 end
