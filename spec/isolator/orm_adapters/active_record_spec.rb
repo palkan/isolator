@@ -86,6 +86,28 @@ describe "ActiveRecord integration" do
           end
         end
       end
+
+      context "Resque" do
+        subject do
+          ar_class.transaction do
+            Resque.enqueue(ResqueWorker)
+          end
+        end
+
+        it { expect { subject }.to raise_error(Isolator::BackgroundJobError) }
+
+        context "when adapter is disabled" do
+          around do |ex|
+            Isolator.adapters.resque.disable!
+            ex.run
+            Isolator.adapters.resque.enable!
+          end
+
+          it "doesn't raise" do
+            expect { subject }.to_not raise_error
+          end
+        end
+      end
     end
 
     context "Email sending" do

@@ -10,6 +10,10 @@ require "sidekiq/testing"
 
 Sidekiq::Testing.fake!
 
+require "resque"
+require "fakeredis"
+Resque.redis = Redis.new
+
 require "net/http"
 require "uri"
 

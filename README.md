@@ -109,6 +109,7 @@ Isolator has a bunch of built-in adapters:
 - `:http` – built on top of [Sniffer][]
 - `:active_job`
 - `:sidekiq`
+- `:resque`
 - `:mailer`
 - `:webmock` – track mocked HTTP requests (unseen by Sniffer) in tests
 
