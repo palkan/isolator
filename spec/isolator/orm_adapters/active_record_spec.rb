@@ -109,6 +109,28 @@ describe "ActiveRecord integration" do
         end
       end
 
+      context "Resque scheduler adapter" do
+        subject do
+          ar_class.transaction do
+            Resque.enqueue_at(1.minute.from_now, ResqueWorker)
+          end
+        end
+
+        it { expect { subject }.to raise_error(Isolator::BackgroundJobError) }
+
+        context "when adapter is disabled" do
+          around do |ex|
+            Isolator.adapters.resque_scheduler.disable!
+            ex.run
+            Isolator.adapters.resque_scheduler.enable!
+          end
+
+          it "doesn't raise" do
+            expect { subject }.to_not raise_error
+          end
+        end
+      end
+
       context "SuckerPunch" do
         subject do
           ar_class.transaction do
