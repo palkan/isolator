@@ -108,6 +108,28 @@ describe "ActiveRecord integration" do
           end
         end
       end
+
+      context "SuckerPunch" do
+        subject do
+          ar_class.transaction do
+            SuckerPunchWorker.perform_async
+          end
+        end
+
+        it { expect { subject }.to raise_error(Isolator::BackgroundJobError) }
+
+        context "when adapter is disabled" do
+          around do |ex|
+            Isolator.adapters.sucker_punch.disable!
+            ex.run
+            Isolator.adapters.sucker_punch.enable!
+          end
+
+          it "doesn't raise" do
+            expect { subject }.to_not raise_error
+          end
+        end
+      end
     end
 
     context "Email sending" do
