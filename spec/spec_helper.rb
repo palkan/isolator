@@ -14,6 +14,8 @@ require "resque"
 require "fakeredis"
 Resque.redis = Redis.new
 
+require "sucker_punch"
+
 require "net/http"
 require "uri"
 
