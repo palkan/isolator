@@ -2,6 +2,8 @@
 
 ## master
 
+- [PR [#10](https://github.com/palkan/isolator/pull/10)] Add `sucker_punch` adapter. ([@alexshgov][])
+
 ## 0.2.0 (2018-02-22)
 
 - [PR [#8](https://github.com/palkan/isolator/pull/8)] Add resque background job adapter. ([@dsalahutdinov][])
