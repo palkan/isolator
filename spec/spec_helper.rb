@@ -11,8 +11,8 @@ require "sidekiq/testing"
 Sidekiq::Testing.fake!
 
 require "resque"
-require "fakeredis"
-Resque.redis = Redis.new
+require "resque-scheduler"
+require "sucker_punch"
 
 require "net/http"
 require "uri"

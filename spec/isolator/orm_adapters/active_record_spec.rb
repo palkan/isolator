@@ -108,6 +108,50 @@ describe "ActiveRecord integration" do
           end
         end
       end
+
+      context "Resque scheduler adapter" do
+        subject do
+          ar_class.transaction do
+            Resque.enqueue_at(1.minute.from_now, ResqueWorker)
+          end
+        end
+
+        it { expect { subject }.to raise_error(Isolator::BackgroundJobError) }
+
+        context "when adapter is disabled" do
+          around do |ex|
+            Isolator.adapters.resque_scheduler.disable!
+            ex.run
+            Isolator.adapters.resque_scheduler.enable!
+          end
+
+          it "doesn't raise" do
+            expect { subject }.to_not raise_error
+          end
+        end
+      end
+
+      context "SuckerPunch" do
+        subject do
+          ar_class.transaction do
+            SuckerPunchWorker.perform_async
+          end
+        end
+
+        it { expect { subject }.to raise_error(Isolator::BackgroundJobError) }
+
+        context "when adapter is disabled" do
+          around do |ex|
+            Isolator.adapters.sucker_punch.disable!
+            ex.run
+            Isolator.adapters.sucker_punch.enable!
+          end
+
+          it "doesn't raise" do
+            expect { subject }.to_not raise_error
+          end
+        end
+      end
     end
 
     context "Email sending" do
