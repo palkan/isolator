@@ -36,4 +36,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "test_after_commit", "~> 1.1"
   spec.add_development_dependency "resque"
   spec.add_development_dependency "fakeredis"
+  spec.add_development_dependency "sucker_punch"
 end
