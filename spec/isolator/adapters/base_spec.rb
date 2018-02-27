@@ -16,7 +16,7 @@ describe "Base adapter" do
 
   after(:all) do
     Isolator.send(:remove_const, "Danger")
-    Isolator.adapters.delete(:test)
+    Isolator.adapters.test.disable!
   end
 
   before do
