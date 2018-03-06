@@ -5,8 +5,8 @@ require "spec_helper"
 describe "Base adapter" do
   before(:all) do
     module ::Isolator::Danger # rubocop:disable Style/ClassAndModuleChildren
-      def self.call(a, b)
-        a + b
+      def self.call(arg1, arg2)
+        arg1 + arg2
       end
     end
 
