@@ -145,6 +145,22 @@ Isolator.adapters.sidekiq.ignore_if { Thread.current[:sidekiq_postpone] }
 
 You can add as many _ignores_ as you want, the offense is registered iff all of them return false.
 
+### Using with legacy Rails codebases
+
+If you already have a huge Rails project it can be a tricky to turn Isolator on because you'll immediately get a lot of failed specs. If you want to fix detected issues one by one, you can list all of them in the special file `.isolator_todo.yml` in a following way:
+
+```
+sidekiq:
+  - app/models/user.rb:20
+  - app/models/sales/**/*.rb
+```
+
+All the exceptions raised in the listed lines will be ignored.
+
+### Using with legacy Ruby codebases
+
+If you are not using Rails, you'll have to load ignores from file manually, using `Isolator#load_ignore_config`, for instance `Isolator.load_ignore_config("./config/.isolator_todo.yml")`
+
 ## Custom Adapters
 
 An adapter is just a combination of a _method wrapper_ and lifecycle hooks.

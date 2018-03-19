@@ -2,6 +2,8 @@
 
 ## master
 
+- [PR [#13](https://github.com/palkan/isolator/pull/13)] Allow load ignored offences from YML file using `load_ignore_config`. ([@DmitryTsepelev][])
+
 ## 0.3.0 (2018-04-02)
 
 - Add support for the [database_cleaner](https://github.com/DatabaseCleaner/database_cleaner) gem. ([@Envek][])
@@ -42,3 +44,4 @@
 [@TheSmartnik]: https://github.com/TheSmartnik
 [@dsalahutdinov]: https://github.com/dsalahutdinov
 [@Envek]: https://github.com/Envek
+[@DmitryTsepelev]: https://github.com/DmitryTsepelev
