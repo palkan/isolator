@@ -6,6 +6,7 @@ require "isolator/adapter_builder"
 require "isolator/notifier"
 require "isolator/errors"
 require "isolator/simple_hashie"
+require "isolator/ignorer"
 
 require "isolator/callbacks"
 require "isolator/isolate"
@@ -105,6 +106,7 @@ module Isolator
 
     include Isolator::Isolate
     include Isolator::Callbacks
+    include Isolator::Ignorer
   end
 end
 
