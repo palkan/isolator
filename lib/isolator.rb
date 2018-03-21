@@ -5,7 +5,7 @@ require "isolator/configuration"
 require "isolator/adapter_builder"
 require "isolator/notifier"
 require "isolator/errors"
-require "isolator/simple_hashie"
+require "isolator/adapters/config"
 
 require "isolator/callbacks"
 require "isolator/isolate"
@@ -100,7 +100,7 @@ module Isolator
     end
 
     def adapters
-      @adapters ||= Isolator::SimpleHashie.new
+      @adapters ||= Isolator::Adapters::Config.new
     end
 
     include Isolator::Isolate

@@ -5,8 +5,8 @@ require "spec_helper"
 describe "Base adapter" do
   before(:all) do
     module ::Isolator::Danger # rubocop:disable Style/ClassAndModuleChildren
-      def self.call(a, b)
-        a + b
+      def self.call(arg1, arg2)
+        arg1 + arg2
       end
     end
 
@@ -16,7 +16,7 @@ describe "Base adapter" do
 
   after(:all) do
     Isolator.send(:remove_const, "Danger")
-    Isolator.adapters.delete(:test)
+    Isolator.adapters.test.disable!
   end
 
   before do

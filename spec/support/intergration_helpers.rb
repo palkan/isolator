@@ -4,7 +4,7 @@ require "open3"
 
 module IntegrationHelpers
   def run_rspec(path, chdir: nil, env: {}, tag: nil)
-    chdir ||= File.expand_path("../../integrations/fixtures/rspec", __FILE__)
+    chdir ||= File.expand_path("../integrations/fixtures/rspec", __dir__)
     tagstr = tag.nil? ? "" : " --tag #{tag}"
     output, _status = Open3.capture2(
       env,
@@ -16,7 +16,7 @@ module IntegrationHelpers
 
   def run_minitest(path, chdir: nil, env: {}, name: nil)
     (env["TESTOPTS"] ||= +"") << "--name #{name}"
-    chdir ||= File.expand_path("../../integrations/fixtures/minitest", __FILE__)
+    chdir ||= File.expand_path("../integrations/fixtures/minitest", __dir__)
     output, _status = Open3.capture2(
       env,
       "bundle exec ruby #{path}_fixture.rb #{env['TESTOPTS']}",
