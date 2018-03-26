@@ -25,6 +25,9 @@ Rails:
 Bundler/OrderedGems:
   Enabled: false
 
+Naming/UncommunicativeMethodParamName:
+  Enabled: false
+
 Style/SymbolArray:
   Enabled: false
 
