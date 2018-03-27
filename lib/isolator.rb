@@ -64,7 +64,7 @@ module Isolator
     end
 
     def transactions_threshold
-      Thread.current.fetch(:isolator_threshold)
+      Thread.current.fetch(:isolator_threshold, 1)
     end
 
     def transactions_threshold=(val)
@@ -106,8 +106,6 @@ module Isolator
     include Isolator::Isolate
     include Isolator::Callbacks
   end
-
-  self.transactions_threshold = 1
 end
 
 require "isolator/orm_adapters"
