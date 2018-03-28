@@ -1,6 +1,10 @@
 # Change log
 
-## master
+## 0.2.2 (2018-03-28)
+
+-  [Fix [#14](https://github.com/palkan/isolator/issues/14)] Always use default value for threshold. ([@palkan][])
+
+    Previously, in multi-threaded env the default value were missing (and led to `KeyError`).
 
 ## 0.2.1 (2018-02-24)
 
