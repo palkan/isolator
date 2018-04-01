@@ -7,8 +7,6 @@ $LOAD_PATH.unshift File.expand_path("../../../../lib", __dir__)
 require_relative "../../../support/rails_app"
 require "rspec/rails"
 
-require "isolator"
-
 RSpec.configure do |config|
   config.use_transactional_fixtures = true
 end

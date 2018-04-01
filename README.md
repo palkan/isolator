@@ -98,6 +98,11 @@ Isolator relys on [uniform_notifier][] to send custom notifications.
 
 **NOTE:** `uniform_notifier` should be installed separately (i.e., added to Gemfile).
 
+### Transactional tests support
+
+ - Rails' baked-in [use_transactional_tests](api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html#class-ActiveRecord::FixtureSet-label-Transactional+Tests)
+ - [database_cleaner](https://github.com/DatabaseCleaner/database_cleaner) gem. Make sure that you require isolator _after_ database_cleaner.
+
 ### Supported ORMs
 
 - `ActiveRecord` >= 4.1

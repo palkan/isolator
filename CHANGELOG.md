@@ -1,5 +1,7 @@
 # Change log
 
+- Add support for the [database_cleaner](https://github.com/DatabaseCleaner/database_cleaner) gem. ([@Envek][])
+
 ## 0.2.2 (2018-03-28)
 
 -  [Fix [#14](https://github.com/palkan/isolator/issues/14)] Always use default value for threshold. ([@palkan][])
@@ -35,3 +37,4 @@
 [@alexshgov]: https://github.com/alexshgov
 [@TheSmartnik]: https://github.com/TheSmartnik
 [@dsalahutdinov]: https://github.com/dsalahutdinov
+[@Envek]: https://github.com/Envek
