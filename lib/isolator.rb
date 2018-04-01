@@ -112,3 +112,4 @@ require "isolator/orm_adapters"
 
 require "isolator/adapters"
 require "isolator/railtie" if defined?(Rails)
+require "isolator/database_cleaner_support" if defined?(DatabaseCleaner)

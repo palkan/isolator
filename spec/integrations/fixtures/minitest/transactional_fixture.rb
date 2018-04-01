@@ -7,8 +7,6 @@ $LOAD_PATH.unshift File.expand_path("../../../../lib", __dir__)
 require_relative "../../../support/rails_app"
 require "rails/test_help"
 
-require "isolator"
-
 class IsolatorTransactionalTest < ActiveSupport::TestCase
   self.use_transactional_tests = true if respond_to?(:use_transactional_tests)
   self.use_transactional_fixtures = true if respond_to?(:use_transactional_fixtures)

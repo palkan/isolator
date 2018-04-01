@@ -38,4 +38,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "fakeredis"
   spec.add_development_dependency "resque-scheduler"
   spec.add_development_dependency "sucker_punch"
+  spec.add_development_dependency "database_cleaner"
 end
