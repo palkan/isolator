@@ -1,5 +1,9 @@
 # Change log
 
+## master
+
+## 0.3.0 (2018-04-02)
+
 - Add support for the [database_cleaner](https://github.com/DatabaseCleaner/database_cleaner) gem. ([@Envek][])
 
 ## 0.2.2 (2018-03-28)
