@@ -157,7 +157,7 @@ Suppose that you have a class `Danger` with a method `#explode`, which is not sa
 #
 # The second argument is the method owner and
 # the third one is a method name.
-Isolotar.isolate :danger, Danger, :explode, **options
+Isolator.isolate :danger, Danger, :explode, **options
 
 # NOTE: if you want to isolate a class method, use signleton_class instead
 Isolator.isolate :danger, Danger.singleton_class, :explode, **options
