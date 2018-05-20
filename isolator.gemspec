@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "rspec-rails", "~> 3.0"
   spec.add_development_dependency "minitest", "~> 5.10.0"
-  spec.add_development_dependency "rubocop", "~> 0.51"
+  spec.add_development_dependency "rubocop", "~> 0.56.0"
   spec.add_development_dependency "rubocop-md", "~> 0.2"
 
   spec.add_development_dependency "uniform_notifier", "~> 1.11"
