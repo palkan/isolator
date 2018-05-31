@@ -131,6 +131,10 @@ Isolator.adapters.http.disable!
 Isolator.adapters.http.enable!
 ```
 
+### Fix Offenses
+
+For the actions that should be executed only after successful transaction commit (which is mostly always so), you can try to use the `after_commit` callback from [after_commit_everywhere] gem (or use native AR callback in models if it's applicable).
+
 ### Ignore Offenses
 
 Since Isolator adapter is just a wrapper over original code, it may lead to false positives when there is another library patching the same behaviour. In that case you might want to ignore some offenses.
@@ -189,3 +193,4 @@ The gem is available as open source under the terms of the [MIT License](http://
 
 [Sniffer]: https://github.com/aderyabin/sniffer
 [uniform_notifier]: https://github.com/flyerhzm/uniform_notifier
+[after_commit_everywhere]: https://github.com/Envek/after_commit_everywhere
