@@ -2,6 +2,8 @@
 
 ## master
 
+## 0.4.0 (2018-06-15)
+
 - [PR [#13](https://github.com/palkan/isolator/pull/13)] Allow load ignored offences from YML file using `load_ignore_config`. ([@DmitryTsepelev][])
 
 ## 0.3.0 (2018-04-02)
