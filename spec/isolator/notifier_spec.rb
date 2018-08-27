@@ -16,7 +16,6 @@ describe Isolator::Notifier do
       before do
         Isolator.configure do |config|
           config.raise_exceptions = true
-          config.send_notifications = false
         end
       end
 
