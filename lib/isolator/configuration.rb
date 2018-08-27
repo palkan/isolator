@@ -12,7 +12,8 @@ module Isolator
   # - `send_notifications` - whether to send notifications (through uniform_notifier);
   #   defauls to false
   class Configuration
-    attr_accessor :raise_exceptions, :logger, :send_notifications
+    attr_accessor :raise_exceptions, :logger
+    attr_reader :send_notifications
 
     def initialize
       @logger = nil

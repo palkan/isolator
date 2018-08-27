@@ -3,7 +3,6 @@
 ENV["RAILS_ENV"] ||= "test"
 
 require "active_support"
-require "uniform_notifier"
 
 require "sidekiq"
 require "sidekiq/testing"

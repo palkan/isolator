@@ -15,7 +15,7 @@ module IntegrationHelpers
   end
 
   def run_minitest(path, chdir: nil, env: {}, name: nil)
-    (env["TESTOPTS"] ||= +"") << "--name #{name}"
+    (env["TESTOPTS"] ||= "") << "--name #{name}"
     chdir ||= File.expand_path("../integrations/fixtures/minitest", __dir__)
     output, _status = Open3.capture2(
       env,
