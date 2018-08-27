@@ -53,7 +53,7 @@ module Isolator
 
     def uniform_notifier_loaded?
       return true if defined?(::UniformNotifier)
-      
+
       warn(
         "Please, install Isolator version 0.4.0 to use" \
         " 'uniform_notifier' to send notifications.\n"
