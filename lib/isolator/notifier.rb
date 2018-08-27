@@ -54,15 +54,11 @@ module Isolator
     def uniform_notifier_loaded?
       return true if defined?(::UniformNotifier)
 
-      begin
-        require "uniform_notifier"
-      rescue LoadError
-        warn(
-          "Please, install and configure 'uniform_notifier' to send notifications:\n" \
-          "# Gemfile\n" \
-          "gem 'uniform_notifer', '~> 1.11', require: false"
-        )
-      end
+      warn(
+        "Please, install Isolator version 0.4.0 to use" \
+        " 'uniform_notifier' to send notifications.\n"
+      )
+      false
     end
   end
 end

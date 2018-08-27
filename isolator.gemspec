@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/palkan/isolator"
   spec.license       = "MIT"
 
-  spec.required_ruby_version = ">= 2.3.0"
+  spec.required_ruby_version = ">= 2.2.2"
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
@@ -30,7 +30,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rubocop", "~> 0.56.0"
   spec.add_development_dependency "rubocop-md", "~> 0.2"
 
-  spec.add_development_dependency "uniform_notifier", "~> 1.11"
   spec.add_development_dependency "sidekiq", "~> 5.0"
   spec.add_development_dependency "webmock", "~> 3.1"
   spec.add_development_dependency "test_after_commit", "~> 1.1"

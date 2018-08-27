@@ -88,9 +88,6 @@ Isolator.configure do |config|
 
   # Raise exception on offense
   config.raise_exceptions = false # true in test env
-
-  # Send notifications to uniform_notifier
-  config.send_notifications = false
 end
 ```
 
