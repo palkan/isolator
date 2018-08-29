@@ -16,3 +16,5 @@ if File.exist?(local_gemfile)
 else
   gem "rails", "~> 5.0"
 end
+
+gem 'uniform_notifier', '~> 1.11'

@@ -17,7 +17,7 @@ AllCops:
     - '*.gemspec'
   DisplayCopNames: true
   StyleGuideCopsOnly: false
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.2.2
 
 Rails:
   Enabled: false
@@ -60,3 +60,6 @@ Metrics/LineLength:
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*.rb'
+
+Style/MutableConstant:
+  Enabled: false

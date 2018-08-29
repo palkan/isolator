@@ -1,0 +1,8 @@
+source "https://rubygems.org"
+
+gem "rails", "~> 4.2"
+gem "sqlite3"
+gem 'uniform_notifier', '1.11'
+gem 'anyway_config', '1.2'
+
+gemspec path: ".."
