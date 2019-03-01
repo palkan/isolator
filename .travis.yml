@@ -1,10 +1,15 @@
 sudo: false
 language: ruby
+cache: bundler
 rvm:
-  - 2.5.0
+  - 2.5.3
 
 notifications:
   email: false
+
+before_install:
+  - (ruby -v | grep '2.2.2') || gem update --system
+  - gem install bundler -v '< 2'
 
 matrix:
   fast_finish: true
@@ -13,6 +18,8 @@ matrix:
       gemfile: gemfiles/railsmaster.gemfile
     - rvm: jruby-9.1.0.0
       gemfile: gemfiles/jruby.gemfile
+    - rvm: 2.6.1
+      gemfile: gemfiles/rails6.gemfile
     - rvm: 2.5.0
       gemfile: Gemfile
     - rvm: 2.4.3

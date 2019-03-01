@@ -7,7 +7,7 @@ gemspec
 
 gem "pry-byebug"
 
-gem "sqlite3"
+gem "sqlite3", "~> 1.3.0"
 
 local_gemfile = File.join(__dir__, "Gemfile.local")
 

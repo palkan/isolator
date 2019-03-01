@@ -59,7 +59,7 @@ describe "Ignorer" do
     end
 
     it "raise when wrong operator is ignored" do
-      expect { subject.call_unmasked(1, 2) }.to raise_error
+      expect { subject.call_unmasked(1, 2) }.to raise_error(Isolator::UnsafeOperationError)
     end
   end
 
