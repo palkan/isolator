@@ -15,7 +15,8 @@ class TestApp < Rails::Application
 
   config.eager_load = true
 
-  config.logger = Logger.new("/dev/null")
+  config.log_level = ENV["LOG"] ? :debug : :fatal
+  config.logger = ENV["LOG"] ? Logger.new(STDOUT) : Logger.new("/dev/null")
 
   config.active_support.test_order = :random
 end

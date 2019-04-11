@@ -21,12 +21,14 @@ class IsolatorDatabaseCleanerTest < ActiveSupport::TestCase
   end
 
   def test_no_transaction_no_raise
+    User.first
     ActiveJobWorker.perform_later
     assert true
   end
 
   def test_raise_with_transaction
     User.transaction do
+      User.first
       ActiveJobWorker.perform_later
     end
 

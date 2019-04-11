@@ -9,6 +9,7 @@ describe "ActiveRecord integration" do
     it do
       expect(Isolator).to_not be_within_transaction
       ar_class.transaction do
+        ar_class.all.to_a
         expect(Isolator).to be_within_transaction
       end
       expect(Isolator).to_not be_within_transaction

@@ -28,6 +28,7 @@ describe "HTTP calls with WebMock" do
 
   it "raises with transaction", :offense do
     User.transaction do
+      User.first
       subject
     end
     expect(true).to eq true

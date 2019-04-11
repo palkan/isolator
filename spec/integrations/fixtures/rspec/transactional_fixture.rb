@@ -22,11 +22,15 @@ describe "use_transactional_tests=true" do
     end
 
     it "doesn't raise when no transaction within example" do
-      expect { ActiveJobWorker.perform_later }.not_to raise_error
+      expect do
+        User.first
+        ActiveJobWorker.perform_later
+      end.not_to raise_error
     end
 
     it "raises with transaction" do
       User.transaction do
+        User.first
         ActiveJobWorker.perform_later
       end
       expect(true).to eq true
@@ -34,11 +38,15 @@ describe "use_transactional_tests=true" do
   end
 
   it "doesn't raise when no transaction", :no_transaction do
-    expect { ActiveJobWorker.perform_later }.not_to raise_error
+    expect do
+      User.first
+      ActiveJobWorker.perform_later
+    end.not_to raise_error
   end
 
   it "raises with transaction", :offense do
     User.transaction do
+      User.first
       ActiveJobWorker.perform_later
     end
     expect(true).to eq true
