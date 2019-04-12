@@ -9,6 +9,7 @@ describe "WebMock integration" do
 
       expect(output).to include("2 examples, 1 failure")
       expect(output).to include("Isolator::HTTPError")
+      expect(output).to include("GET http://www.example.com")
     end
   end
 end

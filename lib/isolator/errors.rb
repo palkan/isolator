@@ -4,9 +4,9 @@ module Isolator # :nodoc: all
   class UnsafeOperationError < StandardError
     MESSAGE = "You are trying to do unsafe operation inside db transaction"
 
-    def initialize(msg = nil)
+    def initialize(msg = nil, details: nil)
       msg ||= self.class::MESSAGE
-      super
+      super(details ? "#{msg}\nDetails: #{details}" : msg)
     end
   end
 

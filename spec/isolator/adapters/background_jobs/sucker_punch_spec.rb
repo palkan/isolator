@@ -17,7 +17,7 @@ describe "SuckerPunch adapter" do
 
   describe "#perform_in" do
     specify do
-      expect { worker.perform_in(60) }.to raise_error(Isolator::BackgroundJobError)
+      expect { worker.perform_in(60) }.to raise_error(Isolator::BackgroundJobError, /SuckerPunchWorker/)
     end
   end
 end

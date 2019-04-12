@@ -41,6 +41,9 @@ Style/StringLiterals:
 Style/RegexpLiteral:
   Enabled: false
 
+Style/Lambda:
+  Enabled: false
+
 Style/BlockDelimiters:
   Exclude:
     - 'spec/**/*.rb'
@@ -56,6 +59,8 @@ Lint/AmbiguousRegexpLiteral:
 
 Metrics/LineLength:
   Max: 100
+  Exclude:
+    - 'spec/**/*.rb'
 
 Metrics/BlockLength:
   Exclude:

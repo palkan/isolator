@@ -18,7 +18,7 @@ describe "Resque scheduler adapter" do
   describe "#enqueue_in" do
     specify do
       expect { Resque.enqueue_in(1.minute, ResqueWorker) }.to(
-        raise_error(Isolator::BackgroundJobError)
+        raise_error(Isolator::BackgroundJobError, /ResqueWorker/)
       )
     end
   end

@@ -9,7 +9,7 @@ describe "Sniffer adapter" do
 
   describe "#store" do
     specify do
-      expect { Sniffer.store(Sniffer::DataItem.new) }.to raise_error(Isolator::HTTPError)
+      expect { Sniffer.store(Sniffer::DataItem.new(request: { host: "example.com", query: "test.php", method: "GET" })) }.to raise_error(Isolator::HTTPError, %r{GET example.com/test.php})
     end
   end
 end

@@ -2,6 +2,11 @@
 
 ## master
 
+- Add support for exceptions message details. ([@palkan][])
+
+  Make it possible to provide more information about the cause of the failure
+  (for example, job class and arguments for background jobs, URL for HTTP).
+
 - Change backtrace filtering behaviour. ([@palkan][])
 
   The default behaviour is to take the top five lines.

@@ -17,7 +17,7 @@ describe "Sidekiq adapter" do
 
   describe "#perform_later" do
     specify do
-      expect { worker.perform_at(3.days.from_now) }.to raise_error(Isolator::BackgroundJobError)
+      expect { worker.perform_at(3.days.from_now) }.to raise_error(Isolator::BackgroundJobError, /SidekiqWorker/)
     end
   end
 end

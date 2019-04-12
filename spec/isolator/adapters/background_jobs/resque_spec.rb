@@ -9,7 +9,7 @@ describe "Resque adapter" do
 
   describe "#enqueue" do
     specify do
-      expect { Resque.enqueue(ResqueWorker) }.to raise_error(Isolator::BackgroundJobError)
+      expect { Resque.enqueue(ResqueWorker) }.to raise_error(Isolator::BackgroundJobError, /ResqueWorker/)
     end
   end
 end

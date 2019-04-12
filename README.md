@@ -190,6 +190,17 @@ Isolator.isolate :danger, Danger.singleton_class, :explode, options
 Possible `options` are:
 - `exception_class` – an exception class to raise in case of offense
 - `exception_message` – custom exception message (could be specified without a class)
+- `details_message` – a block to generate additional exceptin message information:
+
+```ruby
+Isolator.isolate :active_job,
+                 target: ActiveJob::Base,
+                 method_name: :enqueue,
+                 exception_class: Isolator::BackgroundJobError,
+                 details_message: ->(obj, _args) {
+                   "#{obj.class.name}(#{obj.arguments})"
+                 }
+```
 
 You can also add some callbacks to be run before and after the transaction:
 

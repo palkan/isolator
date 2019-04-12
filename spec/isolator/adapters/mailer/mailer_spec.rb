@@ -9,13 +9,13 @@ describe "Mailer adapter" do
 
   describe "#deliver_now" do
     specify do
-      expect { SampleEmail.hello.deliver_now }.to raise_error(Isolator::MailerError)
+      expect { SampleEmail.hello.deliver_now }.to raise_error(Isolator::MailerError, /Subject: isolator test/)
     end
   end
 
   describe "#deliver_later" do
     specify do
-      expect { SampleEmail.hello.deliver_later }.to raise_error(Isolator::BackgroundJobError)
+      expect { SampleEmail.hello.deliver_later }.to raise_error(Isolator::BackgroundJobError, /SampleEmail/)
     end
   end
 end

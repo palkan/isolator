@@ -11,6 +11,7 @@ module Isolator
 
         self.exception_class = options[:exception_class] if options.key?(:exception_class)
         self.exception_message = options[:exception_message] if options.key?(:exception_message)
+        self.details_message = options[:details_message] if options.key?(:details_message)
       end
 
       add_patch_method(adapter, target, method_name) if
@@ -21,7 +22,7 @@ module Isolator
     def self.add_patch_method(adapter, base, method_name)
       mod = Module.new do
         define_method method_name do |*args, &block|
-          adapter.notify(caller, *args)
+          adapter.notify(caller, self, *args)
           super(*args, &block)
         end
       end

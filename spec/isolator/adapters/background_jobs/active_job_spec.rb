@@ -15,7 +15,7 @@ describe "ActiveJob adapter" do
 
   describe "#perform_later" do
     specify do
-      expect { ActiveJobWorker.perform_later }.to raise_error(Isolator::BackgroundJobError)
+      expect { ActiveJobWorker.perform_later("test") }.to raise_error(Isolator::BackgroundJobError, /ActiveJobWorker.+test/)
     end
   end
 end

@@ -4,7 +4,7 @@ module Isolator
   module Adapters
     # Used as a "template" for adapters
     module Base
-      attr_accessor :exception_class, :exception_message
+      attr_accessor :exception_class, :exception_message, :details_message
 
       def disable!
         @disabled = true
@@ -22,9 +22,9 @@ module Isolator
         @disabled == true
       end
 
-      def notify(backtrace, *args)
+      def notify(backtrace, obj, *args)
         return unless notify?(*args)
-        Isolator.notify(exception: build_exception, backtrace: backtrace)
+        Isolator.notify(exception: build_exception(obj, args), backtrace: backtrace)
       end
 
       def notify?(*args)
@@ -45,9 +45,10 @@ module Isolator
 
       private
 
-      def build_exception
+      def build_exception(obj, args)
         klass = exception_class || Isolator::UnsafeOperationError
-        klass.new(exception_message)
+        details = details_message.call(obj, args) if details_message
+        klass.new(exception_message, details: details)
       end
     end
   end
