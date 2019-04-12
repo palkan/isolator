@@ -12,12 +12,14 @@ module Isolator
   # - `send_notifications` - whether to send notifications (through uniform_notifier);
   #   defauls to false
   class Configuration
-    attr_accessor :raise_exceptions, :logger, :send_notifications
+    attr_accessor :raise_exceptions, :logger, :send_notifications,
+                  :backtrace_filter
 
     def initialize
       @logger = nil
       @raise_exceptions = test_env?
       @send_notifications = false
+      @backtrace_filter = ->(backtrace) { backtrace.take(5) }
     end
 
     alias raise_exceptions? raise_exceptions

@@ -2,6 +2,11 @@
 
 ## master
 
+- Change backtrace filtering behaviour. ([@palkan][])
+
+  The default behaviour is to take the top five lines.
+  You can customize it via `Isolator.config.backtrace_filter`.
+
 ## 0.5.0 (2018-08-29)
 
 - [PR [#19](https://github.com/palkan/isolator/pull/19)] Adding support for ruby version 2.2.2. ([@shivanshgaur][])

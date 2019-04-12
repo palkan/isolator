@@ -48,7 +48,7 @@ module Isolator
     end
 
     def filtered_backtrace
-      backtrace.reject { |line| line =~ /\/(gems|ruby)/ }.take_while { |line| line !~ /ruby/ }
+      Isolator.config.backtrace_filter.call(backtrace)
     end
 
     def uniform_notifier_loaded?

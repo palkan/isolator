@@ -91,6 +91,10 @@ Isolator.configure do |config|
 
   # Send notifications to uniform_notifier
   config.send_notifications = false
+
+  # Customize backtrace filtering (provide a callable)
+  # By default, just takes the top-5 lines
+  config.backtrace_filter = ->(backtrace) { backtrace.take(5) }
 end
 ```
 
