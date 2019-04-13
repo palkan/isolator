@@ -6,5 +6,5 @@ Isolator.isolate :active_job,
                  exception_class: Isolator::BackgroundJobError,
                  details_message: ->(obj, _args) {
                    "#{obj.class.name}" \
-                   "#{obj.arguments.any? ? " (#{obj.arguments.join(", ")})" : ""}"
+                   "#{obj.arguments.any? ? " (#{obj.arguments.join(', ')})" : ''}"
                  }

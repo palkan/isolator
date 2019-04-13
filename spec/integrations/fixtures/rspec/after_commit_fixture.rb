@@ -9,7 +9,7 @@ require_relative "../../../support/rails_app"
 class User < ActiveRecord::Base
   attr_reader :commited
 
-  after_create_commit :run_after_commit
+  after_commit :run_after_commit, on: :create
 
   def run_after_commit
     ActiveJobWorker.perform_later
