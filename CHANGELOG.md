@@ -2,6 +2,8 @@
 
 ## master
 
+## 0.6.0 (2019-04-12) 🚀
+
 - Add support for exceptions message details. ([@palkan][])
 
   Make it possible to provide more information about the cause of the failure
