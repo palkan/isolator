@@ -18,6 +18,15 @@ Gem::Specification.new do |spec|
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
   end
+
+  spec.metadata = {
+    "bug_tracker_uri" => "http://github.com/palkan/isolator/issues",
+    "changelog_uri" => "https://github.com/palkan/isolator/blob/master/CHANGELOG.md",
+    "documentation_uri" => "http://github.com/palkan/isolator",
+    "homepage_uri" => "http://github.com/palkan/isolator",
+    "source_code_uri" => "http://github.com/palkan/isolator"
+  }
+
   spec.require_paths = ["lib"]
 
   spec.add_runtime_dependency "sniffer", "~> 0.3.1"
