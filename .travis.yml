@@ -7,10 +7,6 @@ rvm:
 notifications:
   email: false
 
-before_install:
-  - (ruby -v | grep '2.2.2') || gem update --system
-  - gem install bundler -v '< 2'
-
 matrix:
   fast_finish: true
   include:
@@ -18,7 +14,7 @@ matrix:
       gemfile: gemfiles/railsmaster.gemfile
     - rvm: jruby-9.1.0.0
       gemfile: gemfiles/jruby.gemfile
-    - rvm: 2.6.1
+    - rvm: 2.6.2
       gemfile: gemfiles/rails6.gemfile
     - rvm: 2.5.0
       gemfile: Gemfile
