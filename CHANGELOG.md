@@ -2,6 +2,8 @@
 
 ## master
 
+## 0.6.1 (2019-09-06)
+
 - Fix Sniffer integration. ([@palkan][])
 
   Fixes [#21](https://github.com/palkan/isolator/issues/21).
