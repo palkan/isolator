@@ -2,6 +2,10 @@
 
 ## master
 
+- Fix Sniffer integration. ([@palkan][])
+
+  Fixes [#21](https://github.com/palkan/isolator/issues/21).
+
 ## 0.6.0 (2019-04-12) 🚀
 
 - Add support for exceptions message details. ([@palkan][])

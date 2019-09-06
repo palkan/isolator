@@ -10,7 +10,7 @@ Isolator.isolate :http, target: Sniffer.singleton_class,
                         exception_class: Isolator::HTTPError,
                         details_message: ->(_obj, args) {
                           req = args.first.request
-                          "#{req[:method]} #{req[:host]}/#{req[:query]}"
+                          "#{req.method} #{req.host}:#{req.port}#{req.query}"
                         }
 
 Isolator.before_isolate do
