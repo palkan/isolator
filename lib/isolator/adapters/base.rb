@@ -31,8 +31,8 @@ module Isolator
         enabled? && Isolator.enabled? && Isolator.within_transaction? && !ignored?(*args)
       end
 
-      def ignore_if
-        ignores << Proc.new
+      def ignore_if(&block)
+        ignores << block
       end
 
       def ignores
