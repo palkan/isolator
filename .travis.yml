@@ -1,8 +1,6 @@
 sudo: false
 language: ruby
 cache: bundler
-rvm:
-  - 2.5.3
 
 notifications:
   email: false
@@ -12,14 +10,18 @@ matrix:
   include:
     - rvm: ruby-head
       gemfile: gemfiles/railsmaster.gemfile
-    - rvm: jruby-9.2.8.0
+    - rvm: jruby-9.2.10.0
       gemfile: gemfiles/jruby.gemfile
-    - rvm: 2.6.2
-      gemfile: gemfiles/rails6.gemfile
-    - rvm: 2.5.0
+    - rvm: 2.7
       gemfile: Gemfile
+    - rvm: 2.6
+      gemfile: gemfiles/rails6.gemfile
+    - rvm: 2.5
+      gemfile: Gemfile
+    - rvm: 2.5
+      gemfile: gemfiles/activerecord42.gemfile
   allow_failures:
     - rvm: ruby-head
       gemfile: gemfiles/railsmaster.gemfile
-    - rvm: jruby-9.2.8.0
+    - rvm: jruby-9.2.10.0
       gemfile: gemfiles/jruby.gemfile
