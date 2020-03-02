@@ -17,7 +17,8 @@ AllCops:
     - '*.gemspec'
   DisplayCopNames: true
   StyleGuideCopsOnly: false
-  TargetRubyVersion: 2.2.2
+  TargetRubyVersion: 2.5.0
+
 
 Rails:
   Enabled: false

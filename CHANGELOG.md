@@ -2,6 +2,8 @@
 
 ## master
 
+- **Support Ruby 2.5+** ([@palkan][])
+
 ## 0.6.1 (2019-09-06)
 
 - Fix Sniffer integration. ([@palkan][])
