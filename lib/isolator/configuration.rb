@@ -13,7 +13,7 @@ module Isolator
   #   defauls to false
   class Configuration
     attr_accessor :raise_exceptions, :logger, :send_notifications,
-                  :backtrace_filter
+      :backtrace_filter
 
     def initialize
       @logger = nil

@@ -3,5 +3,6 @@
 class SuckerPunchWorker
   include SuckerPunch::Job
 
-  def perform; end
+  def perform
+  end
 end

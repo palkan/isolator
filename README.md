@@ -194,12 +194,12 @@ Possible `options` are:
 
 ```ruby
 Isolator.isolate :active_job,
-                 target: ActiveJob::Base,
-                 method_name: :enqueue,
-                 exception_class: Isolator::BackgroundJobError,
-                 details_message: ->(obj, _args) {
-                   "#{obj.class.name}(#{obj.arguments})"
-                 }
+  target: ActiveJob::Base,
+  method_name: :enqueue,
+  exception_class: Isolator::BackgroundJobError,
+  details_message: ->(obj, _args) {
+    "#{obj.class.name}(#{obj.arguments})"
+  }
 ```
 
 You can also add some callbacks to be run before and after the transaction:

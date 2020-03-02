@@ -3,11 +3,13 @@
 class SidekiqWorker
   include Sidekiq::Worker
 
-  def perform; end
+  def perform
+  end
 end
 
 Sidekiq::Extensions.enable_delay!
 
 class SidekiqClass
-  def self.do_later; end
+  def self.do_later
+  end
 end

@@ -20,7 +20,7 @@ module Isolator
       ignores = build_ignore_list(ignored_paths)
       return if ignores.blank?
 
-      regex = Regexp.new("^.*(#{ignores.join('|')}):.*$")
+      regex = Regexp.new("^.*(#{ignores.join("|")}):.*$")
       adapter.ignore_if { caller.any? { |row| regex =~ row } }
     end
 

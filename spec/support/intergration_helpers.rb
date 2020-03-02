@@ -19,7 +19,7 @@ module IntegrationHelpers
     chdir ||= File.expand_path("../integrations/fixtures/minitest", __dir__)
     output, _status = Open3.capture2(
       env,
-      "bundle exec ruby #{path}_fixture.rb #{env['TESTOPTS']}",
+      "bundle exec ruby #{path}_fixture.rb #{env["TESTOPTS"]}",
       chdir: chdir
     )
     output

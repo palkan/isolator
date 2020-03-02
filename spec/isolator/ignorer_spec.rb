@@ -17,12 +17,12 @@ describe "Ignorer" do
     end
 
     Isolator.isolate :todo_masked_adapter,
-                     target: ::Isolator::Danger.singleton_class,
-                     method_name: :call_masked
+      target: ::Isolator::Danger.singleton_class,
+      method_name: :call_masked
 
     Isolator.isolate :todo_unmasked_adapter,
-                     target: ::Isolator::Danger.singleton_class,
-                     method_name: :call_unmasked
+      target: ::Isolator::Danger.singleton_class,
+      method_name: :call_unmasked
   end
 
   after(:all) do

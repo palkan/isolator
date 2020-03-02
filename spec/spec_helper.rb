@@ -24,7 +24,7 @@ end
 
 require "isolator"
 
-Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
+Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].sort.each { |f| require f }
 
 RSpec.configure do |config|
   config.example_status_persistence_file_path = ".rspec_status"

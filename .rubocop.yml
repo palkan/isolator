@@ -1,71 +1,51 @@
 require:
+  - standard/cop/semantic_blocks
   - rubocop-md
 
+inherit_gem:
+  standard: config/base.yml
+
 AllCops:
-  Include:
-    - 'lib/**/*.rb'
-    - 'lib/**/*.rake'
-    - 'spec/**/*.rb'
   Exclude:
-    - 'bin/**/*'
-    - 'gemfiles/**/*'
-    - 'spec/dummy/**/*'
-    - 'vendor/**/*'
+    - 'bin/*'
     - 'tmp/**/*'
-    - 'Rakefile'
     - 'Gemfile'
-    - '*.gemspec'
+    - 'vendor/**/*'
+    - 'gemfiles/**/*'
+    - 'lib/generators/**/templates/**/*'
   DisplayCopNames: true
-  StyleGuideCopsOnly: false
-  TargetRubyVersion: 2.5.0
+  TargetRubyVersion: 2.5
 
-
-Rails:
+Standard/SemanticBlocks:
   Enabled: false
 
-Bundler/OrderedGems:
-  Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: true
 
-Naming/UncommunicativeMethodParamName:
-  Enabled: false
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: no_comma
 
-Style/SymbolArray:
-  Enabled: false
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: no_comma
 
-Style/Documentation:
+Lint/Void:
   Exclude:
-    - 'spec/**/*.rb'
+    - '**/*.md'
 
-Style/StringLiterals:
-  EnforcedStyle: double_quotes
-
-Style/RegexpLiteral:
-  Enabled: false
-
-Style/Lambda:
-  Enabled: false
-
-Style/BlockDelimiters:
+# See https://github.com/rubocop-hq/rubocop/issues/4222
+Lint/AmbiguousBlockAssociation:
   Exclude:
-    - 'spec/**/*.rb'
+    - 'spec/**/*'
+    - '**/*.md'
 
-Style/NumericPredicate:
-  Enabled: false
-
-Layout/SpaceInsideStringInterpolation:
-  EnforcedStyle: no_space
-
-Lint/AmbiguousRegexpLiteral:
-  Enabled: false
-
-Metrics/LineLength:
-  Max: 100
+Lint/DuplicateMethods:
   Exclude:
-    - 'spec/**/*.rb'
+    - '**/*.md'
 
-Metrics/BlockLength:
+Naming/FileName:
   Exclude:
-    - 'spec/**/*.rb'
+   - '**/*.md'
 
-Style/MutableConstant:
-  Enabled: false
+Layout/InitialIndentation:
+  Exclude:
+    - 'CHANGELOG.md'
