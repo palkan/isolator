@@ -20,4 +20,10 @@ describe "Sidekiq adapter" do
       expect { worker.perform_at(3.days.from_now) }.to raise_error(Isolator::BackgroundJobError, /SidekiqWorker/)
     end
   end
+
+  describe ".delay" do
+    specify do
+      expect { SidekiqClass.delay.do_later }.to raise_error(Isolator::BackgroundJobError)
+    end
+  end
 end

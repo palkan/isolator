@@ -5,3 +5,9 @@ class SidekiqWorker
 
   def perform; end
 end
+
+Sidekiq::Extensions.enable_delay!
+
+class SidekiqClass
+  def self.do_later; end
+end
