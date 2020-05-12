@@ -15,7 +15,7 @@ matrix:
     - rvm: 2.7
       gemfile: Gemfile
     - rvm: 2.6
-      gemfile: gemfiles/rails6.gemfile
+      gemfile: gemfiles/rails5.gemfile
     - rvm: 2.5
       gemfile: Gemfile
     - rvm: 2.5
