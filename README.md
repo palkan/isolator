@@ -214,6 +214,14 @@ Isolator.after_isolate do
 end
 ```
 
+## Troubleshooting
+
+### Tests failing after upgrading to Rails 6.0.3 while using [Combustion](https://github.com/pat/combustion)
+
+The reason is that Rails started using a [separate connection pool for advisory locks](https://github.com/rails/rails/pull/38235) since 6.0.3. Since Combustion usually applies migrations for every test run, this pool becomse visible to [test fixtures](https://github.com/rails/rails/blob/b738f1930f3c82f51741ef7241c1fee691d7deb2/activerecord/lib/active_record/test_fixtures.rb#L123-L127), which resulted in 2 transactional commits tracked by Isolator, which only expects one. That leads to false negatives.
+
+To fix this disable migrations advisory locks by adding `advisory_locks: false` to your database configuration in `(spec|test)/internal/config/database.yml`.
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/palkan/isolator.
