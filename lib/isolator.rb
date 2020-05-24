@@ -69,27 +69,36 @@ module Isolator
     end
 
     def transactions_threshold=(val)
+      # Do we need separate threshold per connection?
       Thread.current[:isolator_threshold] = val
     end
 
-    def incr_transactions!
-      Thread.current[:isolator_transactions] =
-        Thread.current.fetch(:isolator_transactions, 0) + 1
-      start! if Thread.current.fetch(:isolator_transactions) == transactions_threshold
+    def incr_transactions!(connection = ActiveRecord::Base.connection)
+      Thread.current[:isolator_connection_transactions] ||= {}
+      Thread.current[:isolator_connection_transactions][identifier_for(connection)] =
+        current_transactions(connection) + 1
+      start! if current_transactions(connection) == transactions_threshold
     end
 
-    def decr_transactions!
-      Thread.current[:isolator_transactions] =
-        Thread.current.fetch(:isolator_transactions) - 1
-      finish! if Thread.current.fetch(:isolator_transactions) == (transactions_threshold - 1)
+    def decr_transactions!(connection = ActiveRecord::Base.connection)
+      # Decrementing for unknown connection should raise error.
+      Thread.current[:isolator_connection_transactions][identifier_for(connection)] =
+        current_transactions(connection) - 1
+      finish! if current_transactions(connection) == (transactions_threshold - 1)
     end
 
     def clear_transactions!
-      Thread.current[:isolator_transactions] = 0
+      # Note: Hash#transform_values is only compatible with ruby 2.5+
+      Thread.current[:isolator_connection_transactions].transform_values! do |_val|
+        0
+      end
     end
 
     def within_transaction?
-      Thread.current.fetch(:isolator_transactions, 0) >= transactions_threshold
+      Thread.current.fetch(:isolator_connection_transactions, {}).each_value do |transaction_count|
+        return true if transaction_count >= transactions_threshold
+      end
+      false
     end
 
     def enabled?
@@ -111,6 +120,18 @@ module Isolator
 
     include Isolator::Isolate
     include Isolator::Callbacks
+
+    private
+
+    def identifier_for(connection)
+      raise ArgumentError, "Invalid connection" if connection.nil?
+      # Is there a reason to distinguish further by user/pass?
+      connection.instance_variable_get("@config").slice(:adapter, :host, :database)
+    end
+
+    def current_transactions(connection)
+      Thread.current.fetch(:isolator_connection_transactions, {})[identifier_for(connection)] || 0
+    end
   end
 end
 
