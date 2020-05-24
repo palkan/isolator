@@ -88,10 +88,7 @@ module Isolator
     end
 
     def clear_transactions!
-      # Note: Hash#transform_values is only compatible with ruby 2.5+
-      Thread.current[:isolator_connection_transactions].transform_values! do |_val|
-        0
-      end
+      Thread.current[:isolator_connection_transactions] = {}
     end
 
     def within_transaction?
