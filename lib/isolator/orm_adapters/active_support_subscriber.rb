@@ -9,8 +9,8 @@ module Isolator
 
     def self.subscribe!(event)
       ::ActiveSupport::Notifications.subscribe(event) do |_name, _start, _finish, _id, query|
-        Isolator.incr_transactions! if START_PATTERN.match?(query[:sql])
-        Isolator.decr_transactions! if FINISH_PATTERN.match?(query[:sql])
+        Isolator.incr_transactions!(query[:connection]) if START_PATTERN.match?(query[:sql])
+        Isolator.decr_transactions!(query[:connection]) if FINISH_PATTERN.match?(query[:sql])
       end
     end
   end
