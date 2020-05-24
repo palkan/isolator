@@ -117,7 +117,7 @@ module Isolator
     private
 
     def identifier_for(connection)
-      raise ArgumentError, 'Invalid connection' if connection.nil?
+      raise ArgumentError, "Invalid connection" if connection.nil?
       # Is there a reason to distinguish further by user/pass?
       connection.instance_variable_get("@config").slice(:adapter, :host, :database)
     end
