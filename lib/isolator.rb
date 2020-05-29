@@ -91,7 +91,7 @@ module Isolator
     end
 
     def clear_transactions!
-      Thread.current[:isolator_connection_transactions].clear
+      Thread.current[:isolator_connection_transactions]&.clear
     end
 
     def within_transaction?
