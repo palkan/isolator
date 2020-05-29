@@ -17,6 +17,8 @@ require "isolator/ext/thread_fetch"
 module Isolator
   using Isolator::ThreadFetch
 
+  DEFAULT_CONNECTION_THRESHOLD = 1
+
   class << self
     def config
       @config ||= Configuration.new
@@ -64,36 +66,37 @@ module Isolator
       res
     end
 
-    def transactions_threshold
-      Thread.current.fetch(:isolator_threshold, 1)
+    def transactions_threshold(connection_id = base_connection_id)
+      Thread.current.fetch(:isolator_connection_thresholds, {})[base_connection_id] || DEFAULT_CONNECTION_THRESHOLD
     end
 
     def transactions_threshold=(val)
-      # Do we need separate threshold per connection?
-      Thread.current[:isolator_threshold] = val
+      set_threshold(val, base_connection_id)
     end
 
-    def incr_transactions!(connection = ActiveRecord::Base.connection)
-      Thread.current[:isolator_connection_transactions] ||= {}
-      Thread.current[:isolator_connection_transactions][identifier_for(connection)] =
-        current_transactions(connection) + 1
-      start! if current_transactions(connection) == transactions_threshold
+    def set_threshold(val, connection_id)
+      Thread.current[:isolator_connection_thresholds] ||= Hash.new { |h, k| h[k] = DEFAULT_CONNECTION_THRESHOLD }
+      Thread.current[:isolator_connection_thresholds][connection_id] = val
     end
 
-    def decr_transactions!(connection = ActiveRecord::Base.connection)
-      # Decrementing for unknown connection should raise error.
-      Thread.current[:isolator_connection_transactions][identifier_for(connection)] =
-        current_transactions(connection) - 1
-      finish! if current_transactions(connection) == (transactions_threshold - 1)
+    def incr_transactions!(connection_id = base_connection_id)
+      Thread.current[:isolator_connection_transactions] ||= Hash.new { |h, k| h[k] = 0 }
+      Thread.current[:isolator_connection_transactions][connection_id] += 1
+      start! if current_transactions(connection_id) == transactions_threshold(connection_id)
+    end
+
+    def decr_transactions!(connection_id = base_connection_id)
+      Thread.current[:isolator_connection_transactions][identifier_for(connection)] -= 1
+      finish! if current_transactions(connection_id) == (transactions_threshold(connection_id) - 1)
     end
 
     def clear_transactions!
-      Thread.current[:isolator_connection_transactions] = {}
+      Thread.current[:isolator_connection_transactions].clear
     end
 
     def within_transaction?
       Thread.current.fetch(:isolator_connection_transactions, {}).each_value do |transaction_count|
-        return true if transaction_count >= transactions_threshold
+        return true if transaction_count >= transactions_threshold(connection_id)
       end
       false
     end
@@ -120,14 +123,13 @@ module Isolator
 
     private
 
-    def identifier_for(connection)
+    def base_connection_id(connection = ActiveRecord::Base.connection)
       raise ArgumentError, "Invalid connection" if connection.nil?
-      # Is there a reason to distinguish further by user/pass?
       connection.instance_variable_get("@config").slice(:adapter, :host, :database)
     end
 
-    def current_transactions(connection)
-      Thread.current.fetch(:isolator_connection_transactions, {})[identifier_for(connection)] || 0
+    def current_transactions(connection_id)
+      Thread.current.fetch(:isolator_connection_transactions, {})[connection_id] || 0
     end
   end
 end
