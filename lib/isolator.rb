@@ -95,7 +95,7 @@ module Isolator
     end
 
     def within_transaction?
-      Thread.current.fetch(:isolator_connection_transactions, {}).each_value do |transaction_count|
+      Thread.current.fetch(:isolator_connection_transactions, {}).each do |connection_id, transaction_count|
         return true if transaction_count >= transactions_threshold(connection_id)
       end
       false
