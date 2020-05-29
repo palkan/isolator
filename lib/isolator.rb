@@ -86,7 +86,7 @@ module Isolator
     end
 
     def decr_transactions!(connection_id = base_connection_id)
-      Thread.current[:isolator_connection_transactions][identifier_for(connection)] -= 1
+      Thread.current[:isolator_connection_transactions][connection_id] -= 1
       finish! if current_transactions(connection_id) == (transactions_threshold(connection_id) - 1)
     end
 
