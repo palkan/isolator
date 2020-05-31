@@ -66,28 +66,30 @@ module Isolator
       res
     end
 
-    def transactions_threshold(connection_id = base_connection_id)
-      Thread.current.fetch(:isolator_connection_thresholds, {})[base_connection_id] || DEFAULT_CONNECTION_THRESHOLD
-    end
-
     def transactions_threshold=(val)
-      set_threshold(val, base_connection_id)
+      set_connection_threshold(val)
     end
 
-    def set_threshold(val, connection_id)
+    def transactions_threshold(connection = ActiveRecord::Base.connection)
+      connection_threshold(connection_identifier(connection))
+    end
+
+    def set_connection_threshold(val, connection = ActiveRecord::Base.connection)
       Thread.current[:isolator_connection_thresholds] ||= Hash.new { |h, k| h[k] = DEFAULT_CONNECTION_THRESHOLD }
-      Thread.current[:isolator_connection_thresholds][connection_id] = val
+      Thread.current[:isolator_connection_thresholds][connection_identifier(connection)] = val
     end
 
-    def incr_transactions!(connection_id = base_connection_id)
+    def incr_transactions!(connection = ActiveRecord::Base.connection)
+      connection_id = connection_identifier(connection)
       Thread.current[:isolator_connection_transactions] ||= Hash.new { |h, k| h[k] = 0 }
       Thread.current[:isolator_connection_transactions][connection_id] += 1
-      start! if current_transactions(connection_id) == transactions_threshold(connection_id)
+      start! if current_transactions(connection_id) == connection_threshold(connection_id)
     end
 
-    def decr_transactions!(connection_id = base_connection_id)
+    def decr_transactions!(connection = ActiveRecord::Base.connection)
+      connection_id = connection_identifier(connection)
       Thread.current[:isolator_connection_transactions][connection_id] -= 1
-      finish! if current_transactions(connection_id) == (transactions_threshold(connection_id) - 1)
+      finish! if current_transactions(connection_id) == (connection_threshold(connection_id) - 1)
     end
 
     def clear_transactions!
@@ -96,7 +98,7 @@ module Isolator
 
     def within_transaction?
       Thread.current.fetch(:isolator_connection_transactions, {}).each do |connection_id, transaction_count|
-        return true if transaction_count >= transactions_threshold(connection_id)
+        return true if transaction_count >= connection_threshold(connection_id)
       end
       false
     end
@@ -119,13 +121,17 @@ module Isolator
 
     private
 
-    def base_connection_id(connection = ActiveRecord::Base.connection)
+    def connection_identifier(connection)
       raise ArgumentError, "Invalid connection" if connection.nil?
       connection.instance_variable_get("@config").slice(:adapter, :host, :database)
     end
 
     def current_transactions(connection_id)
       Thread.current.fetch(:isolator_connection_transactions, {})[connection_id] || 0
+    end
+
+    def connection_threshold(connection_id)
+      Thread.current.fetch(:isolator_connection_thresholds, {})[connection_id] || DEFAULT_CONNECTION_THRESHOLD
     end
   end
 end
