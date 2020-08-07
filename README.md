@@ -79,6 +79,8 @@ However, there are some potential caveats:
 
 3) Isolator tries to detect the `test` environment and slightly change its behavior: first, it respect _transactional tests_; secondly, error raising is turned on by default (see [below](#configuration)).
 
+4) Isolator does not work with [multiple databases](https://guides.rubyonrails.org/active_record_multiple_databases.html)
+
 ### Configuration
 
 ```ruby
