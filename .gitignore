@@ -11,3 +11,4 @@
 gemfiles/*.lock
 Gemfile.local
 .rspec_status
+.idea

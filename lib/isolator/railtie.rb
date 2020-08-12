@@ -7,7 +7,7 @@ module Isolator
       # (when all deps are likely to be loaded).
       load File.join(__dir__, "adapters.rb")
 
-      Isolator.load_ignore_config(Rails.root.join(".isolator_todo.yml"))
+      Isolator.config.ignorer&.prepare
 
       next unless Rails.env.test?
 

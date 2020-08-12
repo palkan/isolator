@@ -1,38 +1,58 @@
 # frozen_string_literal: true
 
 module Isolator
-  # Add .load_ignore_config function for ignoring patterns from file
-  module Ignorer
-    def load_ignore_config(path)
-      return unless File.exist?(path)
+  # Handle ignoring isolator errors using a yml file
+  class Ignorer
+    TODO_PATH = ".isolator_todo.yml"
 
-      todos = YAML.load_file(path)
+    class << self
+      def prepare(path: TODO_PATH, regex_string: "^.*(#ignores#):.*$")
+        return unless File.exist?(path)
 
-      adapters.each do |id, adapter|
-        ignored_paths = todos.fetch(id, [])
-        configure_adapter(adapter, ignored_paths)
+        todos = YAML.load_file(path)
+
+        Isolator.adapters.each do |id, adapter|
+          ignored_paths = todos.fetch(id, [])
+          AdapterIgnore.new(adapter: adapter, ignored_paths: ignored_paths, regex_string: regex_string).prepare
+        end
       end
     end
 
     private
 
-    def configure_adapter(adapter, ignored_paths)
-      ignores = build_ignore_list(ignored_paths)
-      return if ignores.blank?
+    class AdapterIgnore
+      def initialize(adapter:, ignored_paths:, regex_string:)
+        self.adapter = adapter
+        self.ignored_paths = ignored_paths
+        self.regex_string = regex_string
+      end
 
-      regex = Regexp.new("^.*(#{ignores.join("|")}):.*$")
-      adapter.ignore_if { caller.any? { |row| regex =~ row } }
-    end
+      def prepare
+        return if ignores.blank?
 
-    def build_ignore_list(ignored_paths)
-      ignored_paths.each_with_object([]) do |path, result|
-        ignored_files = Dir[path]
+        adapter.ignore_if { caller.any? { |row| regex =~ row } }
+      end
 
-        if ignored_files.blank?
-          result << path.to_s
-        else
-          result.concat(ignored_files)
+      private
+
+      attr_accessor :adapter, :ignored_paths, :regex_string
+
+      def ignores
+        return @ignores if defined? @ignores
+
+        @ignores = ignored_paths.each_with_object([]) do |path, result|
+          ignored_files = Dir[path]
+
+          if ignored_files.blank?
+            result << path.to_s
+          else
+            result.concat(ignored_files)
+          end
         end
+      end
+
+      def regex
+        Regexp.new(regex_string.gsub("#ignores#", ignores.join("|")))
       end
     end
   end
