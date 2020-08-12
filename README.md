@@ -95,6 +95,10 @@ Isolator.configure do |config|
   # Customize backtrace filtering (provide a callable)
   # By default, just takes the top-5 lines
   config.backtrace_filter = ->(backtrace) { backtrace.take(5) }
+
+  # Define a custom ignorer class (must implement .prepare)
+  # uses a row number based list from the .isolator_todo.yml file
+  config.ignorer = Isolator::Ignorer
 end
 ```
 
@@ -167,7 +171,7 @@ All the exceptions raised in the listed lines will be ignored.
 
 ### Using with legacy Ruby codebases
 
-If you are not using Rails, you'll have to load ignores from file manually, using `Isolator#load_ignore_config`, for instance `Isolator.load_ignore_config("./config/.isolator_todo.yml")`
+If you are not using Rails, you'll have to load ignores from file manually, using `Isolator::Ignorer.prepare(path:)`, for instance `Isolator::Ignorer.prepare(path: "./config/.isolator_todo.yml")`
 
 ## Custom Adapters
 
@@ -183,7 +187,7 @@ Suppose that you have a class `Danger` with a method `#explode`, which is not sa
 # the third one is a method name.
 Isolator.isolate :danger, Danger, :explode, options
 
-# NOTE: if you want to isolate a class method, use signleton_class instead
+# NOTE: if you want to isolate a class method, use singleton_class instead
 Isolator.isolate :danger, Danger.singleton_class, :explode, options
 ```
 
@@ -210,7 +214,7 @@ Isolator.before_isolate do
 end
 
 Isolator.after_isolate do
- # right after the transaction has been committed/rollbacked
+ # right after the transaction has been committed/rolled back
 end
 ```
 
