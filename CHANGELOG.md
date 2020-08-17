@@ -2,6 +2,9 @@
 
 ## master
 
+- Allow custom ignorer usage. ([@iiwo][])
+- `Isolator.load_ignore_config` is deprecated in favor of `Isolator::Ignorer.prepare`. ([@iiwo][])
+
 ## 0.6.2 (2020-03-20)
 
 - Make Sniffer version requirement open-ended. ([@palkan][])
@@ -76,3 +79,4 @@
 [@Envek]: https://github.com/Envek
 [@DmitryTsepelev]: https://github.com/DmitryTsepelev
 [@shivanshgaur]: https://github.com/shivanshgaur
+[@iiwo]: https://github.com/iiwo
