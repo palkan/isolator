@@ -32,10 +32,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", ">= 1.16"
   spec.add_development_dependency "rake", "~> 13.0"
   spec.add_development_dependency "rspec", "~> 3.0"
-  spec.add_development_dependency "rspec-rails", "~> 3.0"
+  spec.add_development_dependency "rspec-rails", ">= 3.0"
   spec.add_development_dependency "minitest", "~> 5.10.0"
-  spec.add_development_dependency "standard", "~> 0.2.0"
-  spec.add_development_dependency "rubocop-md", "~> 0.3"
 
   spec.add_development_dependency "sidekiq", "~> 5.0"
   spec.add_development_dependency "webmock", "~> 3.1"
@@ -46,4 +44,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "sucker_punch"
   spec.add_development_dependency "database_cleaner"
   spec.add_development_dependency "database_cleaner-active_record"
+  spec.add_development_dependency "uniform_notifier"
 end

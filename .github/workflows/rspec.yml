@@ -18,13 +18,20 @@ jobs:
       matrix:
         ruby: ["2.7"]
         gemfile: ["gemfiles/rails6.gemfile"]
+        bundler: ["2"]
         include:
         - ruby: "2.5"
           gemfile: "gemfiles/rails5.gemfile"
+          bundler: "2"
+        - ruby: "2.5"
+          gemfile: "gemfiles/activerecord42.gemfile"
+          bundler: "1"
         - ruby: "2.6"
           gemfile: "gemfiles/rails5.gemfile"
+          bundler: "2"
         - ruby: "2.7"
           gemfile: "gemfiles/railsmaster.gemfile"
+          bundler: "2"
     steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v1
@@ -36,6 +43,7 @@ jobs:
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
+        bundler: ${{ matrix.bundler }}
     - name: Bundle install
       run: |
         bundle config path /home/runner/bundle

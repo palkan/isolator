@@ -16,5 +16,3 @@ else
   gem 'rails', '~> 6.0'
   gem 'sqlite3', '~> 1.4.0'
 end
-
-gem 'uniform_notifier', '~> 1.11'
