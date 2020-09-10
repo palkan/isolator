@@ -35,5 +35,11 @@ describe "Rails transactional tests" do
 
       expect(output).to include("2 examples, 1 failure")
     end
+
+    specify "multiple databases" do
+      output = run_rspec("transactional", tag: "multi")
+
+      expect(output).to include("1 example, 0 failures")
+    end
   end
 end

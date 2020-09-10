@@ -39,4 +39,20 @@ describe "ActiveRecord integration" do
       end
     end
   end
+
+  context "with multiple connections" do
+    specify do
+      Post.connection.begin_db_transaction
+      expect(Isolator).to be_within_transaction
+
+      User.connection.begin_db_transaction
+      expect(Isolator).to be_within_transaction
+
+      User.connection.commit_db_transaction
+      expect(Isolator).to be_within_transaction
+
+      Post.connection.commit_db_transaction
+      expect(Isolator).to_not be_within_transaction
+    end
+  end
 end

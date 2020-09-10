@@ -51,4 +51,14 @@ describe "use_transactional_tests=true" do
     end
     expect(true).to eq true
   end
+
+  context "with multiple connections", :multi do
+    before { @conn = ActiveRecord::Base.establish_connection adapter: "sqlite3", database: ":memory:" }
+    after { @conn.disconnect! }
+
+    it "doesn't raise when new connection is initialized" do
+      ActiveJobWorker.perform_later
+      expect(true).to eq true
+    end
+  end
 end

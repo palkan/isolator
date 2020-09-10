@@ -18,7 +18,7 @@ module Isolator
   using Isolator::ThreadFetch
 
   class << self
-    attr_accessor :default_threshold
+    attr_accessor :default_threshold, :default_connection_id
 
     def config
       @config ||= Configuration.new
@@ -70,24 +70,22 @@ module Isolator
       set_connection_threshold(val)
     end
 
-    def transactions_threshold(connection = ActiveRecord::Base.connection)
-      connection_threshold(connection_identifier(connection))
+    def transactions_threshold(connection_id = default_connection_id.call)
+      connection_threshold(connection_id)
     end
 
-    def set_connection_threshold(val, connection = ActiveRecord::Base.connection)
+    def set_connection_threshold(val, connection_id = default_connection_id.call)
       Thread.current[:isolator_connection_thresholds] ||= Hash.new { |h, k| h[k] = Isolator.default_threshold }
-      Thread.current[:isolator_connection_thresholds][connection_identifier(connection)] = val
+      Thread.current[:isolator_connection_thresholds][connection_id] = val
     end
 
-    def incr_transactions!(connection = ActiveRecord::Base.connection)
-      connection_id = connection_identifier(connection)
+    def incr_transactions!(connection_id = default_connection_id.call)
       Thread.current[:isolator_connection_transactions] ||= Hash.new { |h, k| h[k] = 0 }
       Thread.current[:isolator_connection_transactions][connection_id] += 1
       start! if current_transactions(connection_id) == connection_threshold(connection_id)
     end
 
-    def decr_transactions!(connection = ActiveRecord::Base.connection)
-      connection_id = connection_identifier(connection)
+    def decr_transactions!(connection_id = default_connection_id.call)
       Thread.current[:isolator_connection_transactions][connection_id] -= 1
       finish! if current_transactions(connection_id) == (connection_threshold(connection_id) - 1)
     end
@@ -125,11 +123,6 @@ module Isolator
 
     private
 
-    def connection_identifier(connection)
-      raise ArgumentError, "Invalid connection" if connection.nil?
-      connection.instance_variable_get("@config").slice(:adapter, :host, :database)
-    end
-
     def current_transactions(connection_id)
       Thread.current.fetch(:isolator_connection_transactions, {})[connection_id] || 0
     end
@@ -140,6 +133,7 @@ module Isolator
   end
 
   self.default_threshold = 1
+  self.default_connection_id = -> { ActiveRecord::Base.connected? ? ActiveRecord::Base.connection.object_id : 0 }
 end
 
 require "isolator/orm_adapters"
