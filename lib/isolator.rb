@@ -17,9 +17,9 @@ require "isolator/ext/thread_fetch"
 module Isolator
   using Isolator::ThreadFetch
 
-  DEFAULT_CONNECTION_THRESHOLD = 1
-
   class << self
+    attr_accessor :default_threshold
+
     def config
       @config ||= Configuration.new
     end
@@ -75,7 +75,7 @@ module Isolator
     end
 
     def set_connection_threshold(val, connection = ActiveRecord::Base.connection)
-      Thread.current[:isolator_connection_thresholds] ||= Hash.new { |h, k| h[k] = DEFAULT_CONNECTION_THRESHOLD }
+      Thread.current[:isolator_connection_thresholds] ||= Hash.new { |h, k| h[k] = Isolator.default_threshold }
       Thread.current[:isolator_connection_thresholds][connection_identifier(connection)] = val
     end
 
@@ -135,9 +135,11 @@ module Isolator
     end
 
     def connection_threshold(connection_id)
-      Thread.current.fetch(:isolator_connection_thresholds, {})[connection_id] || DEFAULT_CONNECTION_THRESHOLD
+      Thread.current.fetch(:isolator_connection_thresholds, {})[connection_id] || default_threshold
     end
   end
+
+  self.default_threshold = 1
 end
 
 require "isolator/orm_adapters"
