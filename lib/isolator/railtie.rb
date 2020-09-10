@@ -18,14 +18,12 @@ module Isolator
               super
               return unless run_in_transaction?
 
-              open_count = ActiveRecord::Base.connection.open_transactions
-              Isolator.transactions_threshold += open_count
+              Isolator.default_threshold += 1
             end
 
             def teardown_fixtures(*)
               if run_in_transaction?
-                open_count = ActiveRecord::Base.connection.open_transactions
-                Isolator.transactions_threshold -= open_count
+                Isolator.default_threshold -= 1
               end
               super
             end
