@@ -1,20 +1,20 @@
-source "https://rubygems.org"
+# frozen_string_literal: true
 
-git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
+source 'https://rubygems.org'
 
-# Specify your gem's dependencies in isolator.gemspec
+gem 'pry-byebug', platform: :mri
+
 gemspec
 
-gem "pry-byebug"
+eval_gemfile "gemfiles/rubocop.gemfile"
 
-gem "sqlite3", "~> 1.4.0"
-
-local_gemfile = File.join(__dir__, "Gemfile.local")
+local_gemfile = "#{File.dirname(__FILE__)}/Gemfile.local"
 
 if File.exist?(local_gemfile)
   eval(File.read(local_gemfile)) # rubocop:disable Security/Eval
 else
-  gem "rails", "~> 6.0"
+  gem 'rails', '~> 6.0'
+  gem 'sqlite3', '~> 1.4.0'
 end
 
 gem 'uniform_notifier', '~> 1.11'

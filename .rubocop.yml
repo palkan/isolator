@@ -1,6 +1,5 @@
 require:
   - standard/cop/semantic_blocks
-  - rubocop-md
 
 inherit_gem:
   standard: config/base.yml
@@ -12,7 +11,8 @@ AllCops:
     - 'Gemfile'
     - 'vendor/**/*'
     - 'gemfiles/**/*'
-    - 'lib/generators/**/templates/**/*'
+    - 'lib/.rbnext/**/*'
+    - 'lib/generators/**/templates/*.rb'
   DisplayCopNames: true
   TargetRubyVersion: 2.5
 
@@ -27,25 +27,3 @@ Style/TrailingCommaInArrayLiteral:
 
 Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: no_comma
-
-Lint/Void:
-  Exclude:
-    - '**/*.md'
-
-# See https://github.com/rubocop-hq/rubocop/issues/4222
-Lint/AmbiguousBlockAssociation:
-  Exclude:
-    - 'spec/**/*'
-    - '**/*.md'
-
-Lint/DuplicateMethods:
-  Exclude:
-    - '**/*.md'
-
-Naming/FileName:
-  Exclude:
-   - '**/*.md'
-
-Layout/InitialIndentation:
-  Exclude:
-    - 'CHANGELOG.md'

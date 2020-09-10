@@ -1,0 +1,3 @@
+bump:
+  file: lib/isolator/version.rb
+  skip_ci: true

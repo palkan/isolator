@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-lib = File.expand_path("../lib", __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "isolator/version"
+require_relative "lib/isolator/version"
 
 Gem::Specification.new do |spec|
   spec.name = "isolator"
@@ -17,9 +15,7 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = ">= 2.5.0"
 
-  spec.files = `git ls-files -z`.split("\x0").reject do |f|
-    f.match(%r{^(test|spec|features)/})
-  end
+  spec.files = Dir.glob("lib/**/*") + %w[README.md LICENSE.txt CHANGELOG.md]
 
   spec.metadata = {
     "bug_tracker_uri" => "http://github.com/palkan/isolator/issues",

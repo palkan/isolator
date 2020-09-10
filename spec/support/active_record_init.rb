@@ -16,4 +16,4 @@ end
 
 class User < ActiveRecord::Base; end
 
-ActiveRecord::Base.logger = Logger.new(STDOUT) if ENV["LOG"]
+ActiveRecord::Base.logger = Logger.new($stdout) if ENV["LOG"]
