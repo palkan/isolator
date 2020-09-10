@@ -2,7 +2,12 @@
 
 ## master
 
+- Track transactions for different connections independently. ([@mquan][], [@palkan][])
+
+This, for example, makes Isolator compatible with Rails multi-database apps.
+
 - Allow custom ignorer usage. ([@iiwo][])
+
 - `Isolator.load_ignore_config` is deprecated in favor of `Isolator::Ignorer.prepare`. ([@iiwo][])
 
 ## 0.6.2 (2020-03-20)
@@ -80,3 +85,4 @@
 [@DmitryTsepelev]: https://github.com/DmitryTsepelev
 [@shivanshgaur]: https://github.com/shivanshgaur
 [@iiwo]: https://github.com/iiwo
+[@mquan]: https://github.com/mquan
