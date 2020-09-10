@@ -13,14 +13,6 @@ end
 
 describe "use_transactional_tests=true" do
   context "nested transactions", :nested do
-    before(:all) do
-      ActiveRecord::Base.connection.begin_transaction(joinable: false)
-    end
-
-    after(:all) do
-      ActiveRecord::Base.connection.rollback_transaction
-    end
-
     it "doesn't raise when no transaction within example" do
       expect do
         User.first
