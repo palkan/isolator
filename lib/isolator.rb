@@ -17,6 +17,22 @@ require "isolator/ext/thread_fetch"
 module Isolator
   using Isolator::ThreadFetch
 
+  class ThreadStateProxy
+    attr_reader :prefix
+
+    def initilize(prefix = "isolator_")
+      @prefix = prefix
+    end
+
+    def [](key)
+      Thread.current[:"#{prefix}#{key}"]
+    end
+
+    def []=(key, value)
+      Thread.current[:"#{prefix}#{key}"] = value
+    end
+  end
+
   class << self
     attr_accessor :default_threshold, :default_connection_id
 
@@ -33,11 +49,11 @@ module Isolator
     end
 
     def enable!
-      Thread.current[:isolator_disabled] = false
+      state[:disabled] = true
     end
 
     def disable!
-      Thread.current[:isolator_disabled] = true
+      state[:disabled] = true
     end
 
     # Accepts block and disable Isolator within
@@ -75,27 +91,27 @@ module Isolator
     end
 
     def set_connection_threshold(val, connection_id = default_connection_id.call)
-      Thread.current[:isolator_connection_thresholds] ||= Hash.new { |h, k| h[k] = Isolator.default_threshold }
-      Thread.current[:isolator_connection_thresholds][connection_id] = val
+      state[:thresholds] ||= Hash.new { |h, k| h[k] = Isolator.default_threshold }
+      state[:thresholds][connection_id] = val
     end
 
     def incr_transactions!(connection_id = default_connection_id.call)
-      Thread.current[:isolator_connection_transactions] ||= Hash.new { |h, k| h[k] = 0 }
-      Thread.current[:isolator_connection_transactions][connection_id] += 1
+      state[:transactions] ||= Hash.new { |h, k| h[k] = 0 }
+      state[:transactions][connection_id] += 1
       start! if current_transactions(connection_id) == connection_threshold(connection_id)
     end
 
     def decr_transactions!(connection_id = default_connection_id.call)
-      Thread.current[:isolator_connection_transactions][connection_id] -= 1
+      state[:transactions][connection_id] -= 1
       finish! if current_transactions(connection_id) == (connection_threshold(connection_id) - 1)
     end
 
     def clear_transactions!
-      Thread.current[:isolator_connection_transactions]&.clear
+      state[:transactions]&.clear
     end
 
     def within_transaction?
-      Thread.current.fetch(:isolator_connection_transactions, {}).each do |connection_id, transaction_count|
+      state[:transactions]&.each do |connection_id, transaction_count|
         return true if transaction_count >= connection_threshold(connection_id)
       end
       false
@@ -106,7 +122,7 @@ module Isolator
     end
 
     def disabled?
-      Thread.current[:isolator_disabled] == true
+      state[:disabled] == true
     end
 
     def adapters
@@ -123,15 +139,18 @@ module Isolator
 
     private
 
+    attr_accessor :state
+
     def current_transactions(connection_id)
-      Thread.current.fetch(:isolator_connection_transactions, {})[connection_id] || 0
+      state[:transactions]&.[](connection_id) || 0
     end
 
     def connection_threshold(connection_id)
-      Thread.current.fetch(:isolator_connection_thresholds, {})[connection_id] || default_threshold
+      state[:thresholds]&.[](connection_id) || default_threshold
     end
   end
 
+  self.state = ThreadStateProxy.new
   self.default_threshold = 1
   self.default_connection_id = -> { ActiveRecord::Base.connected? ? ActiveRecord::Base.connection.object_id : 0 }
 end
