@@ -49,7 +49,7 @@ module Isolator
     end
 
     def enable!
-      state[:disabled] = true
+      state[:disabled] = false
     end
 
     def disable!
