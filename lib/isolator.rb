@@ -90,6 +90,10 @@ module Isolator
       connection_threshold(connection_id)
     end
 
+    def current_transactions(connection_id = default_connection_id.call)
+      state[:transactions]&.[](connection_id) || 0
+    end
+
     def set_connection_threshold(val, connection_id = default_connection_id.call)
       state[:thresholds] ||= Hash.new { |h, k| h[k] = Isolator.default_threshold }
       state[:thresholds][connection_id] = val
@@ -140,10 +144,6 @@ module Isolator
     private
 
     attr_accessor :state
-
-    def current_transactions(connection_id)
-      state[:transactions]&.[](connection_id) || 0
-    end
 
     def connection_threshold(connection_id)
       state[:thresholds]&.[](connection_id) || default_threshold

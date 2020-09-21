@@ -7,7 +7,7 @@ describe "after_commit integration" do
     specify do
       output = run_rspec("after_commit")
 
-      expect(output).to include("1 example, 0 failures")
+      expect(output).to include("2 examples, 0 failures")
     end
   end
 end
