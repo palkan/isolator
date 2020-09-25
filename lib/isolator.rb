@@ -99,9 +99,30 @@ module Isolator
       state[:thresholds][connection_id] = val
     end
 
+    def incr_thresholds!
+      self.default_threshold += 1
+      return unless state[:thresholds]
+
+      state[:thresholds].transform_values!(&:succ)
+    end
+
+    def decr_thresholds!
+      self.default_threshold -= 1
+      return unless state[:thresholds]
+
+      state[:thresholds].transform_values!(&:pred)
+    end
+
     def incr_transactions!(connection_id = default_connection_id.call)
       state[:transactions] ||= Hash.new { |h, k| h[k] = 0 }
       state[:transactions][connection_id] += 1
+
+      # Workaround to track threshold changes made before opening a connection
+      pending_threshold = state[:thresholds]&.delete(0)
+      if pending_threshold
+        state[:thresholds][connection_id] = pending_threshold
+      end
+
       start! if current_transactions(connection_id) == connection_threshold(connection_id)
     end
 

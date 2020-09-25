@@ -46,11 +46,26 @@ describe "use_transactional_tests=true" do
 
   context "with multiple connections", :multi do
     before { @conn = ActiveRecord::Base.establish_connection adapter: "sqlite3", database: ":memory:" }
-    after { @conn.disconnect! }
 
     it "doesn't raise when new connection is initialized" do
       ActiveJobWorker.perform_later
       expect(true).to eq true
+    end
+
+    context "with before(:all)" do
+      before(:all) do
+        Isolator.transactions_threshold += 1
+        ::ActiveRecord::Base.connection.begin_transaction(joinable: false)
+      end
+
+      after(:all) do
+        Isolator.transactions_threshold -= 1
+        ::ActiveRecord::Base.connection.rollback_transaction unless ::ActiveRecord::Base.connection.open_transactions.zero?
+      end
+
+      it "doesn't raise when new connection is initialized" do
+        expect { ActiveJobWorker.perform_later }.not_to raise_error
+      end
     end
   end
 end

@@ -18,12 +18,12 @@ module Isolator
               super
               return unless run_in_transaction?
 
-              Isolator.default_threshold += 1
+              Isolator.incr_thresholds!
             end
 
             def teardown_fixtures(*)
               if run_in_transaction?
-                Isolator.default_threshold -= 1
+                Isolator.decr_thresholds!
               end
               super
             end
