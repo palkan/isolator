@@ -2,6 +2,11 @@
 
 ## master
 
+- Add debug mode. ([@palkan][])
+
+Use `ISOLATOR_DEBUG=true` to turn on debug mode, which prints some useful information: when a transaction is tracked,
+thresholds are changed, etc.
+
 - Track transactions for different connections independently. ([@mquan][], [@palkan][])
 
 This, for example, makes Isolator compatible with Rails multi-database apps.

@@ -97,6 +97,8 @@ module Isolator
     def set_connection_threshold(val, connection_id = default_connection_id.call)
       state[:thresholds] ||= Hash.new { |h, k| h[k] = Isolator.default_threshold }
       state[:thresholds][connection_id] = val
+
+      debug!("Threshold value was changed for connection #{connection_id}: #{val}")
     end
 
     def incr_thresholds!
@@ -104,6 +106,8 @@ module Isolator
       return unless state[:thresholds]
 
       state[:thresholds].transform_values!(&:succ)
+
+      debug!("Thresholds were incremented")
     end
 
     def decr_thresholds!
@@ -111,6 +115,8 @@ module Isolator
       return unless state[:thresholds]
 
       state[:thresholds].transform_values!(&:pred)
+
+      debug!("Thresholds were decremented")
     end
 
     def incr_transactions!(connection_id = default_connection_id.call)
@@ -123,12 +129,19 @@ module Isolator
         state[:thresholds][connection_id] = pending_threshold
       end
 
+      debug!("Transaction opened for connection #{connection_id} (total: #{state[:transactions][connection_id]}, threshold: #{state[:thresholds]&.fetch(connection_id, default_threshold)})")
+
       start! if current_transactions(connection_id) == connection_threshold(connection_id)
     end
 
     def decr_transactions!(connection_id = default_connection_id.call)
       state[:transactions][connection_id] -= 1
+
       finish! if current_transactions(connection_id) == (connection_threshold(connection_id) - 1)
+
+      state[:transactions].delete(connection_id) if state[:transactions][connection_id].zero?
+
+      debug!("Transaction closed for connection #{connection_id} (total: #{state[:transactions][connection_id]}, threshold: #{state[:thresholds]&.[](connection_id) || default_threshold})")
     end
 
     def clear_transactions!
@@ -162,6 +175,8 @@ module Isolator
     include Isolator::Isolate
     include Isolator::Callbacks
 
+    attr_accessor :debug_enabled, :backtrace_cleaner, :backtrace_length
+
     private
 
     attr_accessor :state
@@ -169,11 +184,37 @@ module Isolator
     def connection_threshold(connection_id)
       state[:thresholds]&.[](connection_id) || default_threshold
     end
+
+    def debug!(msg)
+      return unless debug_enabled
+      msg = "[ISOLATOR DEBUG] #{msg}"
+
+      if backtrace_cleaner && backtrace_length.positive?
+        source = extract_source_location(caller)
+
+        msg = "#{msg}\n  ↳ #{source.join("\n")}" unless source.empty?
+      end
+
+      $stdout.puts(colorize_debug(msg))
+    end
+
+    def extract_source_location(locations)
+      backtrace_cleaner.call(locations.lazy)
+        .take(backtrace_length).to_a
+    end
+
+    def colorize_debug(msg)
+      return msg unless $stdout.tty?
+
+      "\u001b[31;1m#{msg}\u001b[0m"
+    end
   end
 
   self.state = ThreadStateProxy.new
   self.default_threshold = 1
   self.default_connection_id = -> { ActiveRecord::Base.connected? ? ActiveRecord::Base.connection.object_id : 0 }
+  self.debug_enabled = ENV["ISOLATOR_DEBUG"] == "true"
+  self.backtrace_length = ENV.fetch("ISOLATOR_BACKTRACE_LENGTH", 1).to_i
 end
 
 require "isolator/orm_adapters"
