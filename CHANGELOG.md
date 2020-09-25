@@ -2,6 +2,8 @@
 
 ## master
 
+## 0.7.0 (2020-09-25)
+
 - Add debug mode. ([@palkan][])
 
 Use `ISOLATOR_DEBUG=true` to turn on debug mode, which prints some useful information: when a transaction is tracked,
