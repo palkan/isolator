@@ -2,6 +2,14 @@
 
 module Isolator
   class Railtie < ::Rails::Railtie # :nodoc:
+    initializer "isolator.backtrace_cleaner" do
+      ActiveSupport.on_load(:active_record) do
+        Isolator.backtrace_cleaner = lambda do |locations|
+          ::Rails.backtrace_cleaner.clean(locations)
+        end
+      end
+    end
+
     config.after_initialize do
       # Forec load adapters after application initialization
       # (when all deps are likely to be loaded).

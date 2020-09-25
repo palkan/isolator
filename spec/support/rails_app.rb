@@ -19,6 +19,13 @@ class TestApp < Rails::Application
   config.logger = ENV["LOG"] ? Logger.new($stdout) : Logger.new("/dev/null")
 
   config.active_support.test_order = :random
+
+  config.after_initialize do
+    Rails.backtrace_cleaner.remove_silencers!
+    Rails.backtrace_cleaner.remove_filters!
+    spec_root = File.expand_path(File.join(__dir__, ".."))
+    Rails.backtrace_cleaner.add_silencer { |line| !line.match?(/#{spec_root}\//) }
+  end
 end
 
 require_relative "./workers/active_job_worker"
