@@ -104,7 +104,7 @@ Isolator.configure do |config|
 end
 ```
 
-Isolator relys on [uniform_notifier][] to send custom notifications.
+Isolator relies on [uniform_notifier][] to send custom notifications.
 
 **NOTE:** `uniform_notifier` should be installed separately (i.e., added to Gemfile).
 
@@ -161,7 +161,7 @@ You can add as many _ignores_ as you want, the offense is registered iff all of 
 
 ### Using with legacy Rails codebases
 
-If you already have a huge Rails project it can be a tricky to turn Isolator on because you'll immediately get a lot of failed specs. If you want to fix detected issues one by one, you can list all of them in the special file `.isolator_todo.yml` in a following way:
+If you already have a huge Rails project it can be tricky to turn Isolator on because you'll immediately get a lot of failed specs. If you want to fix detected issues one by one, you can list all of them in the special file `.isolator_todo.yml` in the following way:
 
 ```
 sidekiq:
@@ -196,7 +196,7 @@ Isolator.isolate :danger, Danger.singleton_class, :explode, options
 Possible `options` are:
 - `exception_class` – an exception class to raise in case of offense
 - `exception_message` – custom exception message (could be specified without a class)
-- `details_message` – a block to generate additional exceptin message information:
+- `details_message` – a block to generate additional exception message information:
 
 ```ruby
 Isolator.isolate :active_job,
