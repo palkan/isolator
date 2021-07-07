@@ -144,6 +144,10 @@ module Isolator
       debug!("Transaction closed for connection #{connection_id} (total: #{state[:transactions][connection_id]}, threshold: #{state[:thresholds]&.[](connection_id) || default_threshold})")
     end
 
+    def remove_connection!(connection_id)
+      state[:transactions]&.delete(connection_id)
+    end
+
     def clear_transactions!
       state[:transactions]&.clear
     end
