@@ -135,6 +135,13 @@ module Isolator
     end
 
     def decr_transactions!(connection_id = default_connection_id.call)
+      current = state[:transactions]&.[](connection_id) || 0
+
+      if current <= 0
+        warn "Trying to finalize an untracked transaction"
+        return
+      end
+
       state[:transactions][connection_id] -= 1
 
       finish! if current_transactions(connection_id) == (connection_threshold(connection_id) - 1)
