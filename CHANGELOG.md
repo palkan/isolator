@@ -2,6 +2,8 @@
 
 ## master
 
+- Add .isolator_ignore.yml configuration file for Rails application.
+
 ## 0.7.0 (2020-09-25)
 
 - Add debug mode. ([@palkan][])

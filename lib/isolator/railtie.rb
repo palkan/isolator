@@ -16,6 +16,7 @@ module Isolator
       load File.join(__dir__, "adapters.rb")
 
       Isolator.config.ignorer&.prepare
+      Isolator.config.ignorer&.prepare(path: ".isolator_ignore.yml")
 
       next unless Rails.env.test?
 
