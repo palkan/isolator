@@ -161,7 +161,7 @@ You can add as many _ignores_ as you want, the offense is registered iff all of 
 
 ### Using with legacy Rails codebases
 
-If you already have a huge Rails project it can be tricky to turn Isolator on because you'll immediately get a lot of failed specs. If you want to fix detected issues one by one, you can list all of them in the special file `.isolator_todo.yml` in the following way:
+If you already have a huge Rails project it can be tricky to turn Isolator on because you'll immediately get a lot of failed specs. If you want to fix detected issues one by one, you can list all of them in the special files `.isolator_todo.yml` and `.isolator_ignore.yml` in the following way:
 
 ```
 sidekiq:
