@@ -157,7 +157,7 @@ To ignore offenses when `sidekiq-postpone` is active, you can add an ignore `pro
 Isolator.adapters.sidekiq.ignore_if { Thread.current[:sidekiq_postpone] }
 ```
 
-You can add as many _ignores_ as you want, the offense is registered iff all of them return false.
+You can add as many _ignores_ as you want, the offense is registered if all of them return false.
 
 ### Using with legacy Rails codebases
 
