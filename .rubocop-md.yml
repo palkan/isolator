@@ -6,11 +6,3 @@ require:
 AllCops:
   Include:
     - '**/*.md'
-
-Lint/Void:
-  Exclude:
-    - '**/*.md'
-
-Lint/DuplicateMethods:
-  Exclude:
-    - '**/*.md'

@@ -28,8 +28,8 @@ module Isolator
       @ignorer = Isolator::Ignorer
     end
 
-    alias raise_exceptions? raise_exceptions
-    alias send_notifications? send_notifications
+    alias_method :raise_exceptions?, :raise_exceptions
+    alias_method :send_notifications?, :send_notifications
 
     def test_env?
       ENV["RACK_ENV"] == "test" || ENV["RAILS_ENV"] == "test"

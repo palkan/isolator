@@ -4,7 +4,7 @@ require "spec_helper"
 
 describe "Base adapter" do
   before(:all) do
-    module ::Isolator::Danger # rubocop:disable Style/ClassAndModuleChildren
+    module ::Isolator::Danger # rubocop:disable Lint/ConstantDefinitionInBlock
       def self.call(a, b)
         a + b
       end

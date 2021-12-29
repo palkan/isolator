@@ -3,10 +3,10 @@
 require "spec_helper"
 
 describe "Ignorer" do
-  TODO_PATH = ".isolator_todo.yml"
+  TODO_PATH = ".isolator_todo.yml" # rubocop:disable Lint/ConstantDefinitionInBlock
 
   before(:all) do
-    module ::Isolator::Danger # rubocop:disable Style/ClassAndModuleChildren
+    module ::Isolator::Danger # rubocop:disable Lint/ConstantDefinitionInBlock
       def self.call_masked(a, b)
         a + b
       end

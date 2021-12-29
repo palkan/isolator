@@ -115,13 +115,13 @@ Isolator relies on [uniform_notifier][] to send custom notifications.
 
 ### Supported ORMs
 
-- `ActiveRecord` >= 4.1
+- `ActiveRecord` >= 5.1 (4.2 likely till works, but we do not test against it anymore)
 - `ROM::SQL` (only if Active Support instrumentation extension is loaded)
 
 ### Adapters
 
 Isolator has a bunch of built-in adapters:
-- `:http` – built on top of [Sniffer][]
+- `:http` – built on top of [Sniffer][]
 - `:active_job`
 - `:sidekiq`
 - `:resque`
