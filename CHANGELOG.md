@@ -2,6 +2,8 @@
 
 ## master
 
+## 0.8.0 (2021-12-29)
+
 - Drop Ruby 2.5 support.
 
 - Add .isolator_ignore.yml configuration file for Rails application.
