@@ -171,6 +171,8 @@ sidekiq:
 
 All the exceptions raised in the listed lines will be ignored.
 
+The '.isolator_todo.yml' file is intended to point to the code that should be fixed later, and '.isolator_ignore' points to the code that for some reasons is not expected to be fixed. (See https://github.com/palkan/isolator/issues/40)
+
 ### Using with legacy Ruby codebases
 
 If you are not using Rails, you'll have to load ignores from file manually, using `Isolator::Ignorer.prepare(path:)`, for instance `Isolator::Ignorer.prepare(path: "./config/.isolator_todo.yml")`
