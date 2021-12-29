@@ -16,20 +16,23 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["2.7"]
+        ruby: ["3.0"]
         gemfile: ["gemfiles/rails6.gemfile"]
         bundler: ["2"]
         include:
-        - ruby: "2.5"
+        - ruby: "2.6"
           gemfile: "gemfiles/rails5.gemfile"
           bundler: "2"
         - ruby: "2.5"
           gemfile: "gemfiles/activerecord42.gemfile"
           bundler: "1"
-        - ruby: "2.6"
+        - ruby: "2.7"
           gemfile: "gemfiles/rails5.gemfile"
           bundler: "2"
-        - ruby: "2.7"
+        - ruby: "3.0"
+          gemfile: "gemfiles/rails7.gemfile"
+          bundler: "2"
+        - ruby: "3.1"
           gemfile: "gemfiles/railsmaster.gemfile"
           bundler: "2"
     steps:

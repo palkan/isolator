@@ -46,4 +46,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "database_cleaner-active_record"
   spec.add_development_dependency "after_commit_everywhere"
   spec.add_development_dependency "uniform_notifier"
+  spec.add_development_dependency "webrick"
+  spec.add_development_dependency "net-smtp"
 end
