@@ -3,7 +3,7 @@
 require "spec_helper"
 
 describe "Ignorer" do
-  TODO_PATH = ".isolator_todo.yml" # rubocop:disable Lint/ConstantDefinitionInBlock
+  let(:todo_path) { ".isolator_todo.yml" }
 
   before(:all) do
     module ::Isolator::Danger # rubocop:disable Lint/ConstantDefinitionInBlock
@@ -33,7 +33,8 @@ describe "Ignorer" do
 
   before do
     allow(Isolator).to receive(:within_transaction?) { true }
-    allow(File).to receive(:exist?).with(TODO_PATH).and_return(true)
+    allow(File).to receive(:exist?).and_call_original
+    allow(File).to receive(:exist?).with(todo_path).and_return(true)
   end
 
   subject { ::Isolator::Danger }
@@ -46,12 +47,11 @@ describe "Ignorer" do
   shared_examples "todos filter" do
     context "unmasked todos" do
       before do
-        allow(YAML).to receive(:load_file).with(TODO_PATH).and_return(
+        allow(YAML).to receive(:load_file).with(todo_path).and_return(
           "todo_unmasked_adapter" => ["spec/isolator/ignorer_spec.rb:59"],
           "wrong_adapter" => ["spec/isolator/ignorer_spec.rb:62"]
         )
 
-        stub_const("Isolator::Ignorer::PATH", TODO_PATH)
         prepare
       end
 
@@ -66,11 +66,10 @@ describe "Ignorer" do
 
     context "masked todos" do
       before do
-        allow(YAML).to receive(:load_file).with(TODO_PATH).and_return(
+        allow(YAML).to receive(:load_file).with(todo_path).and_return(
           "todo_masked_adapter" => ["spec/isolator/**/*.rb"]
         )
 
-        stub_const("Isolator::Ignorer::PATH", TODO_PATH)
         prepare
       end
 
@@ -81,7 +80,19 @@ describe "Ignorer" do
   end
 
   it_behaves_like "todos filter" do
-    let(:prepare) { Isolator::Ignorer.prepare }
+    let(:prepare) { Isolator::Ignorer.prepare(path: todo_path) }
+  end
+
+  context 'when the file is not parsed to a hash' do
+    before do
+      allow(YAML).to receive(:load_file).with(todo_path).and_return(nil)
+    end
+
+    it 'raises an error' do
+      expect { Isolator::Ignorer.prepare(path: todo_path) }.to raise_error(
+        Isolator::Ignorer::ParseError, "Unable to parse ignore config file #{todo_path}. Expected Hash, got NilClass."
+      )
+    end
   end
 
   # TODO: remove when load_ignore_config is deprecated
@@ -95,7 +106,7 @@ describe "Ignorer" do
     end
 
     it_behaves_like "todos filter" do
-      let(:prepare) { Isolator.load_ignore_config(TODO_PATH) }
+      let(:prepare) { Isolator.load_ignore_config(todo_path) }
     end
   end
 end
