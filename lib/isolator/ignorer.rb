@@ -3,16 +3,26 @@
 module Isolator
   # Handle ignoring isolator errors using a yml file
   class Ignorer
-    TODO_PATH = ".isolator_todo.yml"
+    class ParseError < StandardError
+      def initialize(file_path, klass)
+        @file_path = file_path
+        @klass = klass
+      end
+
+      def message
+        "Unable to parse ignore config file #{@file_path}. Expected Hash, got #{@klass}."
+      end
+    end
 
     class << self
-      def prepare(path: TODO_PATH, regex_string: "^.*(#ignores#):.*$")
+      def prepare(path:, regex_string: "^.*(#ignores#):.*$")
         return unless File.exist?(path)
 
-        todos = YAML.load_file(path)
+        ignores = YAML.load_file(path)
+        raise ParseError.new(path, ignores.class) unless ignores.respond_to?(:fetch)
 
         Isolator.adapters.each do |id, adapter|
-          ignored_paths = todos.fetch(id, [])
+          ignored_paths = ignores.fetch(id, [])
           AdapterIgnore.new(adapter: adapter, ignored_paths: ignored_paths, regex_string: regex_string).prepare
         end
       end
