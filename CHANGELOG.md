@@ -2,6 +2,8 @@
 
 ## master
 
+- Raise an error when an ignore file does not parse to a hash. ([@bobbymcwho][])
+
 ## 0.8.0 (2021-12-29)
 
 - Drop Ruby 2.5 support.
@@ -99,3 +101,4 @@ This, for example, makes Isolator compatible with Rails multi-database apps.
 [@shivanshgaur]: https://github.com/shivanshgaur
 [@iiwo]: https://github.com/iiwo
 [@mquan]: https://github.com/mquan
+[@bobbymcwho]: https://github.com/bobbymcwho
