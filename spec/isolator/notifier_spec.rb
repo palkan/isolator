@@ -48,5 +48,31 @@ describe Isolator::Notifier do
         expect(uniform_notifier).to_not have_received(:out_of_channel_notify)
       end
     end
+
+    context "when logging to a logger" do
+      let(:logger) { instance_double("Logger") }
+
+      before do
+        Isolator.configure do |config|
+          config.logger = logger
+          config.backtrace_filter = lambda do |_backtrace|
+            ["first/line/of/backtrace", "second/line/of/backtrace"]
+          end
+          config.raise_exceptions = false
+        end
+        allow(logger).to receive(:warn)
+      end
+
+      specify do
+        subject
+
+        expect(logger).to have_received(:warn).with(<<~MSG.chomp)
+          [ISOLATOR EXCEPTION]
+          test exception
+            ↳ first/line/of/backtrace
+            ↳ second/line/of/backtrace
+        MSG
+      end
+    end
   end
 end
