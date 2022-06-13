@@ -83,12 +83,12 @@ describe "Ignorer" do
     let(:prepare) { Isolator::Ignorer.prepare(path: todo_path) }
   end
 
-  context 'when the file is not parsed to a hash' do
+  context "when the file is not parsed to a hash" do
     before do
       allow(YAML).to receive(:load_file).with(todo_path).and_return(nil)
     end
 
-    it 'raises an error' do
+    it "raises an error" do
       expect { Isolator::Ignorer.prepare(path: todo_path) }.to raise_error(
         Isolator::Ignorer::ParseError, "Unable to parse ignore config file #{todo_path}. Expected Hash, got NilClass."
       )
