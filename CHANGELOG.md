@@ -3,6 +3,7 @@
 ## master
 
 - Raise an error when an ignore file does not parse to a hash. ([@bobbymcwho][])
+- Log all filtered backtrace lines to the logger ([@bobbymcwho][])
 
 ## 0.8.0 (2021-12-29)
 
