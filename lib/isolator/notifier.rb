@@ -29,12 +29,12 @@ module Isolator
     def log_exception
       return unless Isolator.config.logger
 
-      offense_line = filtered_backtrace.first
-
       msg = "[ISOLATOR EXCEPTION]\n" \
             "#{exception.message}"
 
-      msg += "\n  ↳ #{offense_line}" if offense_line
+      filtered_backtrace.each do |offense_line|
+        msg += "\n  ↳ #{offense_line}"
+      end
 
       Isolator.config.logger.warn(msg)
     end
