@@ -5,8 +5,8 @@ require "spec_helper"
 describe "Base adapter" do
   before(:all) do
     module ::Isolator::Danger # rubocop:disable Lint/ConstantDefinitionInBlock
-      def self.call(a, b)
-        a + b
+      def self.call(a, b, method: :+)
+        a.send(method, b)
       end
     end
 
@@ -30,22 +30,26 @@ describe "Base adapter" do
   end
 
   describe "#ignore_if" do
-    before(:all) do
-      Isolator.adapters.test.ignore_if do |a, b|
-        (a + b).even?
-      end
-    end
-
-    after(:all) do
+    after do
       Isolator.adapters.test.ignores.clear
     end
 
-    it "raises when not ignored" do
-      expect { subject.call(1, 2) }.to raise_error(Isolator::UnsafeOperationError)
-    end
-
     it "doesn't raise when ignored" do
-      expect { subject.call(3, 5) }.not_to raise_error
+      Isolator.adapters.test.ignore_if do |a, b, method: :+|
+        method == :+ || a == 1
+      end
+
+      expect {
+        subject.call(1, 2)
+      }.not_to raise_error
+
+      expect {
+        subject.call(2, 2, method: :*)
+      }.to raise_error(Isolator::UnsafeOperationError)
+
+      expect {
+        subject.call(2, 2, method: :+)
+      }.not_to raise_error
     end
   end
 end

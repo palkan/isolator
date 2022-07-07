@@ -8,6 +8,18 @@ RSpec.describe Isolator, "dynamic adapters" do
       def test
         42
       end
+
+      def sum(a, b)
+        a + b
+      end
+
+      def round(num, precision: 0)
+        num.round(precision)
+      end
+
+      def shout
+        yield.upcase
+      end
     }
   end
 
@@ -58,5 +70,23 @@ RSpec.describe Isolator, "dynamic adapters" do
     expect {
       Isolator.remove_adapter(:foo)
     }.not_to raise_error
+  end
+
+  it "supports arguments in the modified method" do
+    Isolator.isolate(:foo, target: example_class, method_name: :sum)
+    expect(example_class.new.sum(10, 25)).to eq(35)
+  end
+
+  it "supports keyword arguments in the modified method" do
+    Isolator.isolate(:foo, target: example_class, method_name: :round)
+
+    expect(example_class.new.round(0.05)).to eq(0)
+    expect(example_class.new.round(0.05, precision: 1)).to eq(0.1)
+  end
+
+  it "supports blocks in the modified method" do
+    Isolator.isolate(:foo, target: example_class, method_name: :shout)
+
+    expect(example_class.new.shout { "hello" }).to eq("HELLO")
   end
 end

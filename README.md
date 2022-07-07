@@ -205,8 +205,18 @@ Isolator.isolate :active_job,
   target: ActiveJob::Base,
   method_name: :enqueue,
   exception_class: Isolator::BackgroundJobError,
-  details_message: ->(obj, _args) {
+  details_message: ->(obj) {
     "#{obj.class.name}(#{obj.arguments})"
+  }
+
+Isolator.isolate :promoter,
+  target: UserPromoter,
+  method_name: :call,
+  details_message: ->(obj_, args, kwargs) {
+    # UserPromoter.call(user, role, by: nil)
+    user, role = args
+    by = kwargs[:by]
+    "#{user.name} promoted to #{role} by #{by&.name || "system"})"
   }
 ```
 

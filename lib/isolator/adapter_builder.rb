@@ -32,9 +32,9 @@ module Isolator
         return nil unless method_name
 
         Module.new do
-          define_method method_name do |*args, &block|
-            adapter.notify(caller, self, *args)
-            super(*args, &block)
+          define_method method_name do |*args, **kwargs, &block|
+            adapter.notify(caller, self, *args, **kwargs)
+            super(*args, **kwargs, &block)
           end
         end
       end
