@@ -4,6 +4,7 @@
 
 - Raise an error when an ignore file does not parse to a hash. ([@bobbymcwho][])
 - Log all filtered backtrace lines to the logger ([@bobbymcwho][])
+- Add support for removing dynamic adapters. ([@Mange][])
 
 ## 0.8.0 (2021-12-29)
 
@@ -103,3 +104,4 @@ This, for example, makes Isolator compatible with Rails multi-database apps.
 [@iiwo]: https://github.com/iiwo
 [@mquan]: https://github.com/mquan
 [@bobbymcwho]: https://github.com/bobbymcwho
+[@Mange]: https://github.com/Mange
