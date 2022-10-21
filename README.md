@@ -220,6 +220,23 @@ Isolator.isolate :promoter,
   }
 ```
 
+Trying to register the same adapter name twice will raise an error. You can guard for it, or remove old adapters before in order to replace them.
+
+```ruby
+unless Isolator.has_adapter?(:promoter)
+  Isolator.isolate(:promoter, *rest)
+end
+```
+
+```ruby
+# Handle code reloading
+class Messager
+end
+
+Isolator.remove_adapter(:messager)
+Isolator.isolate(:messager, target: Messager, *rest)
+```
+
 You can also add some callbacks to be run before and after the transaction:
 
 ```ruby
