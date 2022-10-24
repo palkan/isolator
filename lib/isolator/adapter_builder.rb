@@ -5,29 +5,39 @@ require "isolator/adapters/base"
 module Isolator
   # Builds adapter from provided params
   module AdapterBuilder
-    def self.call(target: nil, method_name: nil, **options)
-      adapter = Module.new do
-        extend Isolator::Adapters::Base
+    class << self
+      def call(target: nil, method_name: nil, **options)
+        adapter = Module.new do
+          extend Isolator::Adapters::Base
 
-        self.exception_class = options[:exception_class] if options.key?(:exception_class)
-        self.exception_message = options[:exception_message] if options.key?(:exception_message)
-        self.details_message = options[:details_message] if options.key?(:details_message)
+          self.exception_class = options[:exception_class] if options.key?(:exception_class)
+          self.exception_message = options[:exception_message] if options.key?(:exception_message)
+          self.details_message = options[:details_message] if options.key?(:details_message)
+        end
+
+        mod = build_mod(method_name, adapter)
+        if target && mod
+          target.prepend(mod)
+          adapter.define_singleton_method(:restore) do
+            mod.remove_method(method_name)
+          end
+        end
+
+        adapter
       end
 
-      add_patch_method(adapter, target, method_name) if
-        target && method_name
-      adapter
-    end
+      private
 
-    def self.add_patch_method(adapter, base, method_name)
-      mod = Module.new do
-        define_method method_name do |*args, &block|
-          adapter.notify(caller, self, *args)
-          super(*args, &block)
+      def build_mod(method_name, adapter)
+        return nil unless method_name
+
+        Module.new do
+          define_method method_name do |*args, **kwargs, &block|
+            adapter.notify(caller, self, *args, **kwargs)
+            super(*args, **kwargs, &block)
+          end
         end
       end
-
-      base.prepend mod
     end
   end
 end

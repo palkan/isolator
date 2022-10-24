@@ -174,6 +174,10 @@ module Isolator
       @adapters ||= Isolator::SimpleHashie.new
     end
 
+    def has_adapter?(id)
+      adapters.key?(id.to_s)
+    end
+
     def load_ignore_config(path)
       warn "[DEPRECATION] `load_ignore_config` is deprecated. Please use `Isolator::Ignorer.prepare` instead."
       Isolator::Ignorer.prepare(path: path)

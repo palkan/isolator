@@ -205,9 +205,36 @@ Isolator.isolate :active_job,
   target: ActiveJob::Base,
   method_name: :enqueue,
   exception_class: Isolator::BackgroundJobError,
-  details_message: ->(obj, _args) {
+  details_message: ->(obj) {
     "#{obj.class.name}(#{obj.arguments})"
   }
+
+Isolator.isolate :promoter,
+  target: UserPromoter,
+  method_name: :call,
+  details_message: ->(obj_, args, kwargs) {
+    # UserPromoter.call(user, role, by: nil)
+    user, role = args
+    by = kwargs[:by]
+    "#{user.name} promoted to #{role} by #{by&.name || "system"})"
+  }
+```
+
+Trying to register the same adapter name twice will raise an error. You can guard for it, or remove old adapters before in order to replace them.
+
+```ruby
+unless Isolator.has_adapter?(:promoter)
+  Isolator.isolate(:promoter, *rest)
+end
+```
+
+```ruby
+# Handle code reloading
+class Messager
+end
+
+Isolator.remove_adapter(:messager)
+Isolator.isolate(:messager, target: Messager, *rest)
 ```
 
 You can also add some callbacks to be run before and after the transaction:

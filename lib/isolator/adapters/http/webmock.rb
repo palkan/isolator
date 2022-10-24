@@ -2,7 +2,7 @@
 
 adapter = Isolator.isolate :webmock,
   exception_class: Isolator::HTTPError,
-  details_message: ->(obj, _args) {
+  details_message: ->(obj) {
                      "#{obj.method.to_s.upcase} #{obj.uri}"
                    }
 
