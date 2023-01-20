@@ -9,13 +9,13 @@ describe "Sidekiq adapter" do
 
   let(:worker) { SidekiqWorker }
 
-  describe "#perform_now" do
+  describe "#perform_async" do
     specify do
       expect { worker.perform_async }.to raise_error(Isolator::BackgroundJobError)
     end
   end
 
-  describe "#perform_later" do
+  describe "#perform_at" do
     specify do
       expect { worker.perform_at(3.days.from_now) }.to raise_error(Isolator::BackgroundJobError, /SidekiqWorker/)
     end
