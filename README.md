@@ -159,6 +159,29 @@ Isolator.adapters.sidekiq.ignore_if { Thread.current[:sidekiq_postpone] }
 
 You can add as many _ignores_ as you want, the offense is registered iff all of them return false.
 
+
+### Using with sidekiq/testing
+
+If you require sidekiq/testing in your tests after isolator is required then it will blow away isolator's hooks, so you need to require isolator after requiring sidekiq/testing. 
+
+If you're using Rails and want to use isolator in development and staging, then here is a way to do this.
+
+```ruby
+
+# Gemfile
+gem "isolator", require: false # so it delays loading till after sidekiq/testing
+
+# config/initializers/isolator.rb
+require "sidekiq/testing" if Rails.env.test?
+
+unless Rails.env.production? # so we get it in staging too
+  require "isolator"
+  Isolator.configure do |config|
+    config.send_notifications = true # ...
+  end
+end
+```
+
 ### Using with legacy Rails codebases
 
 If you already have a huge Rails project it can be tricky to turn Isolator on because you'll immediately get a lot of failed specs. If you want to fix detected issues one by one, you can list all of them in the special files `.isolator_todo.yml` and `.isolator_ignore.yml` in the following way:
