@@ -15,6 +15,17 @@ module Isolator
       # (when all deps are likely to be loaded).
       load File.join(__dir__, "adapters.rb")
 
+      # Try to load Rails base classes to trigger their load hooks
+      begin
+        ::ActionMailer::Base
+      rescue NameError
+      end
+
+      begin
+        ::ActiveJob::Base
+      rescue NameError
+      end
+
       Isolator.config.ignorer&.prepare(path: ".isolator_todo.yml")
       Isolator.config.ignorer&.prepare(path: ".isolator_ignore.yml")
 

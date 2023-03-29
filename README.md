@@ -257,7 +257,7 @@ class Messager
 end
 
 Isolator.remove_adapter(:messager)
-Isolator.isolate(:messager, target: Messager, *rest)
+Isolator.isolate(:messager, target: Messager, **rest)
 ```
 
 You can also add some callbacks to be run before and after the transaction:
