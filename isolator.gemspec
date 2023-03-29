@@ -22,7 +22,8 @@ Gem::Specification.new do |spec|
     "changelog_uri" => "https://github.com/palkan/isolator/blob/master/CHANGELOG.md",
     "documentation_uri" => "http://github.com/palkan/isolator",
     "homepage_uri" => "http://github.com/palkan/isolator",
-    "source_code_uri" => "http://github.com/palkan/isolator"
+    "source_code_uri" => "http://github.com/palkan/isolator",
+    "funding_uri" => "https://github.com/sponsors/palkan"
   }
 
   spec.require_paths = ["lib"]
