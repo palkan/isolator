@@ -18,7 +18,7 @@ module Isolator
       def prepare(path:, regex_string: "^.*(#ignores#):.*$")
         return unless File.exist?(path)
 
-        ignores = YAML.load_file(path)
+        ignores = YAML.load_file(path, aliases: true)
         raise ParseError.new(path, ignores.class) unless ignores.respond_to?(:fetch)
 
         Isolator.adapters.each do |id, adapter|
