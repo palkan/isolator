@@ -3,7 +3,7 @@
 require "spec_helper"
 
 describe "Ignorer" do
-  let(:todo_temp_file) { Tempfile.new('.isolator_todo.yml') }
+  let(:todo_temp_file) { Tempfile.new(".isolator_todo.yml") }
   let(:todo_path) { todo_temp_file.path }
 
   before(:each) do
@@ -46,12 +46,12 @@ describe "Ignorer" do
   shared_examples "todos filter" do
     context "exact files paths todos" do
       before do
-        todo_temp_file.write(%{
+        todo_temp_file.write(%(
           todo_foo_adapter:
             - spec/isolator/ignorer_spec.rb:61
           wrong_adapter:
             - spec/isolator/ignorer_spec.rb:65
-        })
+        ))
         todo_temp_file.close
 
         prepare
@@ -68,10 +68,10 @@ describe "Ignorer" do
 
     context "wildcard glob pattern todos" do
       before do
-        todo_temp_file.write(%{
+        todo_temp_file.write(%(
           todo_foo_adapter:
             - spec/isolator/**/*.rb
-        })
+        ))
         todo_temp_file.close
 
         prepare
@@ -84,13 +84,13 @@ describe "Ignorer" do
 
     context "common yml alias reused in multiple adapters in todos" do
       before do
-        todo_temp_file.write(%{
+        todo_temp_file.write(%(
           common: &common
             - spec/isolator/**/*.rb
 
           todo_foo_adapter: *common
           todo_bar_adapter: *common
-        })
+        ))
         todo_temp_file.close
 
         prepare
