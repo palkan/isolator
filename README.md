@@ -162,7 +162,7 @@ You can add as many _ignores_ as you want, the offense is registered iff all of 
 
 ### Using with sidekiq/testing
 
-If you require sidekiq/testing in your tests after isolator is required then it will blow away isolator's hooks, so you need to require isolator after requiring sidekiq/testing. 
+If you require sidekiq/testing in your tests after isolator is required then it will blow away isolator's hooks, so you need to require isolator after requiring sidekiq/testing.
 
 If you're using Rails and want to use isolator in development and staging, then here is a way to do this.
 
@@ -190,6 +190,16 @@ If you already have a huge Rails project it can be tricky to turn Isolator on be
 sidekiq:
   - app/models/user.rb:20
   - app/models/sales/**/*.rb
+```
+
+You can ignore the same files in multiple adapters using YML aliases in the following way:
+
+```
+common_http: &common_http
+  - app/models/user.rb:20
+
+http: *http_common
+webmock: *http_common
 ```
 
 All the exceptions raised in the listed lines will be ignored.
