@@ -195,7 +195,7 @@ sidekiq:
 You can ignore the same files in multiple adapters using YML aliases in the following way:
 
 ```
-common_http: &common_http
+http_common: &http_common
   - app/models/user.rb:20
 
 http: *http_common
