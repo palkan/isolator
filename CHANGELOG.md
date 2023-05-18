@@ -2,6 +2,8 @@
 
 ## master
 
+## 0.9.0 (2023-05-18)
+
 - Support keyword arguments to isolated method in Ruby 3.0. ([@Mange][])
 - Raise an error when an ignore file does not parse to a hash. ([@bobbymcwho][])
 - Log all filtered backtrace lines to the logger ([@bobbymcwho][])
