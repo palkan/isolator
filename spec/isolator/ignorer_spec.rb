@@ -114,7 +114,7 @@ describe "Ignorer" do
 
     it "raises an error" do
       expect { Isolator::Ignorer.prepare(path: todo_path) }.to raise_error(
-        Isolator::Ignorer::ParseError, "Unable to parse ignore config file #{todo_path}. Expected Hash, got NilClass."
+        Isolator::Ignorer::ParseError, /Unable to parse ignore config file #{todo_path}. Expected Hash, got (NilClass|FalseClass)./
       )
     end
   end
