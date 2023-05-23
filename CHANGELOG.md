@@ -109,3 +109,4 @@ This, for example, makes Isolator compatible with Rails multi-database apps.
 [@mquan]: https://github.com/mquan
 [@bobbymcwho]: https://github.com/bobbymcwho
 [@Mange]: https://github.com/Mange
+[@tomgi]: https://github.com/tomgi
