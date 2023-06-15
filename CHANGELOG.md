@@ -2,6 +2,10 @@
 
 ## master
 
+- Fix query having invalid characters. ([@tagirahmad][])
+
+  Fixes [#43](https://github.com/palkan/isolator/issues/43).
+
 ## 0.9.0 (2023-05-18)
 
 - Support keyword arguments to isolated method in Ruby 3.0. ([@Mange][])
@@ -110,3 +114,4 @@ This, for example, makes Isolator compatible with Rails multi-database apps.
 [@bobbymcwho]: https://github.com/bobbymcwho
 [@Mange]: https://github.com/Mange
 [@tomgi]: https://github.com/tomgi
+[@tagirahmad]: https://github.com/tagirahmad

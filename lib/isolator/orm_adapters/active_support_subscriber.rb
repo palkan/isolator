@@ -10,8 +10,10 @@ module Isolator
     def self.subscribe!(event)
       ::ActiveSupport::Notifications.subscribe(event) do |_name, _start, _finish, _id, query|
         connection_id = query[:connection_id] || query[:connection]&.object_id || 0
-        Isolator.incr_transactions!(connection_id) if START_PATTERN.match?(query[:sql])
-        Isolator.decr_transactions!(connection_id) if FINISH_PATTERN.match?(query[:sql])
+        # Prevents "ArgumentError: invalid byte sequence in UTF-8" by replacing invalid byte sequence with "?"
+        sanitized_query = query[:sql].encode("UTF-8", "binary", invalid: :replace, undef: :replace, replace: "?")
+        Isolator.incr_transactions!(connection_id) if START_PATTERN.match?(sanitized_query)
+        Isolator.decr_transactions!(connection_id) if FINISH_PATTERN.match?(sanitized_query)
       end
     end
   end
