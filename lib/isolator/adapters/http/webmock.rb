@@ -7,5 +7,6 @@ adapter = Isolator.isolate :webmock,
                    }
 
 WebMock.after_request do |*args|
-  adapter.notify(caller, *args)
+  # check if we are even notifying before calling `caller`, which is well known to be slow
+  adapter.notify(caller, *args) if adapter.notify?(*args)
 end
