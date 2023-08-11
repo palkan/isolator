@@ -33,7 +33,8 @@ module Isolator
 
         Module.new do
           define_method method_name do |*args, **kwargs, &block|
-            adapter.notify(caller, self, *args, **kwargs)
+            # check if we are even notifying before calling `caller`, which is well known to be slow
+            adapter.notify(caller, self, *args, **kwargs) if adapter.notify?(*args, **kwargs)
             super(*args, **kwargs, &block)
           end
         end
