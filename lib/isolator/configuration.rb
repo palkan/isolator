@@ -18,7 +18,7 @@ module Isolator
   #
   class Configuration
     attr_accessor :raise_exceptions, :logger, :send_notifications,
-      :backtrace_filter, :ignorer
+      :backtrace_filter, :ignorer, :substransactions_depth_threshold
 
     def initialize
       @logger = nil
@@ -26,6 +26,7 @@ module Isolator
       @send_notifications = false
       @backtrace_filter = ->(backtrace) { backtrace.take(5) }
       @ignorer = Isolator::Ignorer
+      @substransactions_depth_threshold = nil
     end
 
     alias_method :raise_exceptions?, :raise_exceptions

@@ -22,4 +22,8 @@ module Isolator # :nodoc: all
   class MailerError < UnsafeOperationError
     MESSAGE = "You are trying to send email inside db transaction."
   end
+
+  class SubtransactionError < UnsafeOperationError
+    MESSAGE = "You are performing a lot of subtransactions inside db transaction"
+  end
 end
