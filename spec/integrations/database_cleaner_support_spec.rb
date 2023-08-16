@@ -29,5 +29,11 @@ describe "Database Cleaner tests" do
 
       expect(output).to include("1 example, 0 failures")
     end
+
+    specify "with multiple databases" do
+      output = run_rspec("database_cleaner_multi")
+
+      expect(output).to include("2 examples, 0 failures")
+    end
   end
 end
