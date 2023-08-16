@@ -2,6 +2,10 @@
 
 ## master
 
+## 0.10.0 (2023-08-15)
+
+- Support multiple databases with DatabaseCleaner. ([@palkan][])
+
 - Fix query having invalid characters. ([@tagirahmad][])
 
   Fixes [#43](https://github.com/palkan/isolator/issues/43).
