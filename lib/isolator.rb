@@ -140,7 +140,7 @@ module Isolator
       if state[:subtransactions][connection_id] < config.substransactions_depth_threshold
         state[:subtransactions][connection_id] += 1
       else
-        raise SubtransactionError
+        notify(exception: SubtransactionError.new, backtrace: caller)
       end
     end
 
