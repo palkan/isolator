@@ -12,29 +12,72 @@ jobs:
     env:
       CI: true
       BUNDLE_GEMFILE: ${{ matrix.gemfile }}
+      POSTGRES_URL: postgres://postgres:postgres@localhost:5432
+      MYSQL_URL: mysql2://rails:rails@127.0.0.1:3306
+      DB: ${{ matrix.db }}
+      # Use postgres for all DB to avoid dealing with PG db creation
+      DB_NAME: postgres
     strategy:
       fail-fast: false
       matrix:
         ruby: ["3.0"]
         gemfile: ["gemfiles/rails6.gemfile"]
-        bundler: ["2"]
+        db: [""]
         include:
         - ruby: "2.6"
           gemfile: "gemfiles/rails5.gemfile"
-          bundler: "2"
+          db: ""
         - ruby: "2.7"
           gemfile: "gemfiles/rails5.gemfile"
-          bundler: "2"
+          db: ""
         - ruby: "3.0"
           gemfile: "gemfiles/rails7.gemfile"
-          bundler: "2"
-        - ruby: "3.1"
-          gemfile: "gemfiles/railsmaster.gemfile"
-          bundler: "2"
+          db: ""
+        - ruby: "3.2"
+          gemfile: "gemfiles/rails7.gemfile"
+          db: "postgres"
+        - ruby: "3.2"
+          gemfile: "gemfiles/rails7.gemfile"
+          db: "mysql"
         - ruby: "3.2"
           gemfile: "gemfiles/railsmaster.gemfile"
+          db: ""
+        - ruby: "3.2"
+          gemfile: "gemfiles/railsmaster.gemfile"
+          db: "postgres"
+        - ruby: "3.2"
+          gemfile: "gemfiles/railsmaster.gemfile"
+          db: "mysql"
+    services:
+      postgres:
+        image: postgres:latest
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      mysql:
+        image: mysql:8
+        ports: ["3306:3306"]
+        env:
+          MYSQL_PASSWORD: rails
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: postgres
+          MYSQL_USER: rails
+        options: >-
+          --health-cmd "mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
+    - name: Install system deps
+      run: |
+        sudo apt-get update
+        sudo apt-get install libsqlite3-dev libpq-dev postgresql-client
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}

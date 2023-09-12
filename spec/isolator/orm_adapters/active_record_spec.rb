@@ -14,6 +14,22 @@ describe "ActiveRecord integration" do
       end
       expect(Isolator).to_not be_within_transaction
     end
+
+    context "when exception is raised within a transaction" do
+      it do
+        expect(Isolator).to_not be_within_transaction
+        expect do
+          expect do
+            ar_class.transaction do
+              ar_class.create!(name: "test")
+              expect(Isolator).to be_within_transaction
+              raise
+            end
+          end.to raise_error(RuntimeError)
+        end.to change(ar_class, :count).by(0)
+        expect(Isolator).to_not be_within_transaction
+      end
+    end
   end
 
   context "other transaction methods" do
