@@ -29,14 +29,22 @@ module Isolator
     def log_exception
       return unless Isolator.config.logger
 
-      msg = "[ISOLATOR EXCEPTION]\n" \
-            "#{exception.message}"
+      separator = " ↳ "
 
-      filtered_backtrace.each do |offense_line|
-        msg += "\n  ↳ #{offense_line}"
+      begin
+        msg = "[ISOLATOR EXCEPTION]\n" \
+              "#{exception.message}"
+
+        filtered_backtrace.each do |offense_line|
+          msg += "\n #{separator}#{offense_line}"
+        end
+
+        Isolator.config.logger.warn(msg)
+      rescue Encoding::CompatibilityError
+        should_retry = separator != " - "
+        separator = " - "
+        retry if should_retry
       end
-
-      Isolator.config.logger.warn(msg)
     end
 
     def send_notifications

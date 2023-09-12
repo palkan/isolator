@@ -73,6 +73,22 @@ describe Isolator::Notifier do
             ↳ second/line/of/backtrace
         MSG
       end
+
+      context "when logging non-utf8 details" do
+        let(:exception) do
+          job_args = ["abc123", "\xff".dup.force_encoding(Encoding::ASCII_8BIT)] # rubocop:disable Performance/UnfreezeString
+          details = "MyJob (#{job_args.join(", ")})"
+
+          Isolator::HTTPError.new(details)
+        end
+
+        specify do
+          subject
+
+          expect(logger).to have_received(:warn).once
+          expect(logger).to have_received(:warn).with(%r{- first/line/of/backtrace})
+        end
+      end
     end
   end
 end

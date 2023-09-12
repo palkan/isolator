@@ -198,15 +198,23 @@ module Isolator
 
     def debug!(msg)
       return unless debug_enabled
-      msg = "[ISOLATOR DEBUG] #{msg}"
 
-      if backtrace_cleaner && backtrace_length.positive?
-        source = extract_source_location(caller)
+      separator = " ↳ "
 
-        msg = "#{msg}\n  ↳ #{source.join("\n")}" unless source.empty?
+      begin
+        msg = "[ISOLATOR DEBUG] #{msg}"
+        if backtrace_cleaner && backtrace_length.positive?
+          source = extract_source_location(caller)
+
+          msg = "#{msg}\n #{separator}#{source.join("\n")}" unless source.empty?
+        end
+
+        $stdout.puts(colorize_debug(msg))
+      rescue Encoding::CompatibilityError
+        should_retry = separator != " - "
+        separator = " - "
+        retry if should_retry
       end
-
-      $stdout.puts(colorize_debug(msg))
     end
 
     def extract_source_location(locations)

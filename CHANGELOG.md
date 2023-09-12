@@ -2,6 +2,10 @@
 
 ## master
 
+- Fix logging non-UTF8 strings. ([@palkan][])
+
+  Fixes [#66](https://github.com/palkan/isolator/issues/66)
+
 ## 0.10.0 (2023-08-15)
 
 - Support multiple databases with DatabaseCleaner. ([@palkan][])
