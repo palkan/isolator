@@ -134,6 +134,28 @@ module Isolator
       start! if current_transactions(connection_id) == connection_threshold(connection_id)
     end
 
+    def incr_subtransactions!(connection_id = default_connection_id.call)
+      state[:subtransactions] ||= Hash.new { |h, k| h[k] = 0 }
+
+      if state[:subtransactions][connection_id] < config.substransactions_depth_threshold
+        state[:subtransactions][connection_id] += 1
+      else
+        notify(exception: SubtransactionError.new, backtrace: caller)
+      end
+    end
+
+    def decr_subtransactions!(connection_id = default_connection_id.call)
+      current = state[:subtransactions]&.[](connection_id) || 0
+
+      if current <= 0
+        warn "Trying to finalize an untracked subtransaction"
+        return
+      end
+
+      state[:subtransactions][connection_id] -= 1
+      state[:subtransactions].delete(connection_id) if state[:subtransactions][connection_id].zero?
+    end
+
     def decr_transactions!(connection_id = default_connection_id.call)
       current = state[:transactions]&.[](connection_id) || 0
 
@@ -159,6 +181,11 @@ module Isolator
       state[:transactions]&.each do |connection_id, transaction_count|
         return true if transaction_count >= connection_threshold(connection_id)
       end
+      false
+    end
+
+    def within_subtransaction?
+      return true if state[:subtransactions] && !state[:subtransactions].empty?
       false
     end
 
