@@ -10,8 +10,12 @@ require_relative "./action_mailer_init"
 require_relative "./active_job_init"
 
 class TestApp < Rails::Application
-  secrets.secret_token = "secret_token"
-  secrets.secret_key_base = "secret_key_base"
+  config.secret_token = "secret_token"
+  config.secret_key_base = "secret_key_base"
+
+  if Rails::VERSION::MAJOR >= 6
+    config.load_defaults "#{Rails::VERSION::MAJOR}.0"
+  end
 
   config.eager_load = true
 
