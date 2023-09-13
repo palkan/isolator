@@ -2,6 +2,8 @@
 
 ## master
 
+- Use Rails new `transaction.active_record` event if available to better handle edge cases. ([@palkan][])
+
 - Fix logging non-UTF8 strings. ([@palkan][])
 
   Fixes [#66](https://github.com/palkan/isolator/issues/66)
