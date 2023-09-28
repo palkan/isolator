@@ -2,6 +2,8 @@
 
 ## master
 
+## 0.11.0 (2023-09-27)
+
 - Use Rails new `transaction.active_record` event if available to better handle edge cases. ([@palkan][])
 
 - Fix logging non-UTF8 strings. ([@palkan][])
