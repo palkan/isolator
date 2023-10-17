@@ -27,8 +27,8 @@ module Isolator
         Isolator.notify(exception: build_exception(obj, args, kwargs), backtrace: backtrace)
       end
 
-      def notify?(*args, **kwargs)
-        enabled? && Isolator.enabled? && Isolator.within_transaction? && !ignored?(*args, **kwargs)
+      def notify?(...)
+        enabled? && Isolator.enabled? && Isolator.within_transaction? && !ignored?(...)
       end
 
       def ignore_if(&block)

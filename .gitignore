@@ -9,6 +9,7 @@
 /tmp/
 *.gem
 gemfiles/*.lock
-Gemfile.local
+Gemfile.local*
 .rspec_status
 .idea
+*.sqlite3*

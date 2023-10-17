@@ -24,11 +24,8 @@ jobs:
         gemfile: ["gemfiles/rails6.gemfile"]
         db: [""]
         include:
-        - ruby: "2.6"
-          gemfile: "gemfiles/rails5.gemfile"
-          db: ""
         - ruby: "2.7"
-          gemfile: "gemfiles/rails5.gemfile"
+          gemfile: "gemfiles/rails6.gemfile"
           db: ""
         - ruby: "3.0"
           gemfile: "gemfiles/rails7.gemfile"

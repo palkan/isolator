@@ -13,9 +13,7 @@ class TestApp < Rails::Application
   config.secret_token = "secret_token"
   config.secret_key_base = "secret_key_base"
 
-  if Rails::VERSION::MAJOR >= 6
-    config.load_defaults "#{Rails::VERSION::MAJOR}.0"
-  end
+  config.load_defaults "#{Rails::VERSION::MAJOR}.0"
 
   config.eager_load = true
 

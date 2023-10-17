@@ -2,6 +2,8 @@
 
 ## master
 
+- Drop Ruby 2.6 and Rails 5 support. ([@palkan][])
+
 ## 0.11.0 (2023-09-27)
 
 - Use Rails new `transaction.active_record` event if available to better handle edge cases. ([@palkan][])
