@@ -31,12 +31,18 @@ module Isolator
       def build_mod(method_name, adapter)
         return nil unless method_name
 
+        adapter_name = "__isolator_adapter_#{adapter.object_id}"
+
         Module.new do
-          define_method method_name do |*args, **kwargs, &block|
-            # check if we are even notifying before calling `caller`, which is well known to be slow
-            adapter.notify(caller, self, *args, **kwargs) if adapter.notify?(*args, **kwargs)
-            super(*args, **kwargs, &block)
-          end
+          define_method(adapter_name) { adapter }
+
+          module_eval <<~RUBY, __FILE__, __LINE__ + 1
+            def #{method_name}(...)
+              # check if we are even notifying before calling `caller`, which is well known to be slow
+              #{adapter_name}.notify(caller, self, ...) if #{adapter_name}.notify?(...)
+              super
+            end
+          RUBY
         end
       end
     end

@@ -115,7 +115,7 @@ Isolator relies on [uniform_notifier][] to send custom notifications.
 
 ### Supported ORMs
 
-- `ActiveRecord` >= 5.1 (4.2 likely till works, but we do not test against it anymore)
+- `ActiveRecord` >= 6.0 (see older versions of Isolator for previous versions)
 - `ROM::SQL` (only if Active Support instrumentation extension is loaded)
 
 ### Adapters
