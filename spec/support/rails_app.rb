@@ -5,9 +5,9 @@ require "action_controller/railtie"
 
 require "isolator"
 
-require_relative "./active_record_init"
-require_relative "./action_mailer_init"
-require_relative "./active_job_init"
+require_relative "active_record_init"
+require_relative "action_mailer_init"
+require_relative "active_job_init"
 
 class TestApp < Rails::Application
   config.secret_token = "secret_token"
@@ -30,6 +30,6 @@ class TestApp < Rails::Application
   end
 end
 
-require_relative "./workers/active_job_worker"
+require_relative "workers/active_job_worker"
 
 TestApp.initialize!
