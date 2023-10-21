@@ -6,7 +6,7 @@ describe "Ignorer" do
   let(:todo_temp_file) { Tempfile.new(".isolator_todo.yml") }
   let(:todo_path) { todo_temp_file.path }
 
-  before(:each) do
+  before do
     module ::Isolator::Danger # rubocop:disable Lint/ConstantDefinitionInBlock
       def self.call_foo(a, b)
         a + b
@@ -26,7 +26,7 @@ describe "Ignorer" do
       method_name: :call_bar
   end
 
-  after(:each) do
+  after do
     Isolator.send(:remove_const, "Danger")
     Isolator.adapters.delete("todo_foo_adapter")
     Isolator.adapters.delete("todo_bar_adapter")

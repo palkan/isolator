@@ -131,7 +131,14 @@ module Isolator
 
       debug!("Transaction opened for connection #{connection_id} (total: #{state[:transactions][connection_id]}, threshold: #{state[:thresholds]&.fetch(connection_id, default_threshold)})")
 
-      start! if current_transactions(connection_id) == connection_threshold(connection_id)
+      current_depth = current_transactions(connection_id)
+      threshold = connection_threshold(connection_id)
+
+      start! if current_depth == threshold
+      if current_depth >= threshold
+        event = {connection_id: connection_id, depth: current_depth - threshold + 1}.freeze
+        notify!(:begin, event)
+      end
     end
 
     def decr_transactions!(connection_id = default_connection_id.call)
@@ -144,7 +151,15 @@ module Isolator
 
       state[:transactions][connection_id] -= 1
 
-      finish! if current_transactions(connection_id) == (connection_threshold(connection_id) - 1)
+      current_depth = current_transactions(connection_id)
+      threshold = connection_threshold(connection_id)
+
+      if current_depth >= threshold - 1
+        event = {connection_id: connection_id, depth: current_depth - threshold + 1}.freeze
+        notify!(:end, event)
+      end
+
+      finish! if current_depth == (threshold - 1)
 
       state[:transactions].delete(connection_id) if state[:transactions][connection_id].zero?
 

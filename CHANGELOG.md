@@ -2,6 +2,8 @@
 
 ## master
 
+- Add `Isolator.on_transaction_begin` and `Isolator.on_transaction_end` callbacks. ([@palkan][])
+
 - Drop Ruby 2.6 and Rails 5 support. ([@palkan][])
 
 ## 0.11.0 (2023-09-27)

@@ -108,6 +108,34 @@ Isolator relies on [uniform_notifier][] to send custom notifications.
 
 **NOTE:** `uniform_notifier` should be installed separately (i.e., added to Gemfile).
 
+### Callbacks
+
+Isolator different callbacks so you can inject your own logic or build custom extensions.
+
+```ruby
+# This callback is called when Isolator enters the "danger zone"—a within-transaction context
+Isolator.before_isolate do
+  puts "Entering a database transaction. Be careful!"
+end
+
+# This callback is called when Isolator leaves the "danger zone"
+Isolator.after_isolate do
+  puts "Leaving a database transaction. Everything is fine. Feel free to call slow HTTP APIs"
+end
+
+# This callback is called every time a new transaction is open (root or nested)
+Isolator.on_transaction_open do |event|
+  puts "New transaction from #{event[:connection_id]}. " \
+       "Current depth: #{event[:depth]}"
+end
+
+# This callback is called every time a transaction is completed
+Isolator.on_transaction_close do |event|
+  puts "Transaction completed from #{event[:connection_id]}. " \
+       "Current depth: #{event[:depth]}"
+end
+```
+
 ### Transactional tests support
 
  - Rails' baked-in [use_transactional_tests](https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html#class-ActiveRecord::FixtureSet-label-Transactional+Tests)
@@ -158,7 +186,6 @@ Isolator.adapters.sidekiq.ignore_if { Thread.current[:sidekiq_postpone] }
 ```
 
 You can add as many _ignores_ as you want, the offense is registered iff all of them return false.
-
 
 ### Using with sidekiq/testing
 

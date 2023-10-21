@@ -1,0 +1,55 @@
+require:
+  - rubocop-rspec
+
+# Disable all cops by default,
+# only enable those defined explcitly in this configuration file
+RSpec:
+  Enabled: false
+
+RSpec/Focus:
+  Enabled: true
+
+RSpec/EmptyExampleGroup:
+  Enabled: true
+
+RSpec/EmptyLineAfterExampleGroup:
+  Enabled: true
+
+RSpec/EmptyLineAfterFinalLet:
+  Enabled: true
+
+RSpec/EmptyLineAfterHook:
+  Enabled: true
+
+RSpec/EmptyLineAfterSubject:
+  Enabled: true
+
+RSpec/HookArgument:
+  Enabled: true
+
+RSpec/HooksBeforeExamples:
+  Enabled: true
+
+RSpec/ImplicitExpect:
+  Enabled: true
+
+RSpec/IteratedExpectation:
+  Enabled: true
+
+RSpec/LetBeforeExamples:
+  Enabled: true
+
+RSpec/MissingExampleGroupArgument:
+  Enabled: true
+
+RSpec/ReceiveCounts:
+  Enabled: true
+
+Capybara/CurrentPathExpectation:
+  Enabled: true
+
+FactoryBot/AttributeDefinedStatically:
+  Enabled: true
+
+FactoryBot/CreateList:
+  Enabled: true

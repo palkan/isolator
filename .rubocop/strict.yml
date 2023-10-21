@@ -1,0 +1,7 @@
+Lint/Debugger: # don't leave binding.pry
+  Enabled: true
+  Exclude: []
+
+RSpec/Focus: # run ALL tests on CI
+  Enabled: true
+  Exclude: []

@@ -50,9 +50,9 @@ RSpec.configure do |config|
   DatabaseCleaner[:active_record, db: Pet].strategy = :transaction
   DatabaseCleaner[:active_record, db: Animal].strategy = :transaction
 
-  config.before(:each) { DatabaseCleaner.start }
+  config.before { DatabaseCleaner.start }
 
-  config.after(:each) { DatabaseCleaner.clean }
+  config.after { DatabaseCleaner.clean }
 
   config.after(:suite) do
     File.delete(PRIMARY_DB)

@@ -1,23 +1,22 @@
+inherit_mode:
+  merge:
+    - Exclude
+
 require:
-  - standard/cop/block_single_line_braces
+  - standard
+  - standard-custom
+  - standard-performance
+  - rubocop-performance
 
 inherit_gem:
   standard: config/base.yml
+  standard-performance: config/base.yml
+  standard-custom: config/base.yml
+
+inherit_from:
+  - .rubocop/rspec.yml
+  - .rubocop/strict.yml
 
 AllCops:
-  Exclude:
-    - 'bin/*'
-    - 'tmp/**/*'
-    - 'Gemfile'
-    - 'vendor/**/*'
-    - 'gemfiles/**/*'
-    - 'lib/.rbnext/**/*'
-    - 'lib/generators/**/templates/*.rb'
-  DisplayCopNames: true
+  NewCops: disable
   SuggestExtensions: false
-
-Standard/BlockSingleLineBraces:
-  Enabled: false
-
-Style/FrozenStringLiteralComment:
-  Enabled: true

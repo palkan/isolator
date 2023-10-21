@@ -47,7 +47,7 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
-  config.after(:each) do
+  config.after do
     Isolator.remove_instance_variable(:@config) if
      Isolator.instance_variable_defined?(:@config)
 
