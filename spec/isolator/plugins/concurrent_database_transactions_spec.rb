@@ -10,8 +10,8 @@ describe "Concurrent multi database transactions" do
   end
 
   after do
-    User.connection.reconnect!
-    Post.connection.reconnect!
+    User.connection.rollback_db_transaction rescue nil # rubocop:disable Style/RescueModifier
+    Post.connection.rollback_db_transaction rescue nil # rubocop:disable Style/RescueModifier
   end
 
   specify "when disabled" do
