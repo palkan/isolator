@@ -94,6 +94,14 @@ module Isolator
       state[:transactions]&.[](connection_id) || 0
     end
 
+    def all_transactions
+      state[:transactions] || {}
+    end
+
+    def connection_threshold(connection_id)
+      state[:thresholds]&.[](connection_id) || default_threshold
+    end
+
     def set_connection_threshold(val, connection_id = default_connection_id.call)
       state[:thresholds] ||= Hash.new { |h, k| h[k] = Isolator.default_threshold }
       state[:thresholds][connection_id] = val
@@ -207,10 +215,6 @@ module Isolator
 
     attr_accessor :state
 
-    def connection_threshold(connection_id)
-      state[:thresholds]&.[](connection_id) || default_threshold
-    end
-
     def debug!(msg)
       return unless debug_enabled
 
@@ -256,3 +260,6 @@ require "isolator/orm_adapters"
 require "isolator/adapters"
 require "isolator/railtie" if defined?(Rails)
 require "isolator/database_cleaner_support" if defined?(DatabaseCleaner)
+
+# Built-in extensions
+require "isolator/plugins/concurrent_database_transactions"

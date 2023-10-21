@@ -2,6 +2,10 @@
 
 ## master
 
+- Add ability to track concurrent transactions to with a thread (e.g., to multiple databases). ([@palkan][])
+
+  This feature is disabled by default, opt-in via: `Isolator.config.disallow_per_thread_concurrent_transactions = true`.
+
 - Add `Isolator.on_transaction_begin` and `Isolator.on_transaction_end` callbacks. ([@palkan][])
 
 - Drop Ruby 2.6 and Rails 5 support. ([@palkan][])

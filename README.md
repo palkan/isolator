@@ -101,6 +101,9 @@ Isolator.configure do |config|
   # Define a custom ignorer class (must implement .prepare)
   # uses a row number based list from the .isolator_todo.yml file
   config.ignorer = Isolator::Ignorer
+
+  # Turn on/off raising exceptions for simultaneous transactions to different databases
+  config.disallow_cross_database_transactions = false
 end
 ```
 
