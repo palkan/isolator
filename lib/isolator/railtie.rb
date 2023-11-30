@@ -2,6 +2,22 @@
 
 module Isolator
   class Railtie < ::Rails::Railtie # :nodoc:
+    module TestFixtures
+      def setup_fixtures(*)
+        super
+        return unless run_in_transaction?
+
+        Isolator.incr_thresholds!
+      end
+
+      def teardown_fixtures(*)
+        if run_in_transaction?
+          Isolator.decr_thresholds!
+        end
+        super
+      end
+    end
+
     initializer "isolator.backtrace_cleaner" do
       ActiveSupport.on_load(:active_record) do
         Isolator.backtrace_cleaner = lambda do |locations|
@@ -31,24 +47,13 @@ module Isolator
 
       next unless Rails.env.test?
 
-      if defined?(::ActiveRecord::TestFixtures)
-        ::ActiveRecord::TestFixtures.prepend(
-          Module.new do
-            def setup_fixtures(*)
-              super
-              return unless run_in_transaction?
+      ActiveSupport.on_load(:active_record_fixtures) do
+        ::ActiveRecord::TestFixtures.prepend(TestFixtures)
+      end
 
-              Isolator.incr_thresholds!
-            end
-
-            def teardown_fixtures(*)
-              if run_in_transaction?
-                Isolator.decr_thresholds!
-              end
-              super
-            end
-          end
-        )
+      # Rails 6 doesn't support this load hook, so we can emulate it
+      if ActiveRecord::VERSION::MAJOR < 7 && defined?(::ActiveRecord::TestFixtures)
+        ::ActiveRecord::TestFixtures.prepend(TestFixtures)
       end
     end
   end
