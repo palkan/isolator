@@ -2,6 +2,8 @@
 
 ## master
 
+## 1.0.0 (2023-11-30)
+
 - Add ability to track concurrent transactions to with a thread (e.g., to multiple databases). ([@palkan][])
 
   This feature is disabled by default, opt-in via: `Isolator.config.disallow_per_thread_concurrent_transactions = true`.
