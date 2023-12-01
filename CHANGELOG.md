@@ -2,6 +2,8 @@
 
 ## master
 
+- Fix Rails 7.0 support. ([@palkan][])
+
 ## 1.0.0 (2023-11-30)
 
 - Add ability to track concurrent transactions to with a thread (e.g., to multiple databases). ([@palkan][])

@@ -51,8 +51,8 @@ module Isolator
         ::ActiveRecord::TestFixtures.prepend(TestFixtures)
       end
 
-      # Rails 6 doesn't support this load hook, so we can emulate it
-      if ActiveRecord::VERSION::MAJOR < 7 && defined?(::ActiveRecord::TestFixtures)
+      # Rails <7.1 doesn't support this load hook, so we we fallback to the prev behaviour
+      if (ActiveRecord::VERSION::MAJOR < 7 || ActiveRecord::VERSION::MINOR < 1) && defined?(::ActiveRecord::TestFixtures)
         ::ActiveRecord::TestFixtures.prepend(TestFixtures)
       end
     end
