@@ -75,11 +75,16 @@ However, there are some potential caveats:
 
 1) Isolator tries to detect the environment automatically and includes only necessary adapters. Thus the order of loading gems matters: make sure that `isolator` is required in the end (NOTE: in Rails, all adapters loaded after application initialization).
 
-2) Isolator does not distinguish framework-level adapters. For example, `:active_job` spy doesn't take into account which AJ adapter you use; if you are using a safe one (e.g. `Que`) just disable the `:active_job` adapter to avoid false negatives (i.e. `Isolator.adapters.active_job.disable!`).
+2) Isolator does not distinguish framework-level adapters. For example, `:active_job` spy doesn't take into account which AJ adapter you use; if you are using a safe one (e.g. `Que`) just disable the `:active_job` adapter to avoid false negatives. You can do this by adding an initializer:
 
-3) Isolator tries to detect the `test` environment and slightly change its behavior: first, it respect _transactional tests_; secondly, error raising is turned on by default (see [below](#configuration)).
+    ```rb
+    require "active_job/base"
+    Isolator.adapters.active_job.disable!
+    ```
 
-4) Experimental [multiple databases](https://guides.rubyonrails.org/active_record_multiple_databases.html) has been added in v0.7.0. Please, let us know if you encounter any issues.
+4) Isolator tries to detect the `test` environment and slightly change its behavior: first, it respect _transactional tests_; secondly, error raising is turned on by default (see [below](#configuration)).
+
+5) Experimental [multiple databases](https://guides.rubyonrails.org/active_record_multiple_databases.html) has been added in v0.7.0. Please, let us know if you encounter any issues.
 
 ### Configuration
 
@@ -171,6 +176,8 @@ Isolator.adapters.http.disable!
 
 Isolator.adapters.http.enable!
 ```
+
+For `active_job`, be sure to first `require "active_job/base"`.
 
 ### Fix Offenses
 
