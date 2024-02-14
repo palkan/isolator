@@ -165,6 +165,7 @@ Isolator has a bunch of built-in adapters:
 - `:sucker_punch`
 - `:mailer`
 - `:webmock` – track mocked HTTP requests (unseen by Sniffer) in tests
+- `:action_cable`
 
 You can dynamically enable/disable adapters, e.g.:
 

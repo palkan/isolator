@@ -2,6 +2,8 @@
 
 ## master
 
+- Add ActionCable adapter. ([@arthurWD][])
+
 ## 1.0.1 (2023-12-01) ❄️
 
 - Fix Rails 7.0 support. ([@palkan][])

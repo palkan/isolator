@@ -2,6 +2,7 @@
 
 require "rails"
 require "action_controller/railtie"
+require "action_cable"
 
 require "isolator"
 
