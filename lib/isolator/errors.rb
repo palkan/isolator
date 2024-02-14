@@ -22,4 +22,8 @@ module Isolator # :nodoc: all
   class MailerError < UnsafeOperationError
     MESSAGE = "You are trying to send email inside db transaction."
   end
+
+  class WebsocketError < UnsafeOperationError
+    MESSAGE = "You are trying to broadcast to a websocket connection inside db transaction. "
+  end
 end
