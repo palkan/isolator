@@ -2,6 +2,8 @@
 
 ## master
 
+- Add support for `ActiveJob::Base.enqueue_after_transaction_commit`. ([@joshuay03][])
+
 - Add `ignore_on: (obj) -> bool` option for adapters. ([@palkan][])
 
 - Add ActionCable adapter. ([@arthurWD][])
@@ -145,3 +147,5 @@ This, for example, makes Isolator compatible with Rails multi-database apps.
 [@Mange]: https://github.com/Mange
 [@tomgi]: https://github.com/tomgi
 [@tagirahmad]: https://github.com/tagirahmad
+[@arthurWD]: https://github.com/arthurWD
+[@joshuay03]: https://github.com/joshuay03

@@ -7,4 +7,9 @@ Isolator.isolate :active_job,
   details_message: ->(obj) {
     "#{obj.class.name}" \
     "#{obj.arguments.any? ? " (#{obj.arguments.join(", ")})" : ""}"
-  }
+  },
+  ignore_on: ->(job) {
+               config = job.class.try(:enqueue_after_transaction_commit)
+               config == :always || (config == :default &&
+                 ActiveJob::Base.queue_adapter.try(:enqueue_after_transaction_commit?) == true)
+             }
