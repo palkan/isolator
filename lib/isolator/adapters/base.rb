@@ -27,6 +27,10 @@ module Isolator
         Isolator.notify(exception: build_exception(obj, args, kwargs), backtrace: backtrace)
       end
 
+      def notify_on?(obj, *args, **kwargs)
+        !ignore_on?(obj) && notify?(*args, **kwargs)
+      end
+
       def notify?(...)
         enabled? && Isolator.enabled? && Isolator.within_transaction? && !ignored?(...)
       end
@@ -41,6 +45,10 @@ module Isolator
 
       def ignored?(*args, **kwargs)
         ignores.any? { |block| block.call(*args, **kwargs) }
+      end
+
+      def ignore_on?(_obj)
+        false
       end
 
       private

@@ -6,3 +6,6 @@ require:
 AllCops:
   Include:
     - '**/*.md'
+
+Layout/IndentationConsistency:
+  Enabled: false

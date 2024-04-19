@@ -2,6 +2,8 @@
 
 ## master
 
+- Add `ignore_on: (obj) -> bool` option for adapters. ([@palkan][])
+
 - Add ActionCable adapter. ([@arthurWD][])
 
 ## 1.0.1 (2023-12-01) ❄️
