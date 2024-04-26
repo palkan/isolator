@@ -29,9 +29,11 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].sort.each { |f| require f }
 RSpec.configure do |config|
   config.example_status_persistence_file_path = ".rspec_status"
   config.filter_run focus: true
-  # TODO: replace with `Rails.version >= Gem::Version.new("7.2")` once 7.2 is released
-  unless Rails::VERSION::MAJOR >= 7 && Rails::VERSION::MINOR >= 2
-    config.filter_run_excluding :rails72
+  # TODO: remove first condition once 8.0 is released
+  if (Rails::VERSION::MAJOR >= 7 && Rails::VERSION::MINOR >= 2) || (Rails::VERSION::MAJOR >= 8)
+    config.filter_run_excluding :rails_pre_8
+  else
+    config.filter_run_excluding :rails8
   end
   config.run_all_when_everything_filtered = true
 

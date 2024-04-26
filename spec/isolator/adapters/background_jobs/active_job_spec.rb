@@ -18,7 +18,7 @@ describe "ActiveJob adapter" do
       expect { ActiveJobWorker.perform_later("test") }.to raise_error(Isolator::BackgroundJobError, /ActiveJobWorker.+test/)
     end
 
-    context "with enqueue_after_transaction_commit", :rails72 do
+    context "with enqueue_after_transaction_commit", :rails8 do
       after { reset_enqueue_after_transaction_commit }
 
       context "configured to :always" do
@@ -73,20 +73,11 @@ describe "ActiveJob adapter" do
       private
 
       def set_enqueue_after_transaction_commit_to(value)
-        Rails.application.config.active_job.enqueue_after_transaction_commit = value
-        run_enqueue_after_transaction_commit_initializer
-        ActiveJobWorker.enqueue_after_transaction_commit = value # manually (re)set for subclass
+        ActiveJob::Base.enqueue_after_transaction_commit = value
       end
 
       def reset_enqueue_after_transaction_commit
-        Rails.application.config.active_job.enqueue_after_transaction_commit = :default
-        run_enqueue_after_transaction_commit_initializer
-        ActiveJobWorker.enqueue_after_transaction_commit = :default # manually (re)set for subclass
-        allow(ActiveJob::Base.queue_adapter).to receive(:enqueue_after_transaction_commit?) { true }
-      end
-
-      def run_enqueue_after_transaction_commit_initializer
-        Rails.application.initializers.find { |i| i.name == "active_job.enqueue_after_transaction_commit" }.run
+        ActiveJob::Base.enqueue_after_transaction_commit = :never
       end
     end
   end
