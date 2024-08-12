@@ -111,20 +111,20 @@ module Isolator
 
     def incr_thresholds!
       self.default_threshold += 1
+      debug!("Thresholds were incremented")
+
       return unless state[:thresholds]
 
       state[:thresholds].transform_values!(&:succ)
-
-      debug!("Thresholds were incremented")
     end
 
     def decr_thresholds!
       self.default_threshold -= 1
+      debug!("Thresholds were incremented")
+
       return unless state[:thresholds]
 
       state[:thresholds].transform_values!(&:pred)
-
-      debug!("Thresholds were decremented")
     end
 
     def incr_transactions!(connection_id = default_connection_id.call)
