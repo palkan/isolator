@@ -42,9 +42,7 @@ describe "ActiveJob adapter" do
         before { set_enqueue_after_transaction_commit_to :default }
 
         context "with queue_adapter enqueue_after_transaction_commit enabled" do
-          before do
-            allow(ActiveJob::Base.queue_adapter).to receive(:enqueue_after_transaction_commit?) { true }
-          end
+          before { ActiveJobWorker.enqueue_after_transaction_commit = :default }
 
           specify do
             expect { ActiveJobWorker.perform_later("test") }.to_not raise_error
@@ -52,9 +50,7 @@ describe "ActiveJob adapter" do
         end
 
         context "with queue_adapter enqueue_after_transaction_commit disabled" do
-          before do
-            allow(ActiveJob::Base.queue_adapter).to receive(:enqueue_after_transaction_commit?) { false }
-          end
+          before { ActiveJobWorker.enqueue_after_transaction_commit = :never }
 
           specify do
             expect { ActiveJobWorker.perform_later("test") }.to raise_error(Isolator::BackgroundJobError, /ActiveJobWorker.+test/)
@@ -74,10 +70,12 @@ describe "ActiveJob adapter" do
 
       def set_enqueue_after_transaction_commit_to(value)
         ActiveJob::Base.enqueue_after_transaction_commit = value
+        ActiveJobWorker.enqueue_after_transaction_commit = value
       end
 
       def reset_enqueue_after_transaction_commit
         ActiveJob::Base.enqueue_after_transaction_commit = :never
+        ActiveJobWorker.enqueue_after_transaction_commit = :never
       end
     end
   end

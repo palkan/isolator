@@ -22,6 +22,8 @@ class TestApp < Rails::Application
   config.logger = ENV["LOG"] ? Logger.new($stdout) : Logger.new("/dev/null")
 
   config.active_support.test_order = :random
+  # TODO: Update tests to work with the default Rails 8 configuration
+  config.active_job.enqueue_after_transaction_commit = :never if config.respond_to?(:active_job)
 
   config.after_initialize do
     Rails.backtrace_cleaner.remove_silencers!
