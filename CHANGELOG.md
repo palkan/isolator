@@ -2,6 +2,8 @@
 
 ## master
 
+## 1.1.0 (2024-08-12)
+
 - Add support for `ActiveJob::Base.enqueue_after_transaction_commit`. ([@joshuay03][])
 
 - Add `ignore_on: (obj) -> bool` option for adapters. ([@palkan][])
