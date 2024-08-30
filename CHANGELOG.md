@@ -2,6 +2,8 @@
 
 ## master
 
+- Add VCR adapter. ([@kehra][])
+
 ## 1.1.0 (2024-08-12)
 
 - Add support for `ActiveJob::Base.enqueue_after_transaction_commit`. ([@joshuay03][])
@@ -151,3 +153,4 @@ This, for example, makes Isolator compatible with Rails multi-database apps.
 [@tagirahmad]: https://github.com/tagirahmad
 [@arthurWD]: https://github.com/arthurWD
 [@joshuay03]: https://github.com/joshuay03
+[@kehra]: https://github.com/kehra
