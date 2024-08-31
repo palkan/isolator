@@ -1,0 +1,35 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:4567/?author=matz&lang=ruby
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:4567
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - WEBrick/1.8.1 (Ruby/3.3.2/2024-05-30)
+      Date:
+      - Fri, 30 Aug 2024 00:49:31 GMT
+      Content-Length:
+      - '2'
+      Connection:
+      - Keep-Alive
+    body:
+      encoding: UTF-8
+      string: OK
+  recorded_at: Fri, 30 Aug 2024 00:49:31 GMT
+recorded_with: VCR 6.3.1

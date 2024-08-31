@@ -17,6 +17,8 @@ require "sucker_punch"
 require "net/http"
 require "uri"
 
+require "vcr"
+
 begin
   require "debug" unless ENV["CI"] == "true"
 rescue LoadError # rubocop:disable Lint/HandleExceptions
