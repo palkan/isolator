@@ -20,7 +20,7 @@ module Isolator
   class ThreadStateProxy
     attr_reader :prefix
 
-    def initilize(prefix = "isolator_")
+    def initialize(prefix = "isolator_")
       @prefix = prefix
     end
 
