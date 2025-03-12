@@ -2,6 +2,10 @@
 
 ## master
 
+## 1.1.1 (2025-03-12)
+
+- Fix handling Rails 8 `enqueue_after_transaction_commit` logic. ([@palkan][])
+
 ## 1.1.0 (2024-08-12)
 
 - Add support for `ActiveJob::Base.enqueue_after_transaction_commit`. ([@joshuay03][])

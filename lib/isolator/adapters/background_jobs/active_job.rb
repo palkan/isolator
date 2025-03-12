@@ -10,6 +10,5 @@ Isolator.isolate :active_job,
   },
   ignore_on: ->(job) {
                config = job.class.try(:enqueue_after_transaction_commit)
-               config == :always || (config == :default &&
-                 ActiveJob::Base.queue_adapter.try(:enqueue_after_transaction_commit?) == true)
+               config == true
              }
