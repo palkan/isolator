@@ -19,7 +19,7 @@ class TestApp < Rails::Application
   config.eager_load = true
 
   config.log_level = ENV["LOG"] ? :debug : :fatal
-  config.logger = ENV["LOG"] ? Logger.new($stdout) : Logger.new("/dev/null")
+  config.logger = ENV["LOG"] ? Logger.new($stdout) : Logger.new(File::NULL)
 
   config.active_support.test_order = :random
   # TODO: Update tests to work with the default Rails 8 configuration
