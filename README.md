@@ -108,7 +108,7 @@ Isolator.configure do |config|
   config.ignorer = Isolator::Ignorer
 
   # Turn on/off raising exceptions for simultaneous transactions to different databases
-  config.disallow_cross_database_transactions = false
+  config.disallow_per_thread_concurrent_transactions = false
 end
 ```
 
