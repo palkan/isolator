@@ -185,6 +185,14 @@ module Isolator
       false
     end
 
+    def set_current_connection_id(connection_id, context:)
+      state["#{context}_connection_id"] = connection_id
+    end
+
+    def current_connection_id(context:)
+      state["#{context}_connection_id"]
+    end
+
     def enabled?
       !disabled?
     end

@@ -2,6 +2,8 @@
 
 ## master
 
+- Fix mid-transaction connection switch issue. ([@viralpraxis][])
+
 ## 1.1.1 (2025-03-12)
 
 - Fix handling Rails 8 `enqueue_after_transaction_commit` logic. ([@palkan][])
@@ -155,3 +157,4 @@ This, for example, makes Isolator compatible with Rails multi-database apps.
 [@tagirahmad]: https://github.com/tagirahmad
 [@arthurWD]: https://github.com/arthurWD
 [@joshuay03]: https://github.com/joshuay03
+[@viralpraxis]: https://github.com/viralpraxis
