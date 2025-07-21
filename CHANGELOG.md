@@ -2,6 +2,8 @@
 
 ## master
 
+- Fix checking for Rails 8.0. ([@sunny][])
+
 ## 1.1.1 (2025-03-12)
 
 - Fix handling Rails 8 `enqueue_after_transaction_commit` logic. ([@palkan][])
