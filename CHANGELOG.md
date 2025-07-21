@@ -2,7 +2,7 @@
 
 ## master
 
-- Fix checking for Rails 8.0. ([@sunny][])
+- Fix checking for Rails versions between 8.0 and 8.1. ([@sunny][])
 
 ## 1.1.1 (2025-03-12)
 
