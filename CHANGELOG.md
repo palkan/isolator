@@ -2,7 +2,7 @@
 
 ## master
 
-- Fix `database_cleaner` support: require `base.rb` explicitly. ([@palkan][])
+- Fix `database_cleaner` support: require `base.rb` explicitly. ([@viralpraxis][])
 
 ## 1.1.1 (2025-03-12)
 
