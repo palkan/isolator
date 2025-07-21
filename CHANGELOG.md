@@ -2,6 +2,8 @@
 
 ## master
 
+- Fix `database_cleaner` support: require `base.rb` explicitly. ([@palkan][])
+
 ## 1.1.1 (2025-03-12)
 
 - Fix handling Rails 8 `enqueue_after_transaction_commit` logic. ([@palkan][])
