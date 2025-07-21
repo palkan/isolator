@@ -132,13 +132,13 @@ Isolator.after_isolate do
 end
 
 # This callback is called every time a new transaction is open (root or nested)
-Isolator.on_transaction_open do |event|
+Isolator.on_transaction_begin do |event|
   puts "New transaction from #{event[:connection_id]}. " \
        "Current depth: #{event[:depth]}"
 end
 
 # This callback is called every time a transaction is completed
-Isolator.on_transaction_close do |event|
+Isolator.on_transaction_end do |event|
   puts "Transaction completed from #{event[:connection_id]}. " \
        "Current depth: #{event[:depth]}"
 end
