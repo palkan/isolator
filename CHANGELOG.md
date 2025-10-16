@@ -3,6 +3,7 @@
 ## master
 
 - Fix `database_cleaner` support: require `base.rb` explicitly. ([@viralpraxis][])
+- Fix checking for Rails versions between 8.0 and 8.1. ([@sunny][])
 
 ## 1.1.1 (2025-03-12)
 

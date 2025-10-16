@@ -6,7 +6,7 @@ Isolator.isolate :active_job,
   exception_class: Isolator::BackgroundJobError,
   details_message: ->(obj) {
     "#{obj.class.name}" \
-    "#{obj.arguments.any? ? " (#{obj.arguments.join(", ")})" : ""}"
+    "#{" (#{obj.arguments.join(", ")})" if obj.arguments.any?}"
   },
   ignore_on: ->(job) {
                config = job.class.try(:enqueue_after_transaction_commit)
