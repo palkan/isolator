@@ -2,6 +2,8 @@
 
 ## master
 
+- Use `ActiveRecord::Base.lease_connection` instead of `ActiveRecord::Base.connection`, if available. ([@viralpraxis][])
+
 ## 1.1.2 (2025-10-16)
 
 - Fix `database_cleaner` support: require `base.rb` explicitly. ([@viralpraxis][])
@@ -161,3 +163,4 @@ This, for example, makes Isolator compatible with Rails multi-database apps.
 [@tagirahmad]: https://github.com/tagirahmad
 [@arthurWD]: https://github.com/arthurWD
 [@joshuay03]: https://github.com/joshuay03
+[@viralpraxis]: https://github.com/viralpraxis
