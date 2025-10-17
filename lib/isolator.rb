@@ -263,3 +263,4 @@ require "isolator/database_cleaner_support" if defined?(DatabaseCleaner)
 
 # Built-in extensions
 require "isolator/plugins/concurrent_database_transactions"
+require "isolator/plugins/database_subtransactions"
