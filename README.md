@@ -109,6 +109,9 @@ Isolator.configure do |config|
 
   # Turn on/off raising exceptions for simultaneous transactions to different databases
   config.disallow_per_thread_concurrent_transactions = false
+
+  # Limit the amount of allowed nested transactions
+  config.max_subtransactions_depth = 5
 end
 ```
 
