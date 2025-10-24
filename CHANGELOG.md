@@ -4,6 +4,10 @@
 
 - Use `ActiveRecord::Base.lease_connection` instead of `ActiveRecord::Base.connection`, if available. ([@viralpraxis][])
 
+- Add ability to limit subtransaction amount. ([@dnamsons][])
+
+  This feature is disabled by default, opt-in via: `Isolator.config.max_subtransactions_depth = :desired_depth`.
+
 ## 1.1.2 (2025-10-16)
 
 - Fix `database_cleaner` support: require `base.rb` explicitly. ([@viralpraxis][])
