@@ -2,6 +2,8 @@
 
 ## master
 
+- Use `ActiveRecord::Base.lease_connection` instead of `ActiveRecord::Base.connection`, if available. ([@viralpraxis][])
+
 - Add ability to limit subtransaction amount. ([@dnamsons][])
 
   This feature is disabled by default, opt-in via: `Isolator.config.max_subtransactions_depth = :desired_depth`.
@@ -165,3 +167,4 @@ This, for example, makes Isolator compatible with Rails multi-database apps.
 [@tagirahmad]: https://github.com/tagirahmad
 [@arthurWD]: https://github.com/arthurWD
 [@joshuay03]: https://github.com/joshuay03
+[@viralpraxis]: https://github.com/viralpraxis
