@@ -2,6 +2,8 @@
 
 ## master
 
+## 1.2.0 (2025-11-07)
+
 - Use `ActiveRecord::Base.lease_connection` instead of `ActiveRecord::Base.connection`, if available. ([@viralpraxis][])
 
 - Add ability to limit subtransaction amount. ([@dnamsons][])
