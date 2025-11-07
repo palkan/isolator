@@ -41,7 +41,10 @@ FILE_DB = File.join(__dir__, "../../tmp/testdb2")
 FileUtils.mkdir_p(File.join(__dir__, "../../tmp/"))
 DB_CONFIG_POSTS = {adapter: "sqlite3", database: FILE_DB}
 
-FileUtils.rm_f(FILE_DB) if File.exist?(FILE_DB)
+Dir.glob(File.expand_path("tmp/testdb2*", __dir__)).each do |path|
+  File.delete(path)
+rescue Errno::ENOENT
+end
 
 ActiveRecord::Base.establish_connection(**DB_CONFIG_POSTS)
 
