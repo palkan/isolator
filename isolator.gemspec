@@ -49,4 +49,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "uniform_notifier"
   spec.add_development_dependency "webrick"
   spec.add_development_dependency "net-smtp"
+  spec.add_development_dependency "sqlite3", "~> 2.7.0" # TMP: 2.8.0 throws disk I/O error
 end
