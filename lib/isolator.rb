@@ -120,7 +120,7 @@ module Isolator
 
     def decr_thresholds!
       self.default_threshold -= 1
-      debug!("Thresholds were incremented")
+      debug!("Thresholds were decremented")
 
       return unless state[:thresholds]
 
