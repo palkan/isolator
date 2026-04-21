@@ -1,5 +1,6 @@
 source "https://rubygems.org"
 
+gem "benchmark"
 gem "rails", github: "rails/rails"
 gem "sqlite3", "~> 2.0"
 gem "pg"
