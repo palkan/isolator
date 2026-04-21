@@ -335,6 +335,14 @@ The reason is that Rails started using a [separate connection pool for advisory 
 
 To fix this disable migrations advisory locks by adding `advisory_locks: false` to your database configuration in `(spec|test)/internal/config/database.yml`.
 
+## ActionMailer jobs
+
+Rails 7.2 added support for the `enqueue_after_transaction_commit` configuration option, which ensures that jobs are enqueued only after all transactions have been committed. One gotcha that may lead to Isolator offenses is that `ActionMailer::MailDeliveryJob` inherits directly from `ActiveJob::Base`, rather than from your application’s top-level `ApplicationJob`.
+
+To fix this, make sure `enqueue_after_transaction_commit` is set to true on `ActiveJob::Base`, or use the global `config.active_job.enqueue_after_transaction_commit setting` if your Rails version supports it.
+
+See https://github.com/palkan/isolator/issues/93 for details.
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/palkan/isolator.
