@@ -65,6 +65,7 @@ ActiveRecord::Base.establish_connection(**DB_CONFIG)
 ActiveRecord::Schema.define do
   create_table :users, if_not_exists: true do |t|
     t.column :name, :string
+    t.timestamps null: true
   end
 end
 

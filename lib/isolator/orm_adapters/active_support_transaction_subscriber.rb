@@ -13,16 +13,17 @@ module Isolator
       def start(event, id, payload)
         if event.start_with?("transaction.")
           connection_id = extract_transaction_connection_id(payload)
+          stack = stacks[connection_id]
 
           # transaction.active_record can be issued without a query (when we restart the transaction),
           # so we should add a new one on the stack.
           # Example: https://github.com/rails/rails/blob/ce49fa9b31cd4a21d43db39d0cea364bce28b51d/activerecord/lib/active_record/connection_adapters/abstract/transaction.rb#L337
-          if stacks[connection_id].last == :raw
+          if stack.last == :raw
             # Update the type of the last transaction event
-            stacks[connection_id].pop
-            stacks[connection_id] << :transaction
+            stack.pop
+            stack << :transaction
           else
-            stacks[connection_id] << :transaction
+            stack << :transaction
             Isolator.incr_transactions!(connection_id)
           end
         end
@@ -32,19 +33,23 @@ module Isolator
         if event.start_with?("sql.")
           if start_event?(payload[:sql])
             connection_id = extract_connection_id(payload)
+            stack = stacks[connection_id]
 
-            stacks[connection_id] << :raw
+            stack << :raw
 
             Isolator.incr_transactions!(connection_id)
           end
 
           if finish_event?(payload[:sql])
             connection_id = extract_connection_id(payload)
+            stack = stacks[connection_id]
 
             # Decrement only if the transaction was started in the raw mode,
             # otherwise we should wait for the "transaction" event
-            if stacks[connection_id].last == :raw
-              stacks[connection_id].pop
+            if stack.last == :raw
+              stack.pop
+              stacks.delete(connection_id) if stack.empty?
+
               Isolator.decr_transactions!(connection_id)
             end
           end
@@ -52,9 +57,14 @@ module Isolator
 
         if event.start_with?("transaction.")
           connection_id = extract_transaction_connection_id(payload)
-          stacks[connection_id].pop
+          stack = stacks[connection_id]
 
-          Isolator.decr_transactions!(connection_id)
+          if stack.last == :transaction
+            stack.pop
+            stacks.delete(connection_id) if stack.empty?
+
+            Isolator.decr_transactions!(connection_id)
+          end
         end
       end
 

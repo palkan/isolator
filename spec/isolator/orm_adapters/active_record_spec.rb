@@ -116,6 +116,37 @@ describe "ActiveRecord integration" do
       end
     end
 
+    context "when rolling back a lazy nested transaction", skip: !(ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1) do
+      specify do
+        record = ar_class.create!(name: "test")
+
+        expect(Isolator).not_to receive(:warn).with("Trying to finalize an untracked transaction")
+
+        ar_class.connection.transaction do
+          ar_class.connection.transaction(requires_new: true) do
+            record.touch
+            raise ActiveRecord::Rollback
+          end
+
+          record.touch
+        end
+
+        expect(Isolator).to_not be_within_transaction
+      end
+    end
+
+    context "when Active Record emits a transaction finish that was not tracked", skip: !(ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1) do
+      specify do
+        subscriber = Isolator::ActiveSupportTransactionSubscriber::Subscriber.new
+
+        expect(Isolator).not_to receive(:warn).with("Trying to finalize an untracked transaction")
+
+        subscriber.finish("transaction.active_record", "transaction-id", {connection: ar_class.connection})
+
+        expect(Isolator).to_not be_within_transaction
+      end
+    end
+
     context "with lazy and non-lazy nested transactions" do
       specify do
         expect(Isolator).to_not be_within_transaction
