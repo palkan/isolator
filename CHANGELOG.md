@@ -2,6 +2,10 @@
 
 ## master
 
+## 1.2.1 (2026-07-16)
+
+- Fix handling "finish" events for untracked (lazy) transactions. ([@sawirricardo][])
+
 ## 1.2.0 (2025-11-07)
 
 - Use `ActiveRecord::Base.lease_connection` instead of `ActiveRecord::Base.connection`, if available. ([@viralpraxis][])
@@ -170,3 +174,4 @@ This, for example, makes Isolator compatible with Rails multi-database apps.
 [@arthurWD]: https://github.com/arthurWD
 [@joshuay03]: https://github.com/joshuay03
 [@viralpraxis]: https://github.com/viralpraxis
+[@sawirricardo]: https://github.com/sawirricardo
