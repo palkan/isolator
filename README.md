@@ -71,6 +71,8 @@ end
 gem "isolator", require: false
 ```
 
+if you are instrumenting net http (e.g. using an APM on staging or even development) then you may need to force sniffer into prepend mode: see https://github.com/palkan/isolator/issues/44#issuecomment-5475678308
+
 ## Usage
 
 Isolator is a plug-n-play tool, so, it begins to work right after required.
