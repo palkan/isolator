@@ -28,6 +28,7 @@ Gem::Specification.new do |spec|
 
   spec.require_paths = ["lib"]
 
+  spec.add_runtime_dependency "benchmark"
   spec.add_runtime_dependency "sniffer", ">= 0.5.0"
 
   spec.add_development_dependency "bundler", ">= 1.16"
