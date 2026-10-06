@@ -22,9 +22,10 @@ module Isolator
             # Update the type of the last transaction event
             stack.pop
             stack << :transaction
+            Isolator.claim_raw_transaction(connection_id)
           else
             stack << :transaction
-            Isolator.incr_transactions!(connection_id)
+            Isolator.incr_transactions!(connection_id, kind: :active_record)
           end
         end
       end
@@ -37,7 +38,7 @@ module Isolator
 
             stack << :raw
 
-            Isolator.incr_transactions!(connection_id)
+            Isolator.incr_transactions!(connection_id, kind: :active_record_raw)
           end
 
           if finish_event?(payload[:sql])
@@ -63,7 +64,7 @@ module Isolator
             stack.pop
             stacks.delete(connection_id) if stack.empty?
 
-            Isolator.decr_transactions!(connection_id)
+            Isolator.decr_transactions!(connection_id, kind: :active_record)
           end
         end
       end
