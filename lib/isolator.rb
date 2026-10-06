@@ -36,6 +36,10 @@ module Isolator
   class << self
     attr_accessor :default_threshold, :default_connection_id
 
+    # When true (Rails 7.2+), ActiveRecord transactions are detected via ActiveRecord's own
+    # transaction state instead of counted events, so they can't go stale after a connection reset
+    attr_accessor :active_record_transaction_state
+
     def config
       @config ||= Configuration.new
     end
@@ -127,9 +131,11 @@ module Isolator
       state[:thresholds].transform_values!(&:pred)
     end
 
-    def incr_transactions!(connection_id = default_connection_id.call)
+    # Pass managed: true for transactions ActiveRecord's transaction manager also tracks
+    def incr_transactions!(connection_id = default_connection_id.call, managed: false)
       state[:transactions] ||= Hash.new { |h, k| h[k] = 0 }
       state[:transactions][connection_id] += 1
+      manage_transaction!(connection_id) if managed
 
       # Workaround to track threshold changes made before opening a connection
       pending_threshold = state[:thresholds]&.delete(0)
@@ -149,7 +155,7 @@ module Isolator
       end
     end
 
-    def decr_transactions!(connection_id = default_connection_id.call)
+    def decr_transactions!(connection_id = default_connection_id.call, managed: false)
       current = state[:transactions]&.[](connection_id) || 0
 
       if current <= 0
@@ -158,6 +164,7 @@ module Isolator
       end
 
       state[:transactions][connection_id] -= 1
+      unmanage_transaction!(connection_id) if managed
 
       current_depth = current_transactions(connection_id)
       threshold = connection_threshold(connection_id)
@@ -174,15 +181,31 @@ module Isolator
       debug!("Transaction closed for connection #{connection_id} (total: #{state[:transactions][connection_id]}, threshold: #{state[:thresholds]&.[](connection_id) || default_threshold})")
     end
 
+    # Marks an already counted transaction as tracked by ActiveRecord's transaction manager
+    def manage_transaction!(connection_id)
+      state[:managed_transactions] ||= Hash.new { |h, k| h[k] = 0 }
+      state[:managed_transactions][connection_id] += 1
+    end
+
+    def unmanage_transaction!(connection_id)
+      managed = state[:managed_transactions]
+      return unless managed&.[](connection_id)&.positive?
+
+      managed[connection_id] -= 1
+      managed.delete(connection_id) if managed[connection_id].zero?
+    end
+
     def clear_transactions!
       state[:transactions]&.clear
+      state[:managed_transactions]&.clear
     end
 
     def within_transaction?
-      state[:transactions]&.each do |connection_id, transaction_count|
-        return true if transaction_count >= connection_threshold(connection_id)
-      end
-      false
+      return within_counted_transaction? unless active_record_transaction_state
+
+      # Non-joinable transactions (transactional tests, database_cleaner, before_all) are
+      # excluded by ActiveRecord itself, so thresholds aren't needed here
+      ::ActiveRecord.all_open_transactions.any? || within_unmanaged_transaction?
     end
 
     def enabled?
@@ -214,6 +237,22 @@ module Isolator
     private
 
     attr_accessor :state
+
+    def within_counted_transaction?
+      state[:transactions]&.each do |connection_id, transaction_count|
+        return true if transaction_count >= connection_threshold(connection_id)
+      end
+      false
+    end
+
+    # Transactions ActiveRecord doesn't track (raw BEGIN statements, other ORMs) are still counted
+    def within_unmanaged_transaction?
+      managed = state[:managed_transactions]
+
+      state[:transactions]&.any? do |connection_id, transaction_count|
+        transaction_count > (managed&.[](connection_id) || 0)
+      end || false
+    end
 
     def debug!(msg)
       return unless debug_enabled
