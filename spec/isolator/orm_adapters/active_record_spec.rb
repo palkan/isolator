@@ -160,12 +160,61 @@ describe "ActiveRecord integration" do
             expect(Isolator).to be_within_transaction
           end
 
-          expect(Isolator).to be_within_transaction
+          # Without ActiveRecord's transaction state, non-joinable transactions are counted like any other
+          expect(Isolator.within_transaction?).to eq(!Isolator.active_record_transaction_state)
         ensure
           ar_class.connection.rollback_transaction
           ar_class.connection.rollback_transaction
         end
 
+        expect(Isolator).to_not be_within_transaction
+      end
+    end
+
+    context "with ActiveRecord's transaction state", skip: !Isolator.active_record_transaction_state do
+      it "ignores non-joinable wrapper transactions, like transactional tests" do
+        ar_class.connection.begin_transaction(joinable: false, _lazy: false)
+        ar_class.first
+
+        expect(Isolator).to_not be_within_transaction
+
+        ar_class.transaction do
+          ar_class.first
+          expect(Isolator).to be_within_transaction
+        end
+
+        expect(Isolator).to_not be_within_transaction
+      ensure
+        ar_class.connection.rollback_transaction
+      end
+
+      it "detects a transaction before its first query" do
+        ar_class.transaction do
+          expect(Isolator).to be_within_transaction
+        end
+      end
+
+      it "is not within a transaction inside after_commit callbacks" do
+        within_after_commit = nil
+
+        ar_class.transaction do
+          ar_class.first
+          ar_class.connection.current_transaction.after_commit { within_after_commit = Isolator.within_transaction? }
+        end
+
+        expect(within_after_commit).to eq(false)
+      end
+
+      # Rails drops a dirty transaction without emitting its finish event when it reconnects,
+      # which used to leave the counted transaction open forever (https://github.com/palkan/isolator/issues/83)
+      it "is not within a transaction after a reconnect drops the open transaction" do
+        # Uses the second database here with the persistent sqlite, so we do not lose schema
+        Post.connection.begin_transaction
+        Post.first
+
+        Post.connection.reconnect!(restore_transactions: true)
+
+        expect(Post.connection.open_transactions).to eq(0)
         expect(Isolator).to_not be_within_transaction
       end
     end

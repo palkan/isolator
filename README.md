@@ -158,6 +158,8 @@ end
  - Rails' baked-in [use_transactional_tests](https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html#class-ActiveRecord::FixtureSet-label-Transactional+Tests)
  - [database_cleaner](https://github.com/DatabaseCleaner/database_cleaner) gem. Make sure that you require isolator _after_ database_cleaner.
 
+On Rails 7.2+, Isolator reads ActiveRecord's transaction state, so any non-joinable transaction (which is what all of the above use) is ignored without extra configuration. Thresholds no longer decide whether an operation is within a transaction there; they're only used by [callbacks](#callbacks) and plugins.
+
 ### Supported ORMs
 
 - `ActiveRecord` >= 6.0 (see older versions of Isolator for previous versions)
@@ -350,6 +352,8 @@ To fix this, make sure `enqueue_after_transaction_commit` is set to true on `Act
 See https://github.com/palkan/isolator/issues/93 for details.
 
 ## Occasional test failures related to connection reaping
+
+This only affects Rails < 7.2; newer versions read ActiveRecord's transaction state, which a reset can't leave stale.
 
 In some cases, connections may be reaped and replaced mid-test, which will most likely lead to test failures because Isolator currently does not track this situation.
 

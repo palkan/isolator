@@ -2,6 +2,15 @@
 
 ## master
 
+- Detect ActiveRecord transactions via ActiveRecord's own transaction state on Rails 7.2+. ([@ngan][])
+
+  Isolator used to count `transaction.active_record` events, and those counts went stale whenever Rails dropped a transaction without emitting its finish event (e.g., reconnecting after a lost connection), failing every later enqueue in the process. Now Isolator asks ActiveRecord directly, which also means:
+
+  - Non-joinable transactions (transactional tests, `database_cleaner`, TestProf's `before_all`) are ignored on their own; thresholds no longer decide whether an operation is within a transaction (callbacks and plugins still use them).
+  - Transactions are detected before their first query, and on threads sharing a connection (e.g., the server threads in system tests).
+
+  Transactions ActiveRecord doesn't track (raw `BEGIN` statements) are still counted.
+
 ## 1.2.0 (2025-11-07)
 
 - Use `ActiveRecord::Base.lease_connection` instead of `ActiveRecord::Base.connection`, if available. ([@viralpraxis][])
@@ -170,3 +179,4 @@ This, for example, makes Isolator compatible with Rails multi-database apps.
 [@arthurWD]: https://github.com/arthurWD
 [@joshuay03]: https://github.com/joshuay03
 [@viralpraxis]: https://github.com/viralpraxis
+[@ngan]: https://github.com/ngan

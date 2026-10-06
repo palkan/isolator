@@ -8,7 +8,7 @@ module Isolator
   end
 
   class ConcurrentTransactionError < UnsafeOperationError
-    MESSAGE = "You are trying to open a transaction while there is an open transation to another database." \
+    MESSAGE = "You are trying to open a transaction while there is an open transation to another database."
   end
 
   Isolator.before_isolate do

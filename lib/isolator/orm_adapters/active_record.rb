@@ -7,6 +7,9 @@ if (ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1) ||
     ActiveRecord.version >= Gem::Version.new("7.1")
   require_relative "active_support_transaction_subscriber"
   Isolator::ActiveSupportTransactionSubscriber.subscribe!
+
+  # Introduced in 7.2: https://github.com/rails/rails/pull/51474
+  Isolator.active_record_transaction_state = ActiveRecord.respond_to?(:all_open_transactions)
 else
   Isolator::ActiveSupportSubscriber.subscribe!("sql.active_record")
 end

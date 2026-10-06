@@ -19,7 +19,7 @@ require "uri"
 
 begin
   require "debug" unless ENV["CI"] == "true"
-rescue LoadError # rubocop:disable Lint/HandleExceptions
+rescue LoadError # rubocop:disable Lint/SuppressedException
 end
 
 require "isolator"
