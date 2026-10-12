@@ -5,6 +5,6 @@ if defined?(ActiveSupport)
     require "isolator/orm_adapters/active_record"
   end
 
-  require "isolator/orm_adapter/rom_active_support" if
+  require "isolator/orm_adapters/rom_active_support" if
     defined?(::ROM::SQL::ActiveSupportInstrumentation)
 end
