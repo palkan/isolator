@@ -19,7 +19,15 @@ module FakeWeb
 end
 
 RSpec.configure do |config|
+  server_thread = nil
+
   config.before(:suite) do
-    Thread.new { FakeWeb.server.start }
+    server = FakeWeb.server
+    server_thread = Thread.new { server.start }
+  end
+
+  config.after(:suite) do
+    FakeWeb.server.shutdown
+    server_thread&.join
   end
 end
