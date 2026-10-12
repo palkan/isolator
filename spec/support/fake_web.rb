@@ -23,7 +23,10 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     server = FakeWeb.server
+    started = Queue.new
+    server.config[:StartCallback] = -> { started << true }
     server_thread = Thread.new { server.start }
+    started.pop
   end
 
   config.after(:suite) do
