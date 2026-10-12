@@ -22,12 +22,12 @@ module Isolator
         @disabled == true
       end
 
-      def notify(backtrace, obj, *args, **kwargs)
+      def notify(backtrace, obj, *args, **kwargs, &_block)
         return unless notify?(*args, **kwargs)
         Isolator.notify(exception: build_exception(obj, args, kwargs), backtrace: backtrace)
       end
 
-      def notify_on?(obj, *args, **kwargs)
+      def notify_on?(obj, *args, **kwargs, &_block)
         !ignore_on?(obj) && notify?(*args, **kwargs)
       end
 
