@@ -17,6 +17,11 @@ module Isolator
       end
 
       def finish(event, id, payload)
+        if payload[:exception] && start_event?(payload[:sql])
+          Isolator.decr_transactions!(extract_connection_id(payload))
+          return
+        end
+
         return unless finish_event?(payload[:sql])
 
         connection_id = extract_connection_id(payload)
