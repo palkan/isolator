@@ -161,7 +161,7 @@ end
 ### Supported ORMs
 
 - `ActiveRecord` >= 6.0 (see older versions of Isolator for previous versions)
-- `ROM::SQL` (only if Active Support instrumentation extension is loaded)
+- `ROM::SQL` (only if Active Support instrumentation extension is loaded). Make sure that you load the extension (`ROM::SQL.load_extensions(:active_support_notifications)`) _before_ requiring isolator.
 
 ### Adapters
 
