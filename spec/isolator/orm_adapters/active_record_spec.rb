@@ -193,6 +193,33 @@ describe "ActiveRecord integration" do
         expect(Isolator).to_not be_within_transaction
       end
     end
+
+    # SQLite raises on a nested BEGIN, which stands in for a BEGIN failing on a lost connection
+    context "when BEGIN fails", skip: DB_CONFIG[:adapter] != "sqlite3" do
+      # Start from a fresh connection: depending on the previous example, Rails may otherwise replace
+      # the connection when BEGIN fails, taking this example's own raw transaction with it
+      before { Post.connection.reconnect! }
+
+      after do
+        Post.connection.execute("ROLLBACK") if Post.connection.raw_connection.transaction_active?
+      end
+
+      it "doesn't count the failed raw BEGIN" do
+        Post.connection.execute("BEGIN")
+        expect { Post.connection.execute("BEGIN") }.to raise_error(ActiveRecord::StatementInvalid)
+        Post.connection.execute("ROLLBACK")
+
+        expect(Isolator).to_not be_within_transaction
+      end
+
+      it "doesn't count a transaction ActiveRecord failed to open" do
+        Post.connection.execute("BEGIN")
+        expect { Post.transaction { Post.first } }.to raise_error(ActiveRecord::StatementInvalid)
+        Post.connection.execute("ROLLBACK") if Post.connection.raw_connection.transaction_active?
+
+        expect(Isolator).to_not be_within_transaction
+      end
+    end
   end
 
   context "with multiple connections" do

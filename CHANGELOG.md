@@ -4,6 +4,8 @@
 
 - Fix `LoadError` when `ROM::SQL` Active Support instrumentation is loaded before Isolator. ([@viralpraxis][])
 
+- Don't count a `BEGIN` or `SAVEPOINT` that failed (e.g., on a lost connection) as an open transaction. ([@ngan][])
+
 ## 1.2.0 (2025-11-07)
 
 - Use `ActiveRecord::Base.lease_connection` instead of `ActiveRecord::Base.connection`, if available. ([@viralpraxis][])
@@ -172,3 +174,4 @@ This, for example, makes Isolator compatible with Rails multi-database apps.
 [@arthurWD]: https://github.com/arthurWD
 [@joshuay03]: https://github.com/joshuay03
 [@viralpraxis]: https://github.com/viralpraxis
+[@ngan]: https://github.com/ngan

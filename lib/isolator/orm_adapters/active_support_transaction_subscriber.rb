@@ -31,7 +31,7 @@ module Isolator
 
       def finish(event, id, payload)
         if event.start_with?("sql.")
-          if start_event?(payload[:sql])
+          if start_event?(payload[:sql]) && !payload[:exception]
             connection_id = extract_connection_id(payload)
             stack = stacks[connection_id]
 
