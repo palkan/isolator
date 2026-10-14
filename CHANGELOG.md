@@ -8,6 +8,8 @@
 
   Fixes [#83](https://github.com/palkan/isolator/issues/83).
 
+- Don't count a `BEGIN` or `SAVEPOINT` that failed (e.g., on a lost connection) as an open transaction. ([@ngan][])
+
 ## 1.2.0 (2025-11-07)
 
 - Use `ActiveRecord::Base.lease_connection` instead of `ActiveRecord::Base.connection`, if available. ([@viralpraxis][])
