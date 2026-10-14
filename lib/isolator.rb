@@ -171,7 +171,7 @@ module Isolator
 
       state[:transactions].delete(connection_id) if state[:transactions][connection_id].zero?
 
-      debug!("Transaction closed for connection #{connection_id} (total: #{state[:transactions][connection_id]}, threshold: #{state[:thresholds]&.[](connection_id) || default_threshold})")
+      debug!("Transaction closed for connection #{connection_id} (total: #{state[:transactions].fetch(connection_id, 0)}, threshold: #{state[:thresholds]&.[](connection_id) || default_threshold})")
     end
 
     def clear_transactions!

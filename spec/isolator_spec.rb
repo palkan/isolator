@@ -14,4 +14,13 @@ describe Isolator do
       expect(described_class).not_to be_within_transaction
     end
   end
+
+  describe ".all_transactions" do
+    it "drops a connection once its transactions are closed" do
+      described_class.incr_transactions!
+      described_class.decr_transactions!
+
+      expect(described_class.all_transactions).to be_empty
+    end
+  end
 end
