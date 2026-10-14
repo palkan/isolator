@@ -10,6 +10,8 @@
 
 - Don't count a `BEGIN` or `SAVEPOINT` that failed (e.g., on a lost connection) as an open transaction. ([@ngan][])
 
+- Fix `Isolator.all_transactions` keeping a connection with a zero count after its transactions are closed. ([@ngan][])
+
 ## 1.2.0 (2025-11-07)
 
 - Use `ActiveRecord::Base.lease_connection` instead of `ActiveRecord::Base.connection`, if available. ([@viralpraxis][])
