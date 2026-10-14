@@ -4,6 +4,10 @@
 
 - Fix `LoadError` when `ROM::SQL` Active Support instrumentation is loaded before Isolator. ([@viralpraxis][])
 
+- Fix `database_cleaner` support lowering the threshold of a different connection than the one it raised it on, when the connection gets replaced mid-test. ([@ngan][])
+
+  Fixes [#83](https://github.com/palkan/isolator/issues/83).
+
 - Don't count a `BEGIN` or `SAVEPOINT` that failed (e.g., on a lost connection) as an open transaction. ([@ngan][])
 
 ## 1.2.0 (2025-11-07)
