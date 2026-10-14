@@ -23,4 +23,13 @@ describe Isolator do
       expect(described_class.all_transactions).to be_empty
     end
   end
+
+  describe ".incr_transactions!" do
+    it "rejects an unknown kind" do
+      expect { described_class.incr_transactions!(kind: :raw) }
+        .to raise_error(ArgumentError, /Unknown transaction kind: :raw/)
+
+      expect(described_class.all_transactions).to be_empty
+    end
+  end
 end

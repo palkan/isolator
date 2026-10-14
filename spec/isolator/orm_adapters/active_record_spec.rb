@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require "after_commit_everywhere"
 
 describe "ActiveRecord integration" do
   let(:ar_class) { User }
@@ -169,6 +170,157 @@ describe "ActiveRecord integration" do
         expect(Isolator).to_not be_within_transaction
       end
     end
+
+    context "with ActiveRecord's transaction depth", skip: !defined?(Isolator::ActiveSupportTransactionSubscriber) do
+      it "honors thresholds for a non-joinable wrapper transaction, like transactional tests" do
+        Isolator.incr_thresholds!
+        ar_class.connection.begin_transaction(joinable: false, _lazy: false)
+        ar_class.first
+
+        expect(Isolator).to_not be_within_transaction
+
+        ar_class.transaction do
+          ar_class.first
+          expect(Isolator).to be_within_transaction
+        end
+
+        expect(Isolator).to_not be_within_transaction
+      ensure
+        ar_class.connection.rollback_transaction
+        Isolator.decr_thresholds!
+      end
+
+      it "honors thresholds for a joinable wrapper transaction" do
+        Isolator.transactions_threshold += 1
+        ar_class.connection.begin_transaction
+        ar_class.first
+
+        expect(Isolator).to_not be_within_transaction
+
+        ar_class.transaction(requires_new: true) do
+          ar_class.first
+          expect(Isolator).to be_within_transaction
+        end
+      ensure
+        ar_class.connection.rollback_transaction
+        Isolator.transactions_threshold -= 1
+      end
+
+      it "detects a non-joinable transaction" do
+        ar_class.transaction(joinable: false) do
+          ar_class.first
+          expect(Isolator).to be_within_transaction
+        end
+      end
+
+      it "detects a transaction before its first query" do
+        ar_class.transaction do
+          expect(Isolator).to be_within_transaction
+        end
+      end
+
+      it "is not within a transaction inside after_commit callbacks" do
+        within_after_commit = nil
+
+        ar_class.transaction do
+          ar_class.first
+          AfterCommitEverywhere.after_commit { within_after_commit = Isolator.within_transaction? }
+        end
+
+        expect(within_after_commit).to eq(false)
+      end
+
+      # Rails drops a dirty transaction without emitting its finish event when it reconnects,
+      # which used to leave the counted transaction open forever (https://github.com/palkan/isolator/issues/83)
+      it "is not within a transaction after a reconnect drops the open transaction" do
+        # Uses the second database here with the persistent sqlite, so we do not lose schema
+        Post.connection.begin_transaction
+        Post.first
+
+        Post.connection.reconnect!(restore_transactions: true)
+
+        expect(Post.connection.open_transactions).to eq(0)
+        expect(Isolator).to_not be_within_transaction
+      end
+
+      it "is not within a transaction in the next wrapper after a reconnect drops the previous one" do
+        Isolator.incr_thresholds!
+
+        # A transactional test whose connection gets reset
+        Post.connection.begin_transaction(joinable: false, _lazy: false)
+        Post.first
+        Post.connection.reconnect!(restore_transactions: true)
+
+        # The next transactional test
+        Post.connection.begin_transaction(joinable: false, _lazy: false)
+        Post.first
+
+        expect(Isolator).to_not be_within_transaction
+      ensure
+        Post.connection.rollback_transaction while Post.connection.open_transactions.positive?
+        Isolator.decr_thresholds!
+      end
+
+      context "with a connection shared across threads, like the server threads in system tests",
+        skip: !ActiveRecord::ConnectionAdapters::ConnectionPool.method_defined?(:pin_connection!) do
+        shared_examples "a shared connection" do
+          around do |example|
+            register_wrapper.call
+            pool = ar_class.connection_pool
+            pool.pin_connection!(true)
+            fixture_transaction = pool.lease_connection.open_transactions.zero?
+            pool.lease_connection.begin_transaction(joinable: false, _lazy: false) if fixture_transaction
+            example.run
+          ensure
+            pool.lease_connection.rollback_transaction if fixture_transaction
+            pool.unpin_connection!
+            unregister_wrapper.call
+          end
+
+          # A server thread holds on to its connection while handling a request
+          def within_transaction_on_server_thread(&block)
+            Thread.new do
+              ar_class.lease_connection
+              block&.call
+              Isolator.within_transaction?
+            ensure
+              ar_class.connection_pool.release_connection
+            end.value
+          end
+
+          it "honors the wrapper's threshold" do
+            expect(within_transaction_on_server_thread).to eq(false)
+          end
+
+          it "detects a transaction opened on the server thread" do
+            within = nil
+
+            within_transaction_on_server_thread do
+              ar_class.transaction do
+                ar_class.first
+                within = Isolator.within_transaction?
+              end
+            end
+
+            expect(within).to eq(true)
+          end
+        end
+
+        context "when the wrapper raises the default threshold, like transactional tests" do
+          let(:register_wrapper) { -> { Isolator.incr_thresholds! } }
+          let(:unregister_wrapper) { -> { Isolator.decr_thresholds! } }
+
+          include_examples "a shared connection"
+        end
+
+        context "when the wrapper raises the connection's threshold, like database_cleaner" do
+          let(:register_wrapper) { -> { Isolator.transactions_threshold += 1 } }
+          let(:unregister_wrapper) { -> { Isolator.transactions_threshold -= 1 } }
+
+          include_examples "a shared connection"
+        end
+      end
+    end
   end
 
   context "other transaction methods" do
@@ -219,6 +371,20 @@ describe "ActiveRecord integration" do
 
         expect(Isolator).to_not be_within_transaction
       end
+    end
+
+    it "doesn't count a raw transaction on a connection that was discarded", skip: !defined?(Isolator::ActiveSupportTransactionSubscriber) do
+      discarded_connection = Post.connection
+      discarded_connection.execute("BEGIN")
+      expect(Isolator).to be_within_transaction
+
+      Post.connection_pool.remove(discarded_connection)
+
+      expect(Post.connection).not_to equal(discarded_connection)
+      expect(Isolator).to_not be_within_transaction
+    ensure
+      discarded_connection.execute("ROLLBACK") if discarded_connection.raw_connection.transaction_active?
+      discarded_connection.disconnect!
     end
   end
 

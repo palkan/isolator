@@ -12,6 +12,15 @@
 
 - Fix `Isolator.all_transactions` keeping a connection with a zero count after its transactions are closed. ([@ngan][])
 
+- Detect ActiveRecord transactions from ActiveRecord's own transaction depth on Rails 7.1+. ([@ngan][])
+
+  Isolator used to count `transaction.active_record` events and compare the count with the thresholds. The count went stale whenever Rails dropped a transaction without emitting its finish event (e.g., reconnecting after a lost connection), which failed every later enqueue in the process. Now Isolator compares ActiveRecord's real transaction depth with the same thresholds, which also means:
+
+  - Transactions are detected before their first query, and on threads sharing a connection (e.g., the server threads in system tests).
+  - A connection's threshold (e.g., the one `database_cleaner` raises) applies to every thread using that connection.
+
+  Transactions ActiveRecord doesn't track (raw `BEGIN` statements) are still counted, while the thread holds the connection.
+
 ## 1.2.0 (2025-11-07)
 
 - Use `ActiveRecord::Base.lease_connection` instead of `ActiveRecord::Base.connection`, if available. ([@viralpraxis][])

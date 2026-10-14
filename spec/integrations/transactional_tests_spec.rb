@@ -41,5 +41,19 @@ describe "Rails transactional tests" do
 
       expect(output).to include("2 examples, 0 failures")
     end
+
+    context "with ActiveRecord's transaction depth", skip: !defined?(Isolator::ActiveSupportTransactionSubscriber) do
+      specify "tests after a connection reset dropped a test's transaction" do
+        output = run_rspec("transactional", tag: "reset")
+
+        expect(output).to include("2 examples, 0 failures")
+      end
+
+      specify "server threads sharing the test's connection" do
+        output = run_rspec("transactional", tag: "server_thread")
+
+        expect(output).to include("2 examples, 0 failures")
+      end
+    end
   end
 end

@@ -17,6 +17,11 @@ require "isolator/ext/thread_fetch"
 module Isolator
   using Isolator::ThreadFetch
 
+  # nil: a transaction on a connection ActiveRecord doesn't own (e.g., ROM)
+  # :active_record: a transaction ActiveRecord's transaction manager tracks
+  # :active_record_raw: a raw BEGIN or SAVEPOINT on an ActiveRecord connection
+  TRANSACTION_KINDS = [nil, :active_record, :active_record_raw].freeze
+
   class ThreadStateProxy
     attr_reader :prefix
 
@@ -105,6 +110,7 @@ module Isolator
     def set_connection_threshold(val, connection_id = default_connection_id.call)
       state[:thresholds] ||= Hash.new { |h, k| h[k] = Isolator.default_threshold }
       state[:thresholds][connection_id] = val
+      shared_thresholds_lock.synchronize { shared_thresholds[connection_id] = val }
 
       debug!("Threshold value was changed for connection #{connection_id}: #{val}")
     end
@@ -112,6 +118,8 @@ module Isolator
     def incr_thresholds!
       self.default_threshold += 1
       debug!("Thresholds were incremented")
+
+      shared_thresholds_lock.synchronize { shared_thresholds.transform_values!(&:succ) }
 
       return unless state[:thresholds]
 
@@ -122,19 +130,30 @@ module Isolator
       self.default_threshold -= 1
       debug!("Thresholds were decremented")
 
+      shared_thresholds_lock.synchronize { shared_thresholds.transform_values!(&:pred) }
+
       return unless state[:thresholds]
 
       state[:thresholds].transform_values!(&:pred)
     end
 
-    def incr_transactions!(connection_id = default_connection_id.call)
+    def incr_transactions!(connection_id = default_connection_id.call, kind: nil)
+      check_transaction_kind(kind)
+
       state[:transactions] ||= Hash.new { |h, k| h[k] = 0 }
       state[:transactions][connection_id] += 1
+      incr_active_record_transactions(connection_id) if kind == :active_record
+      (state[:active_record_connection_ids] ||= {})[connection_id] = true if kind
 
       # Workaround to track threshold changes made before opening a connection
       pending_threshold = state[:thresholds]&.delete(0)
       if pending_threshold
         state[:thresholds][connection_id] = pending_threshold
+
+        shared_thresholds_lock.synchronize do
+          shared_pending_threshold = shared_thresholds.delete(0)
+          shared_thresholds[connection_id] = shared_pending_threshold if shared_pending_threshold
+        end
       end
 
       debug!("Transaction opened for connection #{connection_id} (total: #{state[:transactions][connection_id]}, threshold: #{state[:thresholds]&.fetch(connection_id, default_threshold)})")
@@ -149,7 +168,9 @@ module Isolator
       end
     end
 
-    def decr_transactions!(connection_id = default_connection_id.call)
+    def decr_transactions!(connection_id = default_connection_id.call, kind: nil)
+      check_transaction_kind(kind)
+
       current = state[:transactions]&.[](connection_id) || 0
 
       if current <= 0
@@ -158,6 +179,7 @@ module Isolator
       end
 
       state[:transactions][connection_id] -= 1
+      decr_active_record_transactions(connection_id) if kind == :active_record
 
       current_depth = current_transactions(connection_id)
       threshold = connection_threshold(connection_id)
@@ -169,20 +191,31 @@ module Isolator
 
       finish! if current_depth == (threshold - 1)
 
-      state[:transactions].delete(connection_id) if state[:transactions][connection_id].zero?
+      if state[:transactions][connection_id].zero?
+        state[:transactions].delete(connection_id)
+        state[:active_record_connection_ids]&.delete(connection_id)
+      end
 
       debug!("Transaction closed for connection #{connection_id} (total: #{state[:transactions].fetch(connection_id, 0)}, threshold: #{state[:thresholds]&.[](connection_id) || default_threshold})")
     end
 
+    # Moves an already counted raw transaction to the ones ActiveRecord's transaction manager tracks
+    def claim_raw_transaction(connection_id)
+      incr_active_record_transactions(connection_id)
+    end
+
     def clear_transactions!
       state[:transactions]&.clear
+      state[:active_record_transactions]&.clear
+      state[:active_record_connection_ids]&.clear
     end
 
     def within_transaction?
-      state[:transactions]&.each do |connection_id, transaction_count|
-        return true if transaction_count >= connection_threshold(connection_id)
+      if active_record_depth_available?
+        within_active_record_transaction?
+      else
+        within_counted_transaction?
       end
-      false
     end
 
     def enabled?
@@ -214,6 +247,81 @@ module Isolator
     private
 
     attr_accessor :state
+
+    # The transaction subscriber (Rails 7.1+) tells counted transactions apart from the ones ActiveRecord tracks,
+    # so ActiveRecord's own transaction depth can be used instead of counted events, which go stale after a reset
+    def active_record_depth_available?
+      !defined?(::Isolator::ActiveSupportTransactionSubscriber).nil?
+    end
+
+    def within_counted_transaction?
+      state[:transactions]&.each do |connection_id, transaction_count|
+        return true if transaction_count >= connection_threshold(connection_id)
+      end
+      false
+    end
+
+    # Compares ActiveRecord's real transaction depth with the thresholds instead of counted events.
+    # Transactions ActiveRecord doesn't track (raw BEGIN statements, other ORMs) are still counted.
+    def within_active_record_transaction?
+      connection_ids = []
+
+      ::ActiveRecord::Base.connection_handler.connection_pool_list(:all).each do |pool|
+        connection = pool.active_connection?
+        next unless connection
+
+        connection_id = connection.object_id
+        # Pools can share a connection (e.g., replicas in transactional tests)
+        next if connection_ids.include?(connection_id)
+
+        connection_ids << connection_id
+
+        depth = connection.open_transactions + raw_transactions(connection_id)
+        return true if depth >= shared_connection_threshold(connection_id)
+      end
+
+      # An ActiveRecord connection this thread no longer holds (returned to the pool, or discarded
+      # after a reset) can't have this thread's transactions open anymore
+      state[:transactions]&.any? do |connection_id, _|
+        !connection_ids.include?(connection_id) &&
+          !state[:active_record_connection_ids]&.key?(connection_id) &&
+          raw_transactions(connection_id) >= shared_connection_threshold(connection_id)
+      end || false
+    end
+
+    def raw_transactions(connection_id)
+      total = state[:transactions]&.[](connection_id) || 0
+      active_record = state[:active_record_transactions]&.[](connection_id) || 0
+
+      [total - active_record, 0].max
+    end
+
+    def incr_active_record_transactions(connection_id)
+      state[:active_record_transactions] ||= Hash.new { |h, k| h[k] = 0 }
+      state[:active_record_transactions][connection_id] += 1
+    end
+
+    def decr_active_record_transactions(connection_id)
+      active_record = state[:active_record_transactions]
+      return unless active_record&.[](connection_id)&.positive?
+
+      active_record[connection_id] -= 1
+      active_record.delete(connection_id) if active_record[connection_id].zero?
+    end
+
+    # Thresholds describe a connection's wrapper transactions, so they are shared with every
+    # thread using that connection (e.g., the server threads in system tests)
+    def shared_connection_threshold(connection_id)
+      shared_thresholds_lock.synchronize { shared_thresholds[connection_id] } || default_threshold
+    end
+
+    attr_reader :shared_thresholds, :shared_thresholds_lock
+
+    def check_transaction_kind(kind)
+      return if TRANSACTION_KINDS.include?(kind)
+
+      raise ArgumentError, "Unknown transaction kind: #{kind.inspect}. Expected one of: #{TRANSACTION_KINDS.map(&:inspect).join(", ")}"
+    end
 
     def debug!(msg)
       return unless debug_enabled
@@ -249,6 +357,8 @@ module Isolator
   end
 
   self.state = ThreadStateProxy.new
+  @shared_thresholds = {}
+  @shared_thresholds_lock = Mutex.new
   self.default_threshold = 1
   self.default_connection_id = -> { ActiveRecord::Base.connected? ? ActiveRecord::Base.connection.object_id : 0 }
   self.debug_enabled = ENV["ISOLATOR_DEBUG"] == "true"
